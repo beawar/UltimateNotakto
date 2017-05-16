@@ -10,4 +10,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+    @Override
+    public void onDestroy(){
+        System.out.print("Distrutto");
+        super.onDestroy();
+    }
+
 }
