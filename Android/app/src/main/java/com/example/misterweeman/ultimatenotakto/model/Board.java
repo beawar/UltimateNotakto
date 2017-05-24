@@ -23,12 +23,46 @@ public class Board {
         }
     }
 
-    public void setChecked(int col, int row) {
-        grid[col][row] = !grid[col][row];
-        System.out.println("grid[" + col + "][" + row + "]: " + grid[col][row]);
+    public boolean setChecked(int col, int row) {
+        if (!grid[col][row]) {
+            grid[col][row] = true;
+            return true;
+        }
+        return false;
     }
 
     public boolean at(int col, int row) {
         return grid[col][row];
+    }
+
+    public boolean[][] getGrid() {
+        return grid;
+    }
+
+    public void setGrid(boolean[][] grid) {
+        this.grid = grid;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public boolean[] getGridAsArray() {
+        boolean[] temp = new boolean[size * size];
+        for (int i = 0; i < size; i++) {
+            System.arraycopy(grid[i], 0, temp, size * i, size);
+        }
+        return temp;
+    }
+
+    public void setGridFromArray(boolean[] array) {
+        int gridSize = (int) Math.sqrt(array.length);
+        for (int i = 0; i < array.length; i++) {
+            grid[i / gridSize][i % gridSize] = array[i];
+        }
     }
 }

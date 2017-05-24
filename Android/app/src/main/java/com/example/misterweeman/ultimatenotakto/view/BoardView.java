@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -17,11 +19,17 @@ import com.example.misterweeman.ultimatenotakto.model.Board;
  */
 
 public class BoardView extends View {
+    private static final String ARG_GRIDSIZE = "gridSize";
+    private static final String ARG_GRID = "grid";
+    private static final String ARG_SUPERSTATE = "superState";
+
     private int gridSize = 3;
     private int cellSize;
     private Paint xOnBoard = new Paint();
     private Board grid;
     private Paint blackPaint = new Paint();
+
+    private int xTouch = Integer.MAX_VALUE, yTouch = Integer.MAX_VALUE;
 
     public BoardView(Context context) {
         this(context, null);
@@ -31,6 +39,10 @@ public class BoardView extends View {
         super(context, attrs);
         blackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         drawXStyle(Color.RED);
+    }
+
+    public BoardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     // Calcola dimensione cella in base a lato minore dello schermo e inizializza la griglia
@@ -51,12 +63,32 @@ public class BoardView extends View {
         calculateDimension();
     }
 
+    public Board getGrid() {
+        return grid;
+    }
+
+    public void setGrid(Board grid) {
+        this.grid = grid;
+        if (grid != null) {
+            gridSize = grid.getSize();
+            calculateDimension();
+        }
+    }
+
+    public int getXTouch() {
+        return xTouch;
+    }
+
+    public int getYTouch() {
+        return yTouch;
+    }
+
     // Imposta lo stile della X nella griglia di gioco
     private void drawXStyle(int color) {
         xOnBoard.setColor(color);
         xOnBoard.setStrokeWidth(16);
         xOnBoard.setAntiAlias(true);
-        xOnBoard.setStrokeCap(Paint.Cap.BUTT);
+        xOnBoard.setStrokeCap(Paint.Cap.ROUND);
         xOnBoard.setStyle(Paint.Style.STROKE);
     }
 
@@ -70,12 +102,10 @@ public class BoardView extends View {
 
     private void drawGrid(Canvas canvas) {
         // Disegna la griglia di gioco
-        int i = 1;
-        for (; i < gridSize; i++) {
-            canvas.drawLine(i * cellSize, 0, i * cellSize, getHeight(), blackPaint);
-            canvas.drawLine(0, i * cellSize, getWidth(), i * cellSize, blackPaint);
+        for (int i = 0; i < gridSize + 1; i++) {
+            canvas.drawLine(i * cellSize, 0, i * cellSize, gridSize * cellSize, blackPaint);
+            canvas.drawLine(0, i * cellSize, gridSize * cellSize, i * cellSize, blackPaint);
         }
-        canvas.drawLine(0, i * cellSize, getWidth(), i * cellSize, blackPaint);
     }
 
     private void drawCells(Canvas canvas) {
@@ -83,11 +113,11 @@ public class BoardView extends View {
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 if (grid.at(i, j)) {
-                    canvas.drawLine((i * cellSize), (j * cellSize),
-                            ((i + 1) * cellSize), ((j + 1) * cellSize),
+                    canvas.drawLine((i * cellSize) + (cellSize / 6), (j * cellSize) + (cellSize / 6),
+                            ((i + 1) * cellSize) - (cellSize / 6), ((j + 1) * cellSize) - (cellSize / 6),
                             xOnBoard);
-                    canvas.drawLine((i + 1) * cellSize, j * cellSize,
-                            i * cellSize, (j + 1) * cellSize,
+                    canvas.drawLine((i + 1) * cellSize - (cellSize / 6), j * cellSize + (cellSize / 6),
+                            i * cellSize + (cellSize / 6), (j + 1) * cellSize - (cellSize / 6),
                             xOnBoard);
                 }
             }
@@ -103,18 +133,39 @@ public class BoardView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            int column = (int) (event.getX() / cellSize);
-            int row = (int) (event.getY() / cellSize);
-            if (column < 6 && row < 6) {
-                grid.setChecked(column, row);
+            xTouch = (int) (event.getX() / cellSize);
+            yTouch = (int) (event.getY() / cellSize);
+            if (xTouch < gridSize && yTouch < gridSize && grid.setChecked(xTouch, yTouch)) {
                 invalidate();
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         calculateDimension();
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ARG_SUPERSTATE, super.onSaveInstanceState());
+        bundle.putInt(ARG_GRIDSIZE, this.gridSize);
+        bundle.putBooleanArray(ARG_GRID, this.grid.getGridAsArray());
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            this.gridSize = bundle.getInt(ARG_GRIDSIZE);
+            this.grid = new Board();
+            grid.setGridFromArray(bundle.getBooleanArray(ARG_GRID));
+            state = bundle.getParcelable(ARG_SUPERSTATE);
+        }
+        super.onRestoreInstanceState(state);
     }
 }
