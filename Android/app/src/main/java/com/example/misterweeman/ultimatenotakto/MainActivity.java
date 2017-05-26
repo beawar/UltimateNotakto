@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements GameFragment.Game
 
     @Override
     public void onGameLost() {
-        System.out.println("Ops! You lost!");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lost_dialog_message)
                 .setTitle(R.string.list_dialog_title)

@@ -72,14 +72,12 @@ public class GameFragment extends Fragment implements View.OnTouchListener {
             BoardView bv = (BoardView) v;
             if (bv.getXTouch() < gridSize && bv.getYTouch() < gridSize) {
                 if (Notakto.checkBoardForLost(board, bv.getXTouch(), bv.getYTouch())) {
-                    System.out.println("LOST");
                     if (gameLostListener != null) {
                         gameLostListener.onGameLost();
                     }
                     return true;
                 }
             }
-            System.out.println("Continua a giocare");
             return false;
         }
         return viewOnTouchEvent;

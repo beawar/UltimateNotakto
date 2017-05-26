@@ -12,7 +12,6 @@ public class Notakto {
         int y2 = y - 2;
         if (x1 >= 0 && x2 >= 0 && y1 >= 0 && y2 >= 0) {
             if (brd.at(x1, y1) && brd.at(x2, y2)) {
-                System.out.println("chkULUL");
                 lost = true;
             }
         }
@@ -25,7 +24,6 @@ public class Notakto {
         int x2 = x - 2;
         if (x1 >= 0 && x2 >= 0) {
             if (brd.at(x1, y) && brd.at(x2, y)) {
-                System.out.println("chkLL");
                 lost = true;
             }
         }
@@ -40,7 +38,6 @@ public class Notakto {
         int y2 = y + 2;
         if (x1 >= 0 && x2 >= 0 && y1 < brd.getSize() && y2 < brd.getSize()) {
             if (brd.at(x1, y1) && brd.at(x2, y2)) {
-                System.out.println("chkDLDL");
                 lost = true;
             }
         }
@@ -53,7 +50,6 @@ public class Notakto {
         int y2 = y + 2;
         if (y1 < brd.getSize() && y2 < brd.getSize()) {
             if (brd.at(x, y1) && brd.at(x, y2)) {
-                System.out.println("chkDD");
                 lost = true;
             }
         }
@@ -68,7 +64,6 @@ public class Notakto {
         int y2 = y + 2;
         if (x1 < brd.getSize() && x2 < brd.getSize() && y1 < brd.getSize() && y2 < brd.getSize()) {
             if (brd.at(x1, y1) && brd.at(x2, y2)) {
-                System.out.println("chkDRDR");
                 lost = true;
             }
         }
@@ -81,7 +76,6 @@ public class Notakto {
         int x2 = x + 2;
         if (x1 < brd.getSize() && x2 < brd.getSize()) {
             if (brd.at(x1, y) && brd.at(x2, y)) {
-                System.out.println("chkDD");
                 lost = true;
             }
         }
@@ -96,7 +90,6 @@ public class Notakto {
         int y2 = y - 2;
         if (x1 < brd.getSize() && x2 < brd.getSize() && y1 >= 0 && y2 >= 0) {
             if (brd.at(x1, y1) && brd.at(x2, y2)) {
-                System.out.println("chkDLDL");
                 lost = true;
             }
         }
@@ -109,7 +102,6 @@ public class Notakto {
         int y2 = y - 2;
         if (y1 >= 0 && y2 >= 0) {
             if (brd.at(x, y1) && brd.at(x, y2)) {
-                System.out.println("chkUU");
                 lost = true;
             }
         }
@@ -124,7 +116,6 @@ public class Notakto {
         int y2 = y + 1;
         if (x1 >= 0 && x2 < brd.getSize() && y1 >= 0 && y2 < brd.getSize()) {
             if (brd.at(x1, y1) && brd.at(x2, y2)) {
-                System.out.println("chkULDR");
                 lost = true;
             }
         }
@@ -137,7 +128,6 @@ public class Notakto {
         int x2 = x + 1;
         if (x1 >= 0 && x2 < brd.getSize()) {
             if (brd.at(x1, y) && brd.at(x2, y)) {
-                System.out.println("chkUD");
                 lost = true;
             }
         }
@@ -152,7 +142,6 @@ public class Notakto {
         int y2 = y - 1;
         if (x1 >= 0 && x2 < brd.getSize() && y1 < brd.getSize() && y2 >= 0) {
             if (brd.at(x1, y1) && brd.at(x2, y2)) {
-                System.out.println("chkURDL");
                 lost = true;
             }
         }
@@ -165,7 +154,6 @@ public class Notakto {
         int y2 = y + 1;
         if (y1 >= 0 && y2 < brd.getSize()) {
             if (brd.at(x, y1) && brd.at(x, y2)) {
-                System.out.println("chkUD");
                 lost = true;
             }
         }
