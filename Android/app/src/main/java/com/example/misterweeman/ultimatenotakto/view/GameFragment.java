@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.misterweeman.ultimatenotakto.model.Board;
+import com.example.misterweeman.ultimatenotakto.model.Notakto;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,9 +19,10 @@ import com.example.misterweeman.ultimatenotakto.model.Board;
  */
 public class GameFragment extends Fragment implements View.OnTouchListener {
     private static final String ARG_GRIDSIZE = "gridSize";
-    OnGameFragmentInteractionListener mListener;
     private Board board;
     private int gridSize = 3;
+
+    private GameLostListener gameLostListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -57,33 +59,47 @@ public class GameFragment extends Fragment implements View.OnTouchListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        BoardView boardView = new BoardView(getActivity());
+        final BoardView boardView = new BoardView(getActivity());
         boardView.setGrid(this.board);
+        boardView.setOnTouchListener(this);
         return boardView;
     }
 
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        System.out.println("GameFragment.onTouch");
-        return mListener.onCellTouched(event.getX(), event.getY());
+        boolean viewOnTouchEvent = v.onTouchEvent(event);
+        if (v instanceof BoardView && event.getAction() == MotionEvent.ACTION_UP) {
+            BoardView bv = (BoardView) v;
+            if (bv.getXTouch() < gridSize && bv.getYTouch() < gridSize) {
+                if (Notakto.checkBoardForLost(board, bv.getXTouch(), bv.getYTouch())) {
+                    System.out.println("LOST");
+                    if (gameLostListener != null) {
+                        gameLostListener.onGameLost();
+                    }
+                    return true;
+                }
+            }
+            System.out.println("Continua a giocare");
+            return false;
+        }
+        return viewOnTouchEvent;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnGameFragmentInteractionListener) {
-            mListener = (OnGameFragmentInteractionListener) context;
+        if (context instanceof GameLostListener) {
+            gameLostListener = (GameLostListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnGameFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        gameLostListener = null;
     }
 
     /**
@@ -91,12 +107,8 @@ public class GameFragment extends Fragment implements View.OnTouchListener {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnGameFragmentInteractionListener {
-        boolean onCellTouched(float x, float y);
+    public interface GameLostListener {
+        void onGameLost();
     }
 }

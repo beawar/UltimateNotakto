@@ -2,5 +2,12 @@
     <string name="app_name">UltimateNotakto</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">
+        Ora hai due opzioni:\n
+        1) Torni indietro e l\'app si chiude, quindi se la riapri puoi iniziare una nuova partita;\n
+        2) Premi il tasto home, riapri l\'app e tornerai in questa schermata.
+    </string>
+    <string name="lost_dialog_message">Peccato, hai perso!</string>
+    <string name="list_dialog_title">Hai perso</string>
+    <string name="oh_no">Oh no!</string>
 </resources>
