@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">UltimateNotakto</string>
 
+    <string name="create_game">Crea Partita</string>
+    <string name="join_game">Unisciti ad una Partita</string>
+    <string name="stats">Statistiche</string>
+    <string name="settings">Opzioni</string>
+
+    <string name="board_name">Notakto Board</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">
         Ora hai due opzioni:\n
