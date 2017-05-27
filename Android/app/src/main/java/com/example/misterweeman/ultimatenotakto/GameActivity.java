@@ -32,7 +32,7 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        
+                        finish();
                     }
                 });
         AlertDialog dialog = builder.create();

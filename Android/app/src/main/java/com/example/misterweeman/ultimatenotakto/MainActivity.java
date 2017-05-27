@@ -12,18 +12,27 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG = "UltimateNotakto";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
     }
 
     // called when the user click "Crea Partita"
-    public void createGame(View view){
+    public void goToOption(View view){
 
-        Log.d(TAG, "createGame()");
+        Log.d(TAG, "goToOption()");
 
-        Intent intent = new Intent(this, GameActivity.class);
+        Intent intent = new Intent(this, GameOptionActivity.class);
+        startActivity(intent);
+    }
+
+    // called when the user click "Statistiche"
+    public void goToStats(View view){
+
+        Log.d(TAG, "goToStats()");
+
+        Intent intent = new Intent(this, GameStats.class);
         startActivity(intent);
     }
 

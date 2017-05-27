@@ -13,27 +13,42 @@
         android:textAlignment="center"
         android:gravity="center"
         android:textSize="30sp" />
-    <Button
-        android:id="@+id/create_game_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/create_game"
-        android:onClick="createGame"/>
-    <Button
-        android:id="@+id/join_game_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/join_game"/>
-    <Button
-        android:id="@+id/stats_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/stats"/>
 
-    <Button
-        android:id="@+id/settings_btn"
+    <LinearLayout
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/settings" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+
+        <Button
+            android:id="@+id/create_game_btn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_game"
+            android:onClick="goToOption"/>
+
+        <Button
+            android:id="@+id/join_game_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/join_game"/>
+
+        <Button
+            android:id="@+id/stats_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/stats"
+            android:onClick="goToStats"/>
+
+        <Button
+            android:id="@+id/settings_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings" />
+
+    </LinearLayout>
+
 </LinearLayout>
 
