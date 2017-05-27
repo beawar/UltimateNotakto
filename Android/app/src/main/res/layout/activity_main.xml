@@ -17,7 +17,8 @@
         android:id="@+id/create_game_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/create_game"/>
+        android:text="@string/create_game"
+        android:onClick="createGame"/>
     <Button
         android:id="@+id/join_game_btn"
         android:layout_width="match_parent"
