@@ -6,18 +6,21 @@
     <string name="settings">Opzioni</string>
     <string name="board_name">Notakto Board</string>
     <string name="ok">Ok</string>
-    <string name="board_size">Board Size</string>
+    <string name="board_size">Dimensioni griglia</string>
     <string name="size1">3x3</string>
     <string name="size2">4x4</string>
     <string name="size3">5x5</string>
     <string name="size4">6x6</string>
-    <string name="player_size">Player Size</string>
+    <string name="player_size">Numero giocatori</string>
     <string name="player_size1">2</string>
     <string name="player_size2">3</string>
     <string name="player_size3">4</string>
     <string name="back">Indietro</string>
     <string name="achievements">Achievements</string>
     <string name="leaderboard">Leaderboard</string>
+    <string name="music">Musica</string>
+    <string name="sounds">Suono</string>
+    <string name="how_to">Come giocare</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">

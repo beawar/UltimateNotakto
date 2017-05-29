@@ -36,6 +36,15 @@ public class MainActivity extends AppCompatActivity{
         startActivity(intent);
     }
 
+    // called when the user click "Opzioni"
+    public void goToOptions(View view){
+
+        Log.d(TAG, "goToOptions()");
+
+        Intent intent = new Intent(this, Options.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onDestroy(){
 
