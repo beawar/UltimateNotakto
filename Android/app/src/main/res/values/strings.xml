@@ -10,4 +10,6 @@
     <string name="lost_dialog_message">Peccato, hai perso!</string>
     <string name="list_dialog_title">Hai perso</string>
     <string name="oh_no">Oh no!</string>
+    <string name="signin_failure">Unable to sign in.</string>
+    <string name="sign_out">Sign Out</string>
 </resources>
