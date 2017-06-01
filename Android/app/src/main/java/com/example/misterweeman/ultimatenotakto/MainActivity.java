@@ -1,73 +1,58 @@
 package com.example.misterweeman.ultimatenotakto;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
+import android.util.Log;
+import android.view.View;
 
-import com.example.misterweeman.ultimatenotakto.view.GameFragment;
 
-public class MainActivity extends AppCompatActivity implements GameFragment.GameLostListener {
+public class MainActivity extends AppCompatActivity{
+
+    private static final String TAG = "UltimateNotakto";
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Check that the activity is using the layout version with
-        // the fragment_container FrameLayout
-        if (findViewById(R.id.fragment_container) != null) {
-            // However, if we're being restored from a previous state,
-            // then we don't need to do anything or else
-            // we could end up with overlapping fragments.
-            // Quindi controllo eseguo le istruzioni solo se non c'è uno stato precedente
-            if (savedInstanceState == null) {
-                // Create a new Fragment to be placed in the activity layout
-                GameFragment gameFragment = new GameFragment();
+    }
 
-                // In case this activity was started with special instructions from an
-                // Intent, pass the Intent's extras to the fragment as arguments
-                gameFragment.setArguments(getIntent().getExtras());
+    // called when the user click "Crea Partita"
+    public void goToOption(View view){
 
-                // Add the fragment to the 'fragment_container' Layout
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_container, gameFragment).commit();
-            }
-        }
+        Log.d(TAG, "goToOption()");
+
+        Intent intent = new Intent(this, GameOptionActivity.class);
+        startActivity(intent);
+    }
+
+    // called when the user click "Statistiche"
+    public void goToStats(View view){
+
+        Log.d(TAG, "goToStats()");
+
+        Intent intent = new Intent(this, GameStats.class);
+        startActivity(intent);
+    }
+
+    // called when the user click "Opzioni"
+    public void goToOptions(View view){
+
+        Log.d(TAG, "goToOptions()");
+
+        Intent intent = new Intent(this, Options.class);
+        startActivity(intent);
     }
 
     @Override
     public void onDestroy(){
+
+        Log.d(TAG, "destroy");
+
         super.onDestroy();
     }
 
-    @Override
-    public void onGameLost() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.lost_dialog_message)
-                .setTitle(R.string.list_dialog_title)
-                .setPositiveButton(R.string.oh_no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        BlankFragment blankFragment = BlankFragment.newInstance("param1", "param2");
 
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, blankFragment);
 
-                        transaction.commit();
-                    }
-                })
-                .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                            finish();
-                        }
-                        return false;
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 }
