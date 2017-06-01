@@ -24,7 +24,6 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
             // However, if we're being restored from a previous state,
             // then we don't need to do anything or else
             // we could end up with overlapping fragments.
-            // Quindi controllo eseguo le istruzioni solo se non c'è uno stato precedente
             if (savedInstanceState == null) {
                 // Create a new Fragment to be placed in the activity layout
                 GameFragment gameFragment = new GameFragment();
@@ -57,15 +56,11 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lost_dialog_message)
                 .setTitle(R.string.list_dialog_title)
-                .setPositiveButton(R.string.oh_no, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        BlankFragment blankFragment = BlankFragment.newInstance("param1", "param2");
-
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, blankFragment);
-
-                        transaction.commit();
+                        // TODO: do something else
+                        finish();
                     }
                 })
                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
