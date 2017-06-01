@@ -10,6 +10,9 @@ import android.view.KeyEvent;
 import com.example.misterweeman.ultimatenotakto.view.GameFragment;
 
 public class GameActivity extends AppCompatActivity implements GameFragment.GameLostListener {
+    private AlertDialog alertDialog;
+    private static final String ARG_GAMELOST = "gameLost";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +36,20 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
                 // Add the fragment to the 'fragment_container' Layout
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, gameFragment).commit();
+            } else if (savedInstanceState.getBoolean(ARG_GAMELOST, true)){
+                onGameLost();
             }
         }
     }
 
     @Override
-    public void onDestroy(){
-        super.onDestroy();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (alertDialog != null && alertDialog.isShowing()) {
+            // close dialog to prevent leaked window
+            alertDialog.dismiss();
+            outState.putBoolean(ARG_GAMELOST, true);
+        }
     }
 
     @Override
@@ -67,7 +77,7 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
                         return false;
                     }
                 });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 }
