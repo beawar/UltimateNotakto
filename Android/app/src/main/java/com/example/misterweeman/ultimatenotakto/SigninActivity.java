@@ -12,7 +12,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
-public class MainActivity extends AppCompatActivity implements
+public class SigninActivity extends AppCompatActivity implements
         View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements
                 // add others APIs and scopes here as needed
                 .build();
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_signin);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
     }
