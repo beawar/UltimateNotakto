@@ -29,21 +29,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:gravity="bottom"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="30dp">
-
-        <Button
-            android:id="@+id/back_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/back"/>
-
-    </LinearLayout>
-
 </LinearLayout>
