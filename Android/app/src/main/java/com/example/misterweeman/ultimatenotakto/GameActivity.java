@@ -12,6 +12,7 @@ import com.example.misterweeman.ultimatenotakto.view.GameFragment;
 public class GameActivity extends AppCompatActivity implements GameFragment.GameLostListener {
     private AlertDialog alertDialog;
     private static final String ARG_GAMELOST = "gameLost";
+    private boolean gameLost = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +48,21 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
         if (alertDialog != null && alertDialog.isShowing()) {
             // close dialog to prevent leaked window
             alertDialog.dismiss();
-            outState.putBoolean(ARG_GAMELOST, true);
+        }
+        outState.putBoolean(ARG_GAMELOST, gameLost);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
         }
     }
 
     @Override
     public void onGameLost() {
+        gameLost = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lost_dialog_message)
                 .setTitle(R.string.list_dialog_title)
