@@ -83,12 +83,39 @@
             android:layout_marginTop="20dp"
             android:text="@string/how_to"/>
 
-        <Button
+        <TextView
             android:id="@+id/language_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/lang"/>
+            android:text="@string/lang"
+            android:textAlignment="center"
+            android:textSize="24sp" />
+
+        <RadioGroup
+            android:id="@+id/languages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+
+            <RadioButton
+                android:id="@+id/lang_en"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lang_en"/>
+
+            <RadioButton
+                android:id="@+id/lang_it"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lang_it"/>
+
+
+
+        </RadioGroup>
 
     </LinearLayout>
 
