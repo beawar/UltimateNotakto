@@ -29,7 +29,16 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/Sound_volume"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/sound_volume"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
             <SeekBar
+                android:id="@+id/Sound_seekbar"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
@@ -44,14 +53,24 @@
             android:layout_marginBottom="20dp">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/sounds"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/Effects_volume"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/effects_volume"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
             <SeekBar
-                android:layout_width="250dp"
+                android:id="@+id/Effects_seekbar"
+                android:layout_width="253dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" />
 

@@ -22,6 +22,8 @@
     <string name="sounds">Suono</string>
     <string name="how_to">Come giocare</string>
     <string name="lang">Lingue</string>
+    <string name="sound_volume">0</string>
+    <string name="effects_volume">0</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">
