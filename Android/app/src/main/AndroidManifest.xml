@@ -4,6 +4,7 @@
     package="com.example.misterweeman.ultimatenotakto">
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -18,12 +19,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".SigninActivity"
-            android:allowBackup="false"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
-        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

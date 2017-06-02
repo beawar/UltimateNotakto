@@ -114,6 +114,12 @@
         android:layout_marginBottom="30dp">
 
         <Button
+            android:id="@+id/create_quick_game_btn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_quick_game"
+            android:onClick="startQuickGame"/>
+        <Button
             android:id="@+id/create_game_btn2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

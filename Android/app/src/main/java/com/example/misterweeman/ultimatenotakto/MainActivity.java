@@ -6,16 +6,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "UltimateNotakto";
+    private SignInFragment signInFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (findViewById(R.id.signin_fragment) != null) {
+            if (savedInstanceState == null) {
+                signInFragment = new SignInFragment();
+                signInFragment.setArguments(getIntent().getExtras());
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.signin_fragment, signInFragment).commit();
+            }
+        }
     }
 
     // called when the user click "Crea Partita"

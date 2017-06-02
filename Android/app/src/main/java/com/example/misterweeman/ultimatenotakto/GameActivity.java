@@ -27,7 +27,7 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
             // we could end up with overlapping fragments.
             if (savedInstanceState == null) {
                 // Create a new Fragment to be placed in the activity layout
-                GameFragment gameFragment = new GameFragment();
+                GameFragment gameFragment = GameFragment.newInstance(getIntent().getIntExtra(getString(R.string.ARG_GRID_SIZE), 3));
 
                 // In case this activity was started with special instructions from an
                 // Intent, pass the Intent's extras to the fragment as arguments

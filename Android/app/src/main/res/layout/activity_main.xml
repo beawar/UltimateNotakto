@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <TextView
         android:id="@+id/mainActivity_title"
@@ -17,10 +18,11 @@
     <LinearLayout
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp">
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.01">
 
         <Button
             android:id="@+id/create_game_btn1"
@@ -50,6 +52,16 @@
             android:onClick="goToOptions"/>
 
     </LinearLayout>
+
+    <FrameLayout layout="@layout/fragment_signin"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/signin_fragment" />
+    <!--<fragment-->
+        <!--android:name="com.example.misterweeman.ultimatenotakto.SignInFragment"-->
+        <!--android:id="@+id/signin_fragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 
 </LinearLayout>
 
