@@ -1,7 +1,6 @@
 package com.example.misterweeman.ultimatenotakto;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,23 +15,24 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        loadLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loadLocale(this);
 
     }
 
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        loadLocale(this);
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadLocale(this);
+
     }
 
+    @Override
+    protected void onRestart() {
+        loadLocale(this);
+        super.onRestart();
+    }
     // called when the user click "Crea Partita"
     public void goToOption(View view){
 
@@ -67,7 +67,5 @@ public class MainActivity extends AppCompatActivity{
 
         super.onDestroy();
     }
-
-
 
 }

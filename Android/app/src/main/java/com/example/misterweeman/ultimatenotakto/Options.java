@@ -31,11 +31,11 @@ public class Options extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        loadLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
         //inizializzo variabili
         initializeVariables();
-        loadLocale(this);
 
         SoundSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             int sound_progress = 0;
@@ -89,6 +89,22 @@ public class Options extends AppCompatActivity {
 
 
     }
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        loadLocale(this);
+    }
+
+    @Override
+    protected void onResume() {
+        loadLocale(this);
+        super.onResume();
+    }
+
+    public void onBackPressed(){
+        finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
     // inizializza elementi del layout
     private void initializeVariables() {
         SoundSeekbar = (SeekBar) findViewById(R.id.Sound_seekbar);
@@ -122,4 +138,5 @@ public class Options extends AppCompatActivity {
         editor.putString("lang", lang);
         editor.apply();
     }
+
 }
