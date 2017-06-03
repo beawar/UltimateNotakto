@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity{
     private static final String TAG = "UltimateNotakto";
     private boolean mIsBound = false;
     private MusicService mServ;
+    private boolean firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity{
         doBindService();
         Intent music = new Intent(this,MusicService.class);
         startService(music);
+        firstTime=true;
     }
 
     @Override
@@ -35,6 +38,14 @@ public class MainActivity extends AppCompatActivity{
         super.onRestart();
         setContentView(R.layout.activity_main);
         mServ.resumeMusic();
+    }
+
+    protected void onResume() {
+        super.onResume();
+        if(!firstTime) {
+            mServ.resumeMusic();
+            firstTime=false;
+        }
     }
     // called when the user click "Crea Partita"
     public void goToOption(View view){
@@ -75,11 +86,18 @@ public class MainActivity extends AppCompatActivity{
 
         Log.d(TAG, "destroy");
         doUnbindService();
-        Intent music = new Intent(this,MusicService.class);
-        stopService(music);
+        if(!isChangingConfigurations()) {
+            Intent music = new Intent(this, MusicService.class);
+            stopService(music);
+        }
         super.onDestroy();
     }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
+    //bind servica musica
     private ServiceConnection Scon =new ServiceConnection(){
 
         public void onServiceConnected(ComponentName name, IBinder

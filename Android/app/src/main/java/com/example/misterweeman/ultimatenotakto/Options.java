@@ -33,6 +33,8 @@ public class Options extends AppCompatActivity {
     public static final String PREFS_NAME = "MySettingsFile";
     private boolean mIsBound = false;
     private MusicService mServ;
+    private boolean firstTime;
+
 
 
 
@@ -44,6 +46,7 @@ public class Options extends AppCompatActivity {
         doBindService();
         Intent music = new Intent(this,MusicService.class);
         startService(music);
+        firstTime=true;
         initializeVariables();
 
         SoundSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -52,11 +55,11 @@ public class Options extends AppCompatActivity {
 
                 sound_progress=progresValue;
                 SoundVolume.setText(""+sound_progress);
+                mServ.changeVolume(sound_progress);
             }
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar) {
                 saveMusicSetting(sound_progress);
-                mServ.changeVolume(sound_progress);
             }
 
         });
@@ -101,14 +104,22 @@ public class Options extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        mServ.resumeMusic();
+    protected void onResume() {
+        super.onResume();
+        if(!firstTime) {
+            mServ.resumeMusic();
+            firstTime=false;
+        }
     }
 
     protected void onPause() {
         super.onPause();
         mServ.pauseMusic();
+    }
+
+    protected void onRestart() {
+        super.onRestart();
+        mServ.resumeMusic();
     }
 
     // inizializza elementi del layout
@@ -175,7 +186,7 @@ public class Options extends AppCompatActivity {
         editor.putInt("effects", volume);
         editor.apply();
     }
-
+    //bind service musica
     private ServiceConnection Scon =new ServiceConnection(){
 
         public void onServiceConnected(ComponentName name, IBinder
