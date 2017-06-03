@@ -1,10 +1,14 @@
 package com.example.misterweeman.ultimatenotakto;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -27,6 +31,8 @@ public class Options extends AppCompatActivity {
     private RadioGroup Languages;
     Locale myLocale;
     public static final String PREFS_NAME = "MySettingsFile";
+    private boolean mIsBound = false;
+    private MusicService mServ;
 
 
 
@@ -35,6 +41,9 @@ public class Options extends AppCompatActivity {
         loadLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
+        doBindService();
+        Intent music = new Intent(this,MusicService.class);
+        startService(music);
         initializeVariables();
 
         SoundSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -47,6 +56,7 @@ public class Options extends AppCompatActivity {
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar) {
                 saveMusicSetting(sound_progress);
+                mServ.changeVolume(sound_progress);
             }
 
         });
@@ -89,15 +99,16 @@ public class Options extends AppCompatActivity {
 
 
     }
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        loadLocale(this);
-    }
 
     @Override
-    protected void onResume() {
-        loadLocale(this);
-        super.onResume();
+    protected void onRestart() {
+        super.onRestart();
+        mServ.resumeMusic();
+    }
+
+    protected void onPause() {
+        super.onPause();
+        mServ.pauseMusic();
     }
 
     // inizializza elementi del layout
@@ -165,4 +176,30 @@ public class Options extends AppCompatActivity {
         editor.apply();
     }
 
+    private ServiceConnection Scon =new ServiceConnection(){
+
+        public void onServiceConnected(ComponentName name, IBinder
+                binder) {
+            mServ = ((MusicService.ServiceBinder)binder).getService();
+        }
+
+        public void onServiceDisconnected(ComponentName name) {
+            mServ = null;
+        }
+    };
+
+    void doBindService(){
+        bindService(new Intent(this,MusicService.class),
+                Scon, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
+
+    void doUnbindService()
+    {
+        if(mIsBound)
+        {
+            unbindService(Scon);
+            mIsBound = false;
+        }
+    }
 }
