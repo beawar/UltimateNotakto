@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onRestart() {
         loadLocale(this);
         super.onRestart();
+        setContentView(R.layout.activity_main);
     }
     // called when the user click "Crea Partita"
     public void goToOption(View view){

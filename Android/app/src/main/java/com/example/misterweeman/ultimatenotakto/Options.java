@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SeekBar;
@@ -100,11 +101,6 @@ public class Options extends AppCompatActivity {
         super.onResume();
     }
 
-    public void onBackPressed(){
-        finish();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
     // inizializza elementi del layout
     private void initializeVariables() {
         SoundSeekbar = (SeekBar) findViewById(R.id.Sound_seekbar);
@@ -112,6 +108,17 @@ public class Options extends AppCompatActivity {
         EffectsSeekbar = (SeekBar) findViewById(R.id.Effects_seekbar);
         EffectsVolume = (TextView) findViewById(R.id.Effects_volume);
         Languages = (RadioGroup) findViewById(R.id.languages);
+        //per settare il radiobutton di default
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        String lang = settings.getString("lang", "en");
+        switch(lang) {
+            case "en":
+                ((RadioButton) Languages.getChildAt(0)).setChecked(true);
+                break;
+            case "it":
+                ((RadioButton) Languages.getChildAt(1)).setChecked(true);
+                break;
+        }
     }
 
     //cambia lingua
