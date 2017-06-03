@@ -35,7 +35,6 @@ public class Options extends AppCompatActivity {
         loadLocale(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
-        //inizializzo variabili
         initializeVariables();
 
         SoundSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -47,7 +46,7 @@ public class Options extends AppCompatActivity {
             }
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //TODO sharedPreferences
+                saveMusicSetting(sound_progress);
             }
 
         });
@@ -61,7 +60,7 @@ public class Options extends AppCompatActivity {
             }
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar) {
-                //TODO sharedPreferences
+                saveSoundSetting(effects_progress);
             }
 
         });
@@ -119,6 +118,12 @@ public class Options extends AppCompatActivity {
                 ((RadioButton) Languages.getChildAt(1)).setChecked(true);
                 break;
         }
+        int music_volume= settings.getInt("music", 100);
+        int effects_volume= settings.getInt("effects", 100);
+        SoundSeekbar.setProgress(music_volume);
+        SoundVolume.setText(""+music_volume);
+        EffectsSeekbar.setProgress(effects_volume);
+        EffectsVolume.setText(""+effects_volume);
     }
 
     //cambia lingua
@@ -143,6 +148,20 @@ public class Options extends AppCompatActivity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("lang", lang);
+        editor.apply();
+    }
+    // salva il volume della musica in Sharedpreferences
+    public void saveMusicSetting(int volume){
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("music", volume);
+        editor.apply();
+    }
+    // salva il volume degli effetti sonori in Sharedpreferences
+    public void saveSoundSetting(int volume){
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("effects", volume);
         editor.apply();
     }
 
