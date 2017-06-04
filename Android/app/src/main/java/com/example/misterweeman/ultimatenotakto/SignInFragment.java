@@ -23,8 +23,6 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
 
     private GoogleApiHelper mGoogleApiHelper;
 
-    private static int RC_SIGN_IN = 9001;
-
     private boolean mResolvingConnectionFailure = false;
     private boolean mAutoStartSignInflow = true;
     private boolean mSignInClicked = false;
@@ -90,7 +88,7 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
 
                 // Attempt to resolve the connection failure using BaseGameUtils
                 if (!BaseGameUtils.resolveConnectionFailure(getActivity(),
-                        mGoogleApiHelper.getGoogleApiClient(), connectionResult, RC_SIGN_IN,
+                        mGoogleApiHelper.getGoogleApiClient(), connectionResult, GoogleApiHelper.RC_SIGN_IN,
                         R.string.sign_in_other_error)) {
                     mResolvingConnectionFailure = false;
                 }
@@ -111,7 +109,7 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == GoogleApiHelper.RC_SIGN_IN) {
             mSignInClicked = false;
             mResolvingConnectionFailure = false;
             if (resultCode == RESULT_OK) {

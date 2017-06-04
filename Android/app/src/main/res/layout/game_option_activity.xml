@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/game_option_activity">
 
     <LinearLayout
         android:id="@+id/board_size_layout"
@@ -114,7 +115,7 @@
         android:layout_marginBottom="30dp">
 
         <Button
-            android:id="@+id/create_quick_game_btn2"
+            android:id="@+id/create_quick_game_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/create_quick_game"

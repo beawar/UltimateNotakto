@@ -1,10 +1,13 @@
 package com.example.misterweeman.ultimatenotakto;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +17,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.base_layout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layout.addView(layoutInflater.inflate(R.layout.activity_main, layout, false));
 
         if (findViewById(R.id.signin_fragment) != null) {
             if (savedInstanceState == null) {

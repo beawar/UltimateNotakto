@@ -17,6 +17,9 @@ class GoogleApiHelper implements GoogleApiClient.OnConnectionFailedListener, Goo
 
     private ConnectionListener mConnectionListener;
 
+    public static final int RC_SIGN_IN = 9001;
+
+
 
     public GoogleApiHelper(Context context) {
         this.context = context;

@@ -35,4 +35,8 @@
     <string name="signin_failure">Unable to sign in.</string>
     <string name="sign_out">Sign Out</string>
     <string name="create_quick_game">Crea partita veloce</string>
+    <string name="accept_popup_invite">Accept</string>
+    <string name="game_problem">Something went wrong. Try again later.</string>
+    <string name="is_inviting_you">is inviting you to join a game</string>
+    <string name="please_wait">Please wait</string>
 </resources>

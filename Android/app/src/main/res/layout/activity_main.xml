@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:id="@+id/activity_main">
 
     <TextView
         android:id="@+id/mainActivity_title"
@@ -52,16 +53,6 @@
             android:onClick="goToOptions"/>
 
     </LinearLayout>
-
-    <FrameLayout layout="@layout/fragment_signin"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:id="@+id/signin_fragment" />
-    <!--<fragment-->
-        <!--android:name="com.example.misterweeman.ultimatenotakto.SignInFragment"-->
-        <!--android:id="@+id/signin_fragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
 
 </LinearLayout>
 

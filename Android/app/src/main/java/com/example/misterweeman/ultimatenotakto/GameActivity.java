@@ -1,11 +1,15 @@
 package com.example.misterweeman.ultimatenotakto;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.example.misterweeman.ultimatenotakto.view.GameFragment;
 
@@ -17,7 +21,10 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.base_layout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layout.addView(layoutInflater.inflate(R.layout.activity_game, layout, false));
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout

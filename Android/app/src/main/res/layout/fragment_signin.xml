@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_alignParentBottom="true"
-    tools:context="com.example.misterweeman.ultimatenotakto.SignInFragment">
+    tools:context="com.example.misterweeman.ultimatenotakto.SignInFragment"
+    android:id="@+id/fragment_signin">
+
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
+        style="@style/SignInButton"
         android:layout_centerInParent="true"/>
 
     <Button
         android:id="@+id/sign_out_button"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
+        style="@style/SignOutButton"
         android:text="@string/sign_out"
         android:visibility="gone"
         android:layout_centerInParent="true"
