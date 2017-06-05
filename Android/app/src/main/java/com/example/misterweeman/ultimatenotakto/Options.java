@@ -166,12 +166,13 @@ public class Options extends AppCompatActivity {
         finish();
     }
 
-    public void showHowToPlay(){
+    public void showHowToPlay(View view){
         HowToPlayFragment fr =new HowToPlayFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(0, fr);
-        fragmentTransaction.commit();
+        findViewById(R.id.settings_container).setVisibility(View.GONE);
+        fragmentTransaction.add(R.id.fragment_container,fr);
+        fragmentTransaction.show(fr).commit();
     }
 
 

@@ -6,11 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
     <LinearLayout
         android:gravity="center"
+        android:id="@+id/settings_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/settings_layout"
         android:orientation="vertical"
         android:layout_marginTop="100dp"
         android:layout_marginLeft="30dp"
