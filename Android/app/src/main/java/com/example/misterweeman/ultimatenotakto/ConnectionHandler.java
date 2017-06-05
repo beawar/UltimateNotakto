@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -195,7 +194,8 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     private void startGame(boolean b) {
-        
+        Log.d(TAG, "startGame: ");
+        switchToScreen(R.layout.activity_game);
     }
 
     @Override
@@ -232,6 +232,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onClick(View v) {
+        Log.d(TAG, "onClick: called");
 
     }
 
@@ -300,6 +301,8 @@ public class ConnectionHandler implements RoomUpdateListener,
     public void onInvitationReceived(Invitation invitation) {
         // store invitation for use when player accepts this invitation
         mIncomingInvitationId = invitation.getInvitationId();
+
+        mParentActivity.findViewById(R.id.invitation_popup).setVisibility(View.VISIBLE);
 
         // show in-game popup to let user know of pending invitation
         ((TextView) mParentActivity.findViewById(R.id.incoming_invitation_text)).setText(
@@ -495,7 +498,7 @@ public class ConnectionHandler implements RoomUpdateListener,
             Games.RealTimeMultiplayer.create(mGoogleApiHelper.getGoogleApiClient(), roomConfigBuilder.build());
         } else {
             BaseGameUtils.makeSimpleDialog(mParentActivity, mParentActivity.getString(R.string.game_problem));
-            switchToScreen(R.layout.fragment_signin);
+           switchToScreen(R.layout.fragment_signin);
         }
     }
 
@@ -521,7 +524,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         // should we show the invitation popup? do not show invitation while in an game
         boolean showInvPopup = mIncomingInvitationId != null && mCurScreen != R.layout.activity_game;
 
-        mParentActivity.setContentView(layout);
+        App.setLayout(mParentActivity, layout);
         if (mParentActivity.findViewById(R.id.invitation_popup) != null) {
             mParentActivity.findViewById(R.id.invitation_popup).setVisibility(showInvPopup ? View.VISIBLE : View.GONE);
         }
@@ -534,10 +537,6 @@ public class ConnectionHandler implements RoomUpdateListener,
         else {
             mParentActivity.startActivity(new Intent(Intent.ACTION_MAIN));
         }
-    }
-
-    private void showSignInScreen() {
-
     }
 
     public String getIncomingInvitationId() {

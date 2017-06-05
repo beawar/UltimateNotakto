@@ -1,6 +1,10 @@
 package com.example.misterweeman.ultimatenotakto;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.widget.LinearLayout;
 
 public class App extends Application {
     private GoogleApiHelper mGoogleApiHelper;
@@ -24,5 +28,11 @@ public class App extends Application {
 
     public static GoogleApiHelper getGoogleApiHelper() {
         return getInstance().getGoogleApiHelperInstace();
+    }
+
+    public static void setLayout (Activity activity, int layout) {
+        LinearLayout container = (LinearLayout) activity.findViewById(R.id.layout_container);
+        LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        container.addView(layoutInflater.inflate(layout, container, false));
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -12,6 +13,7 @@ import com.google.android.gms.games.Games;
 
 
 class GoogleApiHelper implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+    private static final String TAG = "GoogleApiHelper";
     private Context context;
     private GoogleApiClient mGoogleApiClient;
 
@@ -48,6 +50,7 @@ class GoogleApiHelper implements GoogleApiClient.OnConnectionFailedListener, Goo
     }
 
     public GoogleApiClient getGoogleApiClient() {
+        Log.d(TAG, "getGoogleApiClient: " + mGoogleApiClient.isConnected());
         return mGoogleApiClient;
     }
 

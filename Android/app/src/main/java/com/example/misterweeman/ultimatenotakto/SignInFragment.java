@@ -1,6 +1,5 @@
 package com.example.misterweeman.ultimatenotakto;
 
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -44,6 +43,16 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
         }
     }
 
+    private void setButtonVisibility() {
+        if (mGoogleApiHelper.isConnected()){
+            mSignInButton.setVisibility(View.GONE);
+            mSignOutButton.setVisibility(View.VISIBLE);
+        } else {
+            mSignInButton.setVisibility(View.VISIBLE);
+            mSignOutButton.setVisibility(View.GONE);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +65,7 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
         if (mSignInButton != null && mSignOutButton != null){
             mSignInButton.setOnClickListener(this);
             mSignOutButton.setOnClickListener(this);
+            setButtonVisibility();
         }
         return view;
     }
@@ -84,27 +94,18 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
             if (mSignInClicked || mAutoStartSignInflow) {
                 mAutoStartSignInflow = false;
                 mSignInClicked = false;
-                mResolvingConnectionFailure = false;
-
-                // Attempt to resolve the connection failure using BaseGameUtils
-                if (!BaseGameUtils.resolveConnectionFailure(getActivity(),
+                mResolvingConnectionFailure = BaseGameUtils.resolveConnectionFailure(getActivity(),
                         mGoogleApiHelper.getGoogleApiClient(), connectionResult, GoogleApiHelper.RC_SIGN_IN,
-                        R.string.sign_in_other_error)) {
-                    mResolvingConnectionFailure = false;
-                }
+                        R.string.sign_in_other_error);
             }
 
         }
-        mSignInButton.setVisibility(View.VISIBLE);
+        setButtonVisibility();
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (mSignInButton.getVisibility() != View.GONE) {
-            // The player is signed in. Hide the sign-in button and allow the player to proceed
-            mSignInButton.setVisibility(View.GONE);
-            mSignOutButton.setVisibility(View.VISIBLE);
-        }
+        setButtonVisibility();
         // Your code here: update UI, enable functionality that depends on sign in, etc
     }
 
@@ -143,12 +144,7 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
             // Auto sign-in
             mGoogleApiHelper.connect();
         }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mGoogleApiHelper.disconnect();
+        setButtonVisibility();
     }
 
     @Override
@@ -158,8 +154,7 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
 
         } else if (v.getId() == R.id.sign_out_button) {
             signOut();
-            mSignInButton.setVisibility(View.VISIBLE);
-            mSignOutButton.setVisibility(View.GONE);
+            setButtonVisibility();
         }
     }
 
