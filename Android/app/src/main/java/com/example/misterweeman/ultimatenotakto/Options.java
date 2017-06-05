@@ -1,5 +1,7 @@
 package com.example.misterweeman.ultimatenotakto;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -163,6 +165,15 @@ public class Options extends AppCompatActivity {
         startActivity(refresh);
         finish();
     }
+
+    public void showHowToPlay(){
+        HowToPlayFragment fr =new HowToPlayFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(0, fr);
+        fragmentTransaction.commit();
+    }
+
 
 
 

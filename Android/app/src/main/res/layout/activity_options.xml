@@ -10,6 +10,7 @@
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/settings_layout"
         android:orientation="vertical"
         android:layout_marginTop="100dp"
         android:layout_marginLeft="30dp"
@@ -77,10 +78,11 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/leaderboard_btn"
+            android:id="@+id/how_to_play_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:onClick="showHowToPlay"
             android:text="@string/how_to"/>
 
         <TextView
