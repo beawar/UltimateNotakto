@@ -33,7 +33,7 @@ public class Options extends AppCompatActivity {
     public static final String PREFS_NAME = "MySettingsFile";
     private boolean mIsBound = false;
     private MusicService mServ;
-    private boolean firstTime;
+    private boolean firstTime = true;
 
 
 
@@ -46,7 +46,7 @@ public class Options extends AppCompatActivity {
         doBindService();
         Intent music = new Intent(this,MusicService.class);
         startService(music);
-        firstTime=true;
+        //firstTime=true;
         initializeVariables();
 
         SoundSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -121,6 +121,8 @@ public class Options extends AppCompatActivity {
         super.onRestart();
         mServ.resumeMusic();
     }
+
+
 
     // inizializza elementi del layout
     private void initializeVariables() {
