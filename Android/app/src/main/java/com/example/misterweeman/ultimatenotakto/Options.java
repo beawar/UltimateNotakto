@@ -46,7 +46,6 @@ public class Options extends AppCompatActivity {
         doBindService();
         Intent music = new Intent(this,MusicService.class);
         startService(music);
-        //firstTime=true;
         initializeVariables();
 
         SoundSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {

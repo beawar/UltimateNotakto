@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity{
         doBindService();
         Intent music = new Intent(this,MusicService.class);
         startService(music);
-        //firstTime=true;
     }
 
     @Override
