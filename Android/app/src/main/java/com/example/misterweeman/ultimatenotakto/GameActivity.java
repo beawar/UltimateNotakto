@@ -6,11 +6,14 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.misterweeman.ultimatenotakto.view.GameFragment;
 
@@ -34,10 +37,12 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
 
         GameFragment gameFragment = GameFragment.newInstance(getBoardSize(boardSize));
 
-        fragmentTransaction.add(R.id.game_layout, gameFragment);
+        fragmentTransaction.add(R.id.game_board, gameFragment);
         fragmentTransaction.commit();
 
         setContentView(R.layout.game_activity);
+
+        createTimer();
 
     }
 
@@ -74,6 +79,25 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
         }
 
         return bSize;
+
+    }
+
+    private void createTimer(){
+
+        final TextView textTimer = (TextView) findViewById(R.id.game_timer);
+        final Toast toast = Toast.makeText(this, "Turno finito", Toast.LENGTH_LONG);
+
+        new CountDownTimer(40000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                textTimer.setText(String.valueOf(millisUntilFinished / 1000));
+            }
+
+            public void onFinish(){
+                toast.show();
+            }
+
+        }.start();
 
     }
 
