@@ -22,6 +22,10 @@
     <string name="sounds">Suono</string>
     <string name="how_to">Come giocare</string>
     <string name="lang">Lingue</string>
+    <string name="player1">Player1</string>
+    <string name="player2">Player2</string>
+    <string name="player3">Player3</string>
+    <string name="player4">Player4</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">

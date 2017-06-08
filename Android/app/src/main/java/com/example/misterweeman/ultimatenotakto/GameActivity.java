@@ -31,6 +31,7 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
         Intent intent = getIntent();
 
         int boardSize = intent.getIntExtra("BoardSizeChecked", R.id.button_3x3);
+        int playerSize = intent.getIntExtra("PlayerNumberChecked", R.id.button_2players);
 
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
