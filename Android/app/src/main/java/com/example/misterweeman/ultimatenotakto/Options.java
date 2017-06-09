@@ -1,7 +1,5 @@
 package com.example.misterweeman.ultimatenotakto;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +11,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,6 +25,7 @@ import java.util.Locale;
 import static com.example.misterweeman.ultimatenotakto.Utility.loadLocale;
 
 public class Options extends AppCompatActivity {
+    private static final String TAG = "UltimateNotakto";
     private SeekBar SoundSeekbar;
     private SeekBar EffectsSeekbar;
     private TextView SoundVolume;
@@ -36,6 +36,7 @@ public class Options extends AppCompatActivity {
     private boolean mIsBound = false;
     private MusicService mServ;
     private boolean firstTime = true;
+
 
 
 
@@ -167,15 +168,11 @@ public class Options extends AppCompatActivity {
     }
 
     public void showHowToPlay(View view){
-        HowToPlayFragment fr =new HowToPlayFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        findViewById(R.id.settings_container).setVisibility(View.GONE);
-        fragmentTransaction.add(R.id.fragment_container,fr);
-        fragmentTransaction.show(fr).commit();
+        Log.d(TAG, "goToHowToPlay()");
+
+        Intent intent = new Intent(this, HowtoplayActivity.class);
+        startActivity(intent);
     }
-
-
 
 
     // salva la lingua in Sharedpreferences

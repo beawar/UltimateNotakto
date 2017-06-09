@@ -5,12 +5,12 @@
 
     <application
         android:allowBackup="false"
+        android:configChanges="locale|orientation|screenSize"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:configChanges="locale|orientation|screenSize"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.games.APP_ID"
@@ -23,8 +23,7 @@
             android:name=".SigninActivity"
             android:allowBackup="false"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -70,9 +69,16 @@
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" /></activity>
-        <service android:name=".MusicService"
-            android:enabled="true"></service>
+                android:value=".MainActivity" />
+        </activity>
+
+        <service
+            android:name=".MusicService"
+            android:enabled="true" />
+
+        <activity
+            android:name=".HowtoplayActivity"
+            android:label="@string/title_activity_howtoplay"></activity>
     </application>
 
 </manifest>
