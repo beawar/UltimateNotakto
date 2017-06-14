@@ -14,7 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import static android.R.attr.fragment;
 public class GameActivity extends AppCompatActivity implements GameFragment.GameLostListener{
 
     private static final String TAG = "Notakto Board";
+    private CountDownTimer timer;
 
     @Override
     protected void onCreate(Bundle saveInstanceBundle){
@@ -49,6 +52,8 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layout.addView(layoutInflater.inflate(R.layout.game_activity, layout, false));
+
+        addPlayers(playerSize);
 
         createTimer();
 
@@ -95,18 +100,48 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
         final TextView textTimer = (TextView) findViewById(R.id.game_timer);
         final Toast toast = Toast.makeText(this, "Turno finito", Toast.LENGTH_LONG);
 
-        new CountDownTimer(40000, 1000) {
+        timer = new CountDownTimer(40000, 1000) {
 
-            public void onTick(long millisUntilFinished) {
-                textTimer.setText(String.valueOf(millisUntilFinished / 1000));
-            }
+                    public void onTick(long millisUntilFinished) {
+                        textTimer.setText(String.valueOf(millisUntilFinished / 1000));
+                    }
 
-            public void onFinish(){
-                toast.show();
-            }
+                    public void onFinish(){
+                        toast.show();
+                        this.start();
+                    }
 
-        }.start();
+            }.start();
 
+    }
+
+    private void addPlayers(int playerSize){
+
+        TextView player1 = (TextView) findViewById(R.id.player_1);
+        player1.setBackgroundResource(R.color.green);
+
+        TextView player2 = (TextView) findViewById(R.id.player_2);
+        player2.setBackgroundResource(R.color.green);
+
+        if(playerSize == R.id.button_3players){
+
+            TextView player3 = (TextView) findViewById(R.id.player_3);
+            player3.setBackgroundResource(R.color.green);
+
+        }
+        else if(playerSize == R.id.button_4players){
+
+            TextView player3 = (TextView) findViewById(R.id.player_3);
+            player3.setBackgroundResource(R.color.green);
+
+            TextView player4 = (TextView) findViewById(R.id.player_4);
+            player4.setBackgroundResource(R.color.green);
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        timer.cancel();
     }
 
 }

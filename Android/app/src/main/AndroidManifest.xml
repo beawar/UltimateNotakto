@@ -17,40 +17,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GameOptionActivity"
-            android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
+            android:name=".GameOptionActivity" />
         <activity
-            android:name=".GameActivity"
-            android:parentActivityName=".GameOptionActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".GameOptionActivity" />
-        </activity>
+            android:name=".GameActivity" />
         <activity
-            android:name=".GameStats"
-            android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
+            android:name=".GameStats" />
         <activity
-            android:name=".Options"
-            android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" /></activity>
+            android:name=".Options" />
     </application>
 
 </manifest>
