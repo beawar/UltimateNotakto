@@ -23,7 +23,7 @@
             android:name=".SigninActivity"
             android:allowBackup="false"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,7 +78,7 @@
 
         <activity
             android:name=".HowtoplayActivity"
-            android:label="@string/title_activity_howtoplay"></activity>
+            android:label="@string/title_activity_howtoplay"/>
     </application>
 
 </manifest>

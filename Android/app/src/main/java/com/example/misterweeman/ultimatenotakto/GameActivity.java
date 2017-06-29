@@ -28,9 +28,12 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
 
     private static final String TAG = "Notakto Board";
     private CountDownTimer timer;
+
+    /*
     private AlertDialog alertDialog;
     private static final String ARG_GAMELOST = "gameLost";
     private boolean gameLost = false;
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +89,7 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
     }
 
 
-
+/*
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -104,6 +107,7 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
             gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
         }
     }
+*/
 
     @Override
     public void onGameLost() {
