@@ -195,7 +195,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     private void startGame(boolean b) {
         Log.d(TAG, "startGame: ");
-        switchToScreen(R.layout.activity_game);
+        mParentActivity.startActivity(new Intent(mParentActivity, GameActivity.class));
     }
 
     @Override
@@ -265,6 +265,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     private void updateRoom(Room room) {
         if (room != null) {
             mPartecipants = room.getParticipants();
+            Log.d(TAG, "updateRoom: room " + room.getRoomId());
         }
         if (mPartecipants != null) {
             updatePeerScoresDisplay();
@@ -429,12 +430,12 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onP2PConnected(String partecipant) {
-
+        Log.d(TAG, "onP2PConnected: partecipant " + partecipant);
     }
 
     @Override
     public void onP2PDisconnected(String partecipant) {
-
+        Log.d(TAG, "onP2PDisconnected: partecipant " + partecipant);
     }
 
     @Override
@@ -520,13 +521,15 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     private void switchToScreen(int layout) {
-        mCurScreen = layout;
-        // should we show the invitation popup? do not show invitation while in an game
-        boolean showInvPopup = mIncomingInvitationId != null && mCurScreen != R.layout.activity_game;
+        if (mCurScreen != layout) {
+            mCurScreen = layout;
+            // should we show the invitation popup? do not show invitation while in an game
+            boolean showInvPopup = mIncomingInvitationId != null && mCurScreen != R.layout.activity_game;
 
-        App.setLayout(mParentActivity, layout);
-        if (mParentActivity.findViewById(R.id.invitation_popup) != null) {
-            mParentActivity.findViewById(R.id.invitation_popup).setVisibility(showInvPopup ? View.VISIBLE : View.GONE);
+            App.setLayout(mParentActivity, layout);
+            if (mParentActivity.findViewById(R.id.invitation_popup) != null) {
+                mParentActivity.findViewById(R.id.invitation_popup).setVisibility(showInvPopup ? View.VISIBLE : View.GONE);
+            }
         }
     }
 

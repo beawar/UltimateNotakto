@@ -30,9 +30,10 @@ public class App extends Application {
         return getInstance().getGoogleApiHelperInstace();
     }
 
-    public static void setLayout (Activity activity, int layout) {
+    public static void setLayout(Activity activity, int layout) {
         LinearLayout container = (LinearLayout) activity.findViewById(R.id.layout_container);
         LayoutInflater layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         container.addView(layoutInflater.inflate(layout, container, false));
     }
+
 }
