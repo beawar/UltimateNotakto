@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/create_game"
-            android:onClick="goToOption"/>
+            android:onClick="goToNewGame"/>
 
         <Button
             android:id="@+id/join_game_btn"

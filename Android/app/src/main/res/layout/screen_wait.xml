@@ -4,5 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/screen_wait">
 
-    <TextView style="@style/Blurb" android:text="@string/please_wait" />
+    <TextView android:text="@string/please_wait"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
 </LinearLayout>

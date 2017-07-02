@@ -34,7 +34,8 @@
                 android:id="@+id/button_3x3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/size1"/>
+                android:text="@string/size1"
+                android:checked="true"/>
 
             <RadioButton
                 android:id="@+id/button_4x4"
@@ -87,7 +88,8 @@
                 android:id="@+id/button_2players"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/player_size1"/>
+                android:text="@string/player_size1"
+                android:checked="true"/>
 
             <RadioButton
                 android:id="@+id/button_3players"

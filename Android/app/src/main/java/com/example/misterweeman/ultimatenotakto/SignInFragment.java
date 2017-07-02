@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import com.google.example.games.basegameutils.BaseGameUtils;
 import static android.app.Activity.RESULT_OK;
 
 public class SignInFragment extends Fragment implements GoogleApiHelper.ConnectionListener{
-
+    private static final String TAG = "SignInFragment";
     private GoogleApiHelper mGoogleApiHelper;
 
     private boolean mResolvingConnectionFailure = false;
@@ -158,4 +159,10 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
         }
     }
 
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume: ");
+        setButtonVisibility();
+        super.onResume();
+    }
 }

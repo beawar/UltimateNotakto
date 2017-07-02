@@ -29,6 +29,8 @@ public class BoardView extends View {
     private Board grid;
     private Paint blackPaint = new Paint();
 
+    private static int[] colors = {Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW};
+
     private int xTouch = Integer.MAX_VALUE, yTouch = Integer.MAX_VALUE;
 
     public BoardView(Context context) {
@@ -167,5 +169,21 @@ public class BoardView extends View {
             state = bundle.getParcelable(ARG_SUPERSTATE);
         }
         super.onRestoreInstanceState(state);
+    }
+
+    public void updateBoard (int x, int y, int color) {
+        if (x < gridSize && y < gridSize) {
+            grid.setChecked(x, y);
+            drawXStyle(color);
+            invalidate();
+        }
+    }
+
+    public static int[] getColors() {
+        return colors;
+    }
+
+    public static void setColors(int[] colors) {
+        BoardView.colors = colors;
     }
 }

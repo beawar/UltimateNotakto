@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // called when the user click "Crea Partita"
-    public void goToOption(View view){
+    public void goToNewGame(View view){
 
-        Log.d(TAG, "goToOption()");
+        Log.d(TAG, "goToNewGame()");
 
-        Intent intent = new Intent(this, GameOptionActivity.class);
+        Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
 

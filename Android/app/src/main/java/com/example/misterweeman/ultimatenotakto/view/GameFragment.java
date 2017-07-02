@@ -8,8 +8,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.misterweeman.ultimatenotakto.ConnectionHandler;
+import com.example.misterweeman.ultimatenotakto.GameActivity;
 import com.example.misterweeman.ultimatenotakto.model.Board;
 import com.example.misterweeman.ultimatenotakto.model.Notakto;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMessageReceivedListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,12 +24,17 @@ import com.example.misterweeman.ultimatenotakto.model.Notakto;
  * Use the {@link GameFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GameFragment extends Fragment implements View.OnTouchListener {
+public class GameFragment extends Fragment implements
+        View.OnTouchListener, RealTimeMessageReceivedListener {
     private static final String ARG_GRIDSIZE = "gridSize";
     private Board board;
+    private BoardView boardView;
     private int gridSize = 3;
 
+    private List<String> players;
+
     private GameLostListener gameLostListener;
+    private ConnectionHandler mConnectionHandler;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,13 +65,17 @@ public class GameFragment extends Fragment implements View.OnTouchListener {
             gridSize = getArguments().getInt(ARG_GRIDSIZE, 3);
         }
         board = new Board(gridSize);
+        players = new ArrayList<>();
         setRetainInstance(true);
+        if (getActivity() instanceof GameActivity) {
+            mConnectionHandler =((GameActivity) getActivity()).getConnectionHandler();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final BoardView boardView = new BoardView(getActivity());
+        boardView = new BoardView(getActivity());
         boardView.setGrid(this.board);
         boardView.setOnTouchListener(this);
         return boardView;
@@ -67,20 +83,34 @@ public class GameFragment extends Fragment implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        boolean viewOnTouchEvent = v.onTouchEvent(event);
         if (v instanceof BoardView && event.getAction() == MotionEvent.ACTION_UP) {
             BoardView bv = (BoardView) v;
-            if (bv.getXTouch() < gridSize && bv.getYTouch() < gridSize) {
-                if (Notakto.checkBoardForLost(board, bv.getXTouch(), bv.getYTouch())) {
-                    if (gameLostListener != null) {
-                        gameLostListener.onGameLost();
+            int x = bv.getXTouch();
+            int y = bv.getYTouch();
+            if (x < gridSize && y < gridSize) {
+                if (mConnectionHandler.isMyTurn()) {
+                    if (!mConnectionHandler.hasLost()) {
+                        // if it's my turn and I have not lost yet, I play
+                        boolean b = bv.onTouchEvent(event);
+                        if (Notakto.checkBoardForLost(board, x, y)) {
+                            if (gameLostListener != null) {
+                                gameLostListener.onGameLost();
+                            }
+                            // if it's my turn and i just lost
+                            mConnectionHandler.broadcastTurn(true, x, y);
+                        } else {
+                            // if it's my turn and I haven't lost yet
+                            mConnectionHandler.broadcastTurn(false, x, y);
+                        }
+                        return b;
                     }
-                    return true;
+                    // if it's my turn but I lost already, I just pass it
+                    mConnectionHandler.broadcastTurn(true, -1, -1);
                 }
+                return false;
             }
-            return false;
         }
-        return viewOnTouchEvent;
+        return v.onTouchEvent(event);
     }
 
     @Override
@@ -98,6 +128,29 @@ public class GameFragment extends Fragment implements View.OnTouchListener {
     public void onDetach() {
         super.onDetach();
         gameLostListener = null;
+    }
+
+    @Override
+    public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
+        mConnectionHandler.onRealTimeMessageReceived(realTimeMessage);
+        byte[] buf = realTimeMessage.getMessageData();
+        String sender = realTimeMessage.getSenderParticipantId();
+        boolean hasLost = (char) buf[0] == 'Y';
+        int x = (int) buf[1];
+        int y = (int) buf[2];
+        int turn = (int) buf[3];
+        updateBoard(x, y, sender, turn);
+    }
+
+    public void updateBoard(int x, int y, String sender, int turn) {
+        if (!players.contains(sender)) {
+            players.add(sender);
+        }
+        if (boardView != null) {
+            int color = BoardView.getColors()[turn];
+            boardView.updateBoard(x, y, color);
+        }
+
     }
 
     /**
