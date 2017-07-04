@@ -300,7 +300,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         // send to every other partecipant
         // Reliable messages are used because receiving this information is essential for the game
         for (Participant p : mPartecipants) {
-            if (!p.getParticipantId().equals(mMyId) && p.getStatus() != Participant.STATUS_JOINED) {
+            if (!p.getParticipantId().equals(mMyId) && p.getStatus() == Participant.STATUS_JOINED) {
                 Games.RealTimeMultiplayer.sendReliableMessage(
                         mGoogleApiHelper.getGoogleApiClient(), null, mMsgBuffer, mRoomId, p.getParticipantId());
             }

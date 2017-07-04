@@ -12,11 +12,13 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.example.misterweeman.ultimatenotakto.view.GameFragment;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class GameActivity extends AppCompatActivity implements GameFragment.GameLostListener {
+public class GameActivity extends AppCompatActivity implements
+        GameFragment.GameListener {
     private static final String TAG = "GameActivity";
     private AlertDialog alertDialog;
     private static final String ARG_GAMELOST = "gameLost";
@@ -75,7 +77,7 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
     protected void onPostResume() {
         Log.d(TAG, "onPostResume: ");
         super.onPostResume();
-        while (!fragmentTransactionHelpers.isEmpty()){
+        while (!fragmentTransactionHelpers.isEmpty()) {
             FragmentTransactionHelper fragmentTransactionHelper = fragmentTransactionHelpers.remove();
             fragmentTransactionHelper.commit();
             mCurrentFragment = fragmentTransactionHelper.getReplacingFragment();
@@ -190,5 +192,17 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
 
     public Fragment getCurrentFragment() {
         return mCurrentFragment;
+    }
+
+    @Override
+    public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
+        mConnectionHandler.onRealTimeMessageReceived(realTimeMessage);
+        byte[] buf = realTimeMessage.getMessageData();
+        String sender = realTimeMessage.getSenderParticipantId();
+        boolean hasLost = (char) buf[0] == 'Y';
+        int x = (int) buf[1];
+        int y = (int) buf[2];
+        int turn = (int) buf[3];
+        mGameFragment.updateBoard(x, y, sender, turn);
     }
 }

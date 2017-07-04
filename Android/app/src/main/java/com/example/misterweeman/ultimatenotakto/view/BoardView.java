@@ -134,15 +134,16 @@ public class BoardView extends View {
     // Setta la cella toccata con l'opposto del suo valore
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            xTouch = (int) (event.getX() / cellSize);
-            yTouch = (int) (event.getY() / cellSize);
-            if (xTouch < gridSize && yTouch < gridSize && grid.setChecked(xTouch, yTouch)) {
-                invalidate();
-                return true;
-            }
-        }
-        return false;
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        xTouch = (int) (event.getX() / cellSize);
+        yTouch = (int) (event.getY() / cellSize);
+//            if (xTouch < gridSize && yTouch < gridSize && grid.setChecked(xTouch, yTouch)) {
+//                invalidate();
+//                return true;
+//            }
+//        }
+//        return false;
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -171,12 +172,13 @@ public class BoardView extends View {
         super.onRestoreInstanceState(state);
     }
 
-    public void updateBoard (int x, int y, int color) {
-        if (x < gridSize && y < gridSize) {
-            grid.setChecked(x, y);
+    public boolean updateBoard (int x, int y, int color) {
+        if (x < gridSize && y < gridSize && grid.setChecked(x, y)) {
             drawXStyle(color);
             invalidate();
+            return true;
         }
+        return false;
     }
 
     public static int[] getColors() {
