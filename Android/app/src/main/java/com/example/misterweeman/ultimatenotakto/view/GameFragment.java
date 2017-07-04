@@ -14,7 +14,6 @@ import com.example.misterweeman.ultimatenotakto.ConnectionHandler;
 import com.example.misterweeman.ultimatenotakto.GameActivity;
 import com.example.misterweeman.ultimatenotakto.model.Board;
 import com.example.misterweeman.ultimatenotakto.model.Notakto;
-import com.google.android.gms.games.multiplayer.realtime.RealTimeMessageReceivedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +152,7 @@ public class GameFragment extends Fragment implements
      * to the activity and potentially other fragments contained in that
      * activity.
      */
-    public interface GameListener extends RealTimeMessageReceivedListener{
+    public interface GameListener{
         void onGameLost();
     }
 }

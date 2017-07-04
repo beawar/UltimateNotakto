@@ -38,7 +38,6 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     private final static int RC_SELECT_PLAYERS = 10000;
     private static final int RC_WAITING_ROOM = 10002;
-    private static final int RC_INVITATION_INBOX = 10001;
 
     private GoogleApiHelper mGoogleApiHelper;
     // room id of the current game
@@ -58,16 +57,14 @@ public class ConnectionHandler implements RoomUpdateListener,
     private int mFromScreen;
     private boolean mResolvingConnectionFailure = false;
 
-//    private List<String> mActivePartecipant = new ArrayList<>();
     private Set<String> mFinishedPartecipants = new HashSet<>();
     private int mCurrentTurn = 0;
-//    private int mSecondsLeft;
 
-    private Activity mParentActivity = null;
+    private GameActivity mParentActivity = null;
     private int mMyTurn;
 
 
-    ConnectionHandler(Activity activity, int layoutId) {
+    ConnectionHandler(GameActivity activity, int layoutId) {
         mParentActivity = activity;
         mFromScreen = layoutId;
         mGoogleApiHelper = App.getGoogleApiHelper();
@@ -94,8 +91,8 @@ public class ConnectionHandler implements RoomUpdateListener,
             Log.d(TAG, "Select players UI succeded");
 
             // get the invitee list
-            final ArrayList<String> invitess = data.getStringArrayListExtra(Games.EXTRA_PLAYER_IDS);
-            Log.d(TAG, "Invitee count:" + invitess.size());
+            final ArrayList<String> invitees = data.getStringArrayListExtra(Games.EXTRA_PLAYER_IDS);
+            Log.d(TAG, "Invitee count:" + invitees.size());
 
             // get auto-match criteria
             Bundle autoMatchCriteria;
@@ -104,7 +101,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
             if (minAutoMatchPlayers > 0) {
                 autoMatchCriteria = RoomConfig.createAutoMatchCriteria(minAutoMatchPlayers, maxAutoMatchPlayers, 0);
-                Log.d(TAG, "Automatch criteria: " + autoMatchCriteria);
+                Log.d(TAG, "Auto-match criteria: " + autoMatchCriteria);
             } else {
                 Log.d(TAG, "minAutoMatchPlayers = " + minAutoMatchPlayers);
                 autoMatchCriteria = null;
@@ -112,7 +109,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
             // create the room and specify a variant if appropriate
             RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();
-            roomConfigBuilder.addPlayersToInvite(invitess);
+            roomConfigBuilder.addPlayersToInvite(invitees);
             if (autoMatchCriteria != null) {
                 roomConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
             }
@@ -135,8 +132,22 @@ public class ConnectionHandler implements RoomUpdateListener,
         startGame();
     }
 
+    protected boolean shouldCancelGame(Room room) {
+        if (mPartecipants != null) {
+            int connectedPlayers = 0;
+            for (Participant p : mPartecipants) {
+                if (p.isConnectedToRoom()) {
+                    connectedPlayers += 1;
+                }
+            }
+            return connectedPlayers <= 1
+                    || mFinishedPartecipants.size() == mPartecipants.size() - 1;
+        }
+        return true;
+    }
+
     @NonNull
-    private RoomConfig.Builder makeBasicRoomConfigBuilder() {
+    protected RoomConfig.Builder makeBasicRoomConfigBuilder() {
         return RoomConfig.builder(this)
                 .setMessageReceivedListener(this)
                 .setRoomStatusUpdateListener(this);
@@ -174,7 +185,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
     }
 
-    private void startGame() {
+    protected void startGame() {
         Log.d(TAG, "startGame: ");
 //        mParentActivity.startActivity(new Intent(mParentActivity, GameActivity.class));
         switchToScreen(R.layout.fragment_game);
@@ -218,7 +229,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     }
 
-    private void leaveRoom() {
+    protected void leaveRoom() {
         Log.d(TAG, "Leaving room");
 //        mSecondsLeft = 0;
         stopKeepingScreenOn();
@@ -232,7 +243,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
     }
 
-    private void showWaitingRoom(Room room) {
+    protected void showWaitingRoom(Room room) {
         Log.d(TAG, "showWaitingRoom: ");
         final int MIN_PLAYERS = Integer.MAX_VALUE;
         Intent intent = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiHelper.getGoogleApiClient(), room, MIN_PLAYERS);
@@ -241,13 +252,13 @@ public class ConnectionHandler implements RoomUpdateListener,
         mParentActivity.startActivityForResult(intent, RC_WAITING_ROOM);
     }
 
-    private void showGameError(){
+    protected void showGameError(){
         Log.d(TAG, "showGameError: ");
         BaseGameUtils.makeSimpleDialog(mParentActivity, mParentActivity.getString(R.string.game_problem));
         switchToMainScreen();
     }
 
-    private void updateRoom(Room room) {
+    protected void updateRoom(Room room) {
         Log.d(TAG, "updateRoom: ");
         if (room != null) {
             mPartecipants = room.getParticipants();
@@ -328,6 +339,8 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
         mCurrentTurn = ((int) buf[3] + 1) % mPartecipants.size();
 
+        mParentActivity.updateBoard(x, y, sender, turn);
+
     }
 
     @Override
@@ -354,7 +367,11 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onPeerDeclined(Room room, List<String> list) {
         Log.d(TAG, "onPeerDeclined: ");
-        updateRoom(room);
+        if (shouldCancelGame(room)) {
+            leaveRoom();
+        } else {
+            updateRoom(room);
+        }
     }
 
 
@@ -368,7 +385,11 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onPeerLeft(Room room, List<String> list) {
         Log.d(TAG, "onPeerLeft: ");
-        updateRoom(room);
+        if (shouldCancelGame(room)) {
+            leaveRoom();
+        } else {
+            updateRoom(room);
+        }
     }
 
 
@@ -408,7 +429,11 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onPeersDisconnected(Room room, List<String> list) {
         Log.d(TAG, "onPeersDisconnected: ");
-        updateRoom(room);
+        if (shouldCancelGame(room)) {
+            leaveRoom();
+        } else {
+            updateRoom(room);
+        }
     }
 
 
@@ -483,7 +508,7 @@ public class ConnectionHandler implements RoomUpdateListener,
             Games.RealTimeMultiplayer.create(mGoogleApiHelper.getGoogleApiClient(), roomConfigBuilder.build());
         } else {
             BaseGameUtils.makeSimpleDialog(mParentActivity, mParentActivity.getString(R.string.game_problem));
-           switchToScreen(R.layout.fragment_signin);
+            switchToScreen(R.layout.fragment_signin);
         }
     }
 
@@ -504,7 +529,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         stopKeepingScreenOn();
     }
 
-    private void switchToScreen(int layout) {
+    protected void switchToScreen(int layout) {
         Log.d(TAG, "switchToScreen: ");
         if (mCurScreen != layout) {
             if (layout == R.layout.fragment_game || layout == R.layout.fragment_game_option) {
@@ -523,7 +548,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
     }
 
-    private void switchToMainScreen() {
+    protected void switchToMainScreen() {
         Log.d(TAG, "switchToMainScreen: ");
         if (mGoogleApiHelper.getGoogleApiClient() != null && mGoogleApiHelper.isConnected()) {
             switchToScreen(mFromScreen);
@@ -533,16 +558,16 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
     }
 
-    private void switchToGameScreen(int layout) {
+    protected void switchToGameScreen(int layout) {
         Log.d(TAG, "switchToGameScreen: ");
-        if (mParentActivity instanceof GameActivity) {
-            GameActivity gameActivity = (GameActivity) mParentActivity;
-            if (layout == R.layout.fragment_game) {
-                gameActivity.replaceFragment(gameActivity.getGameFragment());
-            } else if (layout == R.layout.fragment_game_option) {
-                gameActivity.replaceFragment(gameActivity.getGameOptionFragment());
-            }
+
+        GameActivity gameActivity = (GameActivity) mParentActivity;
+        if (layout == R.layout.fragment_game) {
+            gameActivity.replaceFragment(gameActivity.getGameFragment());
+        } else if (layout == R.layout.fragment_game_option) {
+            gameActivity.replaceFragment(gameActivity.getGameOptionFragment());
         }
+
     }
 
 //    public String getIncomingInvitationId() {
@@ -564,7 +589,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 //        }
 //    }
 
-//    private void invitationInbox() {
+//    protected void invitationInbox() {
 //        Intent intent = Games.Invitations.getInvitationInboxIntent(mGoogleApiHelper.getGoogleApiClient());
 //        mParentActivity.startActivityForResult(intent, RC_INVITATION_INBOX);
 //    }
