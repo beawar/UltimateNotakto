@@ -169,6 +169,7 @@ public class GameActivity extends AppCompatActivity implements GameFragment.Game
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(contentFrameId, replacingFragment).commit();
         mCurrentFragment = replacingFragment;
+        recreate();
     }
 
     @Override
