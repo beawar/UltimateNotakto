@@ -92,12 +92,6 @@ public class GameOptionFragment extends Fragment{
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mConnectionHandler.onStop();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mConnectionHandler.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);

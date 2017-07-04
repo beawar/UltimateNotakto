@@ -83,6 +83,7 @@ public class GameFragment extends Fragment implements
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        mConnectionHandler.isConnectedToRoom();
         if (v instanceof BoardView && event.getAction() == MotionEvent.ACTION_UP) {
             BoardView bv = (BoardView) v;
             int x = bv.getXTouch();
