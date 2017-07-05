@@ -15,6 +15,10 @@ import android.view.View;
 
 import com.example.misterweeman.ultimatenotakto.model.Board;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Bea on 17/05/2017.
  * View per la griglia di gioco
@@ -30,8 +34,12 @@ public class BoardView extends View {
     private int gridSize = 3;
     private int cellSize;
     private Paint xOnBoard = new Paint();
+
     private Board grid;
     private Paint blackPaint = new Paint();
+    private int selectedColor;
+    private Map<Path, Paint> colorsMap = new HashMap<Path, Paint>();
+    private ArrayList <Path> paths = new ArrayList<Path>();
 
     private static int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
 
@@ -44,7 +52,7 @@ public class BoardView extends View {
     public BoardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         blackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        drawXStyle(Color.RED);
+        drawXStyle(Color.BLACK);
     }
 
     public BoardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -92,12 +100,14 @@ public class BoardView extends View {
     // Imposta lo stile della X nella griglia di gioco
     private void drawXStyle(int color) {
         Log.d(TAG, "drawXStyle()");
-        xOnBoard.setColor(color);
+        selectedColor = color;
+        /*xOnBoard.setColor(color);
         xOnBoard.setStrokeWidth(16);
         xOnBoard.setAntiAlias(true);
         xOnBoard.setStrokeCap(Paint.Cap.ROUND);
-        xOnBoard.setStyle(Paint.Style.STROKE);
+        xOnBoard.setStyle(Paint.Style.STROKE);*/
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -105,6 +115,7 @@ public class BoardView extends View {
         canvas.drawColor(Color.WHITE);
         drawCells(canvas);
         drawGrid(canvas);
+
     }
 
     private void drawGrid(Canvas canvas) {
@@ -117,18 +128,33 @@ public class BoardView extends View {
 
     private void drawCells(Canvas canvas) {
         // Disegna la X
+        Path x = new Path();
+        Paint mPaint = new Paint();
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 if (grid.at(i, j)) {
-                    canvas.drawLine((i * cellSize) + (cellSize / 6), (j * cellSize) + (cellSize / 6),
-                            ((i + 1) * cellSize) - (cellSize / 6), ((j + 1) * cellSize) - (cellSize / 6),
-                            xOnBoard);
-                    canvas.drawLine((i + 1) * cellSize - (cellSize / 6), j * cellSize + (cellSize / 6),
-                            i * cellSize + (cellSize / 6), (j + 1) * cellSize - (cellSize / 6),
-                            xOnBoard);
+                    x.moveTo((i * cellSize) + (cellSize / 6), (j * cellSize) + (cellSize / 6));
+                    x.lineTo(((i + 1) * cellSize) - (cellSize / 6), ((j + 1) * cellSize) - (cellSize / 6));
+                    x.moveTo((i + 1) * cellSize - (cellSize / 6), j * cellSize + (cellSize / 6));
+                    x.lineTo(i * cellSize + (cellSize / 6), (j + 1) * cellSize - (cellSize / 6));
                 }
             }
         }
+        mPaint.setColor(selectedColor);
+        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeWidth(16);
+        paths.add(x);
+        colorsMap.put(x,mPaint);
+        for (Path p : paths)
+        {
+            Log.d(TAG, "drawXStyle() "+colorsMap.get(p));
+            canvas.drawPath(p, colorsMap.get(p));
+        }
+        //mPaint.setColor(selectedColor);
+        //canvas.drawPath(x, mPaint);
     }
 
     @Override
