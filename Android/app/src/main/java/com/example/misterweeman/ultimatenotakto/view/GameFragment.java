@@ -94,7 +94,7 @@ public class GameFragment extends Fragment implements
                 if (mConnectionHandler.isMyTurn()) {
                     if (!mConnectionHandler.hasLost()) {
                         // if it's my turn and I have not lost yet, I play
-                        boolean b = bv.updateBoard(x, y, Color.RED);
+                        boolean b = bv.updateBoard(x, y, mConnectionHandler.getCurrTurn());
                         if (Notakto.checkBoardForLost(board, x, y)) {
                             if (gameListener != null) {
                                 gameListener.onGameLost();

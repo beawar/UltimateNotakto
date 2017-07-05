@@ -609,4 +609,9 @@ public class ConnectionHandler implements RoomUpdateListener,
         return mRoomId != null;
     }
 
+    public int getCurrTurn(){
+        Log.d(TAG, "getCurrTurn()");
+        return mCurrentTurn;
+    }
+
 }
