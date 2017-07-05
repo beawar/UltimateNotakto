@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -19,6 +21,8 @@ import com.example.misterweeman.ultimatenotakto.model.Board;
  */
 
 public class BoardView extends View {
+    private static final String TAG = "BoardView";
+
     private static final String ARG_GRIDSIZE = "gridSize";
     private static final String ARG_GRID = "grid";
     private static final String ARG_SUPERSTATE = "superState";
@@ -87,6 +91,7 @@ public class BoardView extends View {
 
     // Imposta lo stile della X nella griglia di gioco
     private void drawXStyle(int color) {
+        Log.d(TAG, "drawXStyle()");
         xOnBoard.setColor(color);
         xOnBoard.setStrokeWidth(16);
         xOnBoard.setAntiAlias(true);
