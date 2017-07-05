@@ -194,6 +194,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     public void updateBoard(int x, int y, String sender, int turn) {
+        Log.d(TAG, "updateBoard()");
         mGameFragment.updateBoard(x, y, sender, turn);
     }
 }

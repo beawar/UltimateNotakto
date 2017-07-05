@@ -26,6 +26,7 @@ import java.util.List;
  */
 public class GameFragment extends Fragment implements
         View.OnTouchListener {
+    private static final String TAG = "GameFragment";
     private static final String ARG_GRIDSIZE = "gridSize";
     private Board board;
     private BoardView boardView;
@@ -136,6 +137,7 @@ public class GameFragment extends Fragment implements
 
 
     public void updateBoard(int x, int y, String sender, int turn) {
+        Log.d(TAG, "updateBoard()");
         if (!players.contains(sender)) {
             players.add(sender);
         }

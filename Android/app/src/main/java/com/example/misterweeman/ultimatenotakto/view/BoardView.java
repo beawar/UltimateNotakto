@@ -29,7 +29,7 @@ public class BoardView extends View {
     private Board grid;
     private Paint blackPaint = new Paint();
 
-    private static int[] colors = {Color.BLUE, Color.RED, Color.GREEN, Color.YELLOW};
+    private static int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
 
     private int xTouch = Integer.MAX_VALUE, yTouch = Integer.MAX_VALUE;
 
