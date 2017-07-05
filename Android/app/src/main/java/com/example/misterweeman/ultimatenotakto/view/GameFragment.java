@@ -1,7 +1,6 @@
 package com.example.misterweeman.ultimatenotakto.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -94,25 +93,26 @@ public class GameFragment extends Fragment implements
                 if (mConnectionHandler.isMyTurn()) {
                     if (!mConnectionHandler.hasLost()) {
                         // if it's my turn and I have not lost yet, I play
-                        boolean b = bv.updateBoard(x, y, bv.getColors()[mConnectionHandler.getCurrTurn()]);
-                        if (Notakto.checkBoardForLost(board, x, y)) {
-                            if (gameListener != null) {
-                                gameListener.onGameLost();
+                        // if I click on an already cheched cell, do nothing and wait for a valid touch
+                        if (bv.updateBoard(x, y, BoardView.getColors()[mConnectionHandler.getCurrTurn()])) {
+                            // if the touch is valid, check for lost and broadcast the move
+                            if (Notakto.checkBoardForLost(board, x, y)) {
+                                if (gameListener != null) {
+                                    gameListener.onGameLost();
+                                }
+                                // if it's my turn and i just lost
+                                mConnectionHandler.broadcastTurn(true, x, y);
+                            } else {
+                                // if it's my turn and I haven't lost yet
+                                mConnectionHandler.broadcastTurn(false, x, y);
                             }
-                            // if it's my turn and i just lost
-                            mConnectionHandler.broadcastTurn(true, x, y);
-                        } else {
-                            // if it's my turn and I haven't lost yet
-                            mConnectionHandler.broadcastTurn(false, x, y);
                         }
-//                        return b;
                     } else {
-                        // if it's my turn but I lost already, I just pass it
+                        // if it's my turn but I lost already, I just skip it
                         mConnectionHandler.broadcastTurn(true, -1, -1);
                     }
                 }
             }
-//            return false;
         }
         return true;
     }

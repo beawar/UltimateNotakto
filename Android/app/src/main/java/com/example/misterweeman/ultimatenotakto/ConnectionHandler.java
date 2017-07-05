@@ -307,7 +307,6 @@ public class ConnectionHandler implements RoomUpdateListener,
         // turnId indicates whos turn has take place
         mMsgBuffer[3] = (byte) mCurrentTurn;
 
-
         // send to every other partecipant
         // Reliable messages are used because receiving this information is essential for the game
         for (Participant p : mPartecipants) {
@@ -316,6 +315,9 @@ public class ConnectionHandler implements RoomUpdateListener,
                         mGoogleApiHelper.getGoogleApiClient(), null, mMsgBuffer, mRoomId, p.getParticipantId());
             }
         }
+
+        // update the current turn (if I sent this message, I have already played my turn)
+        mCurrentTurn = (mCurrentTurn + 1) % mPartecipants.size();
     }
 
     @Override
@@ -337,7 +339,9 @@ public class ConnectionHandler implements RoomUpdateListener,
                 mFinishedPartecipants.add(sender);
             }
         }
-        mCurrentTurn = ((int) buf[3] + 1) % mPartecipants.size();
+        // update the current turn
+        mCurrentTurn = (turn + 1) % mPartecipants.size();
+
 
         mParentActivity.updateBoard(x, y, sender, turn);
 
