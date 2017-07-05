@@ -45,7 +45,10 @@ public class Options extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         loadLocale(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_options);
+        setContentView(R.layout.base_layout);
+        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
+        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layout.addView(layoutInflater.inflate(R.layout.activity_options, layout, false));
         doBindService();
         Intent music = new Intent(this,MusicService.class);
         startService(music);
@@ -79,8 +82,8 @@ public class Options extends AppCompatActivity {
             }
 
         });
-        Languages.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
+        Languages.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
@@ -101,8 +104,6 @@ public class Options extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     @Override

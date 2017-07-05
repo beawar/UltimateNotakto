@@ -4,15 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
-    tools:context="com.example.misterweeman.ultimatenotakto.GameActivity">
+    tools:context="com.example.misterweeman.ultimatenotakto.GameActivity"
+    android:id="@+id/activity_game">
 
     <LinearLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:orientation="vertical" />
 
 
 </android.support.constraint.ConstraintLayout>

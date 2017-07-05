@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/game_option_activity">
+
+    <LinearLayout
+        android:id="@+id/board_size_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/size_title"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="@string/board_size"
+            android:textSize="30sp"/>
+
+        <RadioGroup
+            android:id="@+id/button_size_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+
+            <RadioButton
+                android:id="@+id/button_3x3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/size1"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/button_4x4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/size2"/>
+
+            <RadioButton
+                android:id="@+id/button_5x5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/size3"/>
+
+            <RadioButton
+                android:id="@+id/button_6x6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/size4"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/number_player_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/player_title"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="@string/player_size"
+            android:textSize="30sp"/>
+
+        <RadioGroup
+            android:id="@+id/button_player_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp">
+
+            <RadioButton
+                android:id="@+id/button_2players"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/player_size1"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/button_3players"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/player_size2"/>
+
+            <RadioButton
+                android:id="@+id/button_4players"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/player_size3"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp">
+
+        <Button
+            android:id="@+id/create_quick_game_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_quick_game"
+            android:onClick="startQuickGame"/>
+        <Button
+            android:id="@+id/create_game_btn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create_game"
+            android:onClick="createGame"/>
+
+    </LinearLayout>
+
+</LinearLayout>

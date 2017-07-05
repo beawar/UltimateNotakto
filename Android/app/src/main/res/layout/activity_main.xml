@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:id="@+id/activity_main">
 
     <TextView
         android:id="@+id/mainActivity_title"
@@ -17,17 +19,18 @@
     <LinearLayout
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp">
+        android:layout_marginRight="30dp"
+        android:layout_weight="1.01">
 
         <Button
             android:id="@+id/create_game_btn1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/create_game"
-            android:onClick="goToOption"/>
+            android:onClick="goToNewGame"/>
 
         <Button
             android:id="@+id/join_game_btn"

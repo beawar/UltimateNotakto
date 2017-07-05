@@ -8,14 +8,16 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import static com.example.misterweeman.ultimatenotakto.Utility.loadLocale;
-
 
 public class MainActivity extends AppCompatActivity{
 
     private static final String TAG = "UltimateNotakto";
+    private SignInFragment signInFragment;
     private boolean mIsBound = false;
     private MusicService mServ;
     private boolean firstTime = true;
@@ -24,18 +26,20 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState){
         loadLocale(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.base_layout);
+        App.setLayout(this, R.layout.activity_main);
         doBindService();
         Intent music = new Intent(this,MusicService.class);
         startService(music);
-    }
 
-    @Override
-    protected void onRestart() {
-        loadLocale(this);
-        super.onRestart();
-        setContentView(R.layout.activity_main);
-        mServ.resumeMusic();
+        if (findViewById(R.id.signin_fragment) != null) {
+            if (savedInstanceState == null) {
+                signInFragment = new SignInFragment();
+                signInFragment.setArguments(getIntent().getExtras());
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.signin_fragment, signInFragment).commit();
+            }
+        }
     }
 
     protected void onResume() {
@@ -47,11 +51,11 @@ public class MainActivity extends AppCompatActivity{
     }
 
     // called when the user click "Crea Partita"
-    public void goToOption(View view){
+    public void goToNewGame(View view){
 
-        Log.d(TAG, "goToOption()");
+        Log.d(TAG, "goToNewGame()");
 
-        Intent intent = new Intent(this, GameOptionActivity.class);
+        Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- INVITATION POPUP -->
+    <LinearLayout
+        android:id="@+id/invitation_popup"
+        style="@style/InvPopup">
+        <TextView
+            android:id="@+id/incoming_invitation_text"
+            style="@style/InvPopupText"/>
+        <Button
+            android:id="@+id/button_accept_popup_invitation"
+            style="@style/InvPopupButton"
+            android:text="@string/accept_popup_invite" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"/>
+
+    <!-- SIGN IN/OUT FRAGMENT-->
+    <FrameLayout
+        layout="@layout/fragment_signin"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/signin_fragment"/>
+
+</LinearLayout>

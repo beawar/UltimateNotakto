@@ -8,26 +8,29 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.misterweeman.ultimatenotakto.model.Board;
 
-/**
- * Created by Bea on 17/05/2017.
- * View per la griglia di gioco
- */
-
 public class BoardView extends View {
+    private static final String TAG = "BoardView";
+
     private static final String ARG_GRIDSIZE = "gridSize";
     private static final String ARG_GRID = "grid";
     private static final String ARG_SUPERSTATE = "superState";
 
     private int gridSize = 3;
     private int cellSize;
-    private Paint xOnBoard = new Paint();
     private Board grid;
     private Paint blackPaint = new Paint();
+
+    private SparseArray<Paint> xOnBoardMap;
+    private SparseIntArray colorBoardHelper;
+    private static int[] colors = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
 
     private int xTouch = Integer.MAX_VALUE, yTouch = Integer.MAX_VALUE;
 
@@ -38,7 +41,7 @@ public class BoardView extends View {
     public BoardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         blackPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        drawXStyle(Color.RED);
+        drawXStyles();
     }
 
     public BoardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -83,13 +86,23 @@ public class BoardView extends View {
         return yTouch;
     }
 
-    // Imposta lo stile della X nella griglia di gioco
-    private void drawXStyle(int color) {
-        xOnBoard.setColor(color);
-        xOnBoard.setStrokeWidth(16);
-        xOnBoard.setAntiAlias(true);
-        xOnBoard.setStrokeCap(Paint.Cap.ROUND);
-        xOnBoard.setStyle(Paint.Style.STROKE);
+    // Set the styles for the x (1 for every possible player)
+    protected void drawXStyles(){
+        Log.d(TAG, "drawXStyles: ");
+        colorBoardHelper = new SparseIntArray();
+        xOnBoardMap = new SparseArray<>(4);
+        xOnBoardMap.append(Color.RED, new Paint());
+        xOnBoardMap.append(Color.BLUE, new Paint());
+        xOnBoardMap.append(Color.GREEN, new Paint());
+        xOnBoardMap.append(Color.YELLOW, new Paint());
+        for (int i=0; i<xOnBoardMap.size(); ++i) {
+            Paint xPaint = xOnBoardMap.valueAt(i);
+            xPaint.setColor(xOnBoardMap.keyAt(i));
+            xPaint.setStrokeWidth(16);
+            xPaint.setAntiAlias(true);
+            xPaint.setStrokeCap(Paint.Cap.ROUND);
+            xPaint.setStyle(Paint.Style.STROKE);
+        }
     }
 
     @Override
@@ -101,7 +114,6 @@ public class BoardView extends View {
     }
 
     private void drawGrid(Canvas canvas) {
-        // Disegna la griglia di gioco
         for (int i = 0; i < gridSize + 1; i++) {
             canvas.drawLine(i * cellSize, 0, i * cellSize, gridSize * cellSize, blackPaint);
             canvas.drawLine(0, i * cellSize, gridSize * cellSize, i * cellSize, blackPaint);
@@ -109,16 +121,18 @@ public class BoardView extends View {
     }
 
     private void drawCells(Canvas canvas) {
+        Log.d(TAG, "drawCells: ");
         // Disegna la X
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 if (grid.at(i, j)) {
+                    int color = colorBoardHelper.get(3 * j + i, Color.BLACK);
                     canvas.drawLine((i * cellSize) + (cellSize / 6), (j * cellSize) + (cellSize / 6),
                             ((i + 1) * cellSize) - (cellSize / 6), ((j + 1) * cellSize) - (cellSize / 6),
-                            xOnBoard);
+                            xOnBoardMap.get(color));
                     canvas.drawLine((i + 1) * cellSize - (cellSize / 6), j * cellSize + (cellSize / 6),
                             i * cellSize + (cellSize / 6), (j + 1) * cellSize - (cellSize / 6),
-                            xOnBoard);
+                            xOnBoardMap.get(color));
                 }
             }
         }
@@ -132,15 +146,10 @@ public class BoardView extends View {
     // Setta la cella toccata con l'opposto del suo valore
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            xTouch = (int) (event.getX() / cellSize);
-            yTouch = (int) (event.getY() / cellSize);
-            if (xTouch < gridSize && yTouch < gridSize && grid.setChecked(xTouch, yTouch)) {
-                invalidate();
-                return true;
-            }
-        }
-        return false;
+        Log.d(TAG, "onTouchEvent: ");
+        xTouch = (int) (event.getX() / cellSize);
+        yTouch = (int) (event.getY() / cellSize);
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -167,5 +176,23 @@ public class BoardView extends View {
             state = bundle.getParcelable(ARG_SUPERSTATE);
         }
         super.onRestoreInstanceState(state);
+    }
+
+    public boolean updateBoard(int x, int y, int color) {
+        Log.d(TAG, "updateBoard: ");
+        if (x < gridSize && y < gridSize && grid.setChecked(x, y)) {
+            colorBoardHelper.put(3 * y + x, color);
+            invalidate();
+            return true;
+        }
+        return false;
+    }
+
+    public static int[] getColors() {
+        return colors;
+    }
+
+    public static void setColors(int[] colors) {
+        BoardView.colors = colors;
     }
 }

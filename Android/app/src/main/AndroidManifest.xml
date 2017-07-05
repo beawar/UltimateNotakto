@@ -4,6 +4,7 @@
     package="com.example.misterweeman.ultimatenotakto">
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:configChanges="locale|orientation|screenSize"
         android:fullBackupContent="false"
@@ -19,11 +20,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".SigninActivity"
-            android:allowBackup="false"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GameOptionActivity"
+            android:name=".GameActivity"
             android:parentActivityName=".MainActivity"
             tools:targetApi="jelly_bean">
 
@@ -40,16 +36,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
-        </activity>
-        <activity
-            android:name=".GameActivity"
-            android:parentActivityName=".GameOptionActivity"
-            tools:targetApi="jelly_bean">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".GameOptionActivity" />
         </activity>
         <activity
             android:name=".GameStats"
