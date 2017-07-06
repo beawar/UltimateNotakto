@@ -32,13 +32,6 @@
     <string name="player2">Player2</string>
     <string name="player3">Player3</string>
     <string name="player4">Player4</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">
-        Ora hai due opzioni:\n
-        1) Torni indietro e l\'app si chiude, quindi se la riapri puoi iniziare una nuova partita;\n
-        2) Premi il tasto home, riapri l\'app e tornerai in questa schermata.
-    </string>
     <string name="lost_dialog_message">You lost. You can stay as a spectator or leave the match.</string>
     <string name="list_dialog_title">You lost</string>
     <string name="oh_no">Oh no!</string>
@@ -50,5 +43,10 @@
     <string name="game_problem">Something went wrong. Try again later.</string>
     <string name="is_inviting_you">is inviting you to join a game</string>
     <string name="please_wait">Please wait</string>
-    <string name="automatching">Looking for match...</string>
+    <string name="automatching">Looking for match…</string>
+    <string name="finished_turn">Turn over</string>
+    <string name="inv_popup_text">has invted you to join a game</string>
+    <string name="win_dialog_title">You won</string>
+    <string name="won_dialog_message">You won! Leave the match.</string>
+
 </resources>

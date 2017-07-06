@@ -47,8 +47,12 @@
     <string name="title_activity_howtoplay">HowtoplayActivity</string>
     <string name="create_quick_game">Crea partita veloce</string>
     <string name="accept_popup_invite">Accetta</string>
-    <string name="game_problem">Something went wrong. Try again later.</string>
+    <string name="game_problem">Qualcosa è andato storto. Riprova più tardi.</string>
     <string name="is_inviting_you">is inviting you to join a game</string>
     <string name="please_wait">Attendi</string>
     <string name="automatching">Sto cercando una partita...</string>
+    <string name="finished_turn">Turno finito</string>
+    <string name="inv_popup_text">ti ha invitato a giocare una partita</string>
+    <string name="win_dialog_title">Hai vinto</string>
+    <string name="won_dialog_message">Hai vinto! Lascia la partita.</string>
 </resources>

@@ -9,4 +9,5 @@
     <color name="yellow">#FFFF00</color>
     <color name="orange">#FF5500</color>
     <color name="green">#2c9115</color>
+    <color name="background_color">#fafafa</color>
 </resources>

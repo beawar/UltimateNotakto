@@ -1,11 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorBackground">@color/background_material_light</item>
     </style>
     <!--
        Copyright (C) 2013 Google Inc.
@@ -69,17 +70,6 @@
         <item name="android:layout_marginBottom">40dp</item>
     </style>
 
-    <style name="Blurb">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/BlurbColor</item>
-    </style>
-
-    <style name="GameBlurb" parent="@style/Blurb">
-        <item name="android:text">@string/game_blurb</item>
-        <item name="android:layout_marginBottom">40dp</item>
-    </style>
-
     <style name="SignInButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -97,10 +87,6 @@
 
     <style name="MainScreenButton" parent="@style/GameButton">
         <item name="android:layout_marginBottom">10dp</item>
-    </style>
-
-    <style name="MainScreenButtonBlurb" parent="@style/GameBlurb">
-        <item name="android:layout_marginBottom">20dp</item>
     </style>
 
     <style name="InvPopupText">
@@ -168,9 +154,6 @@
         <item name="android:gravity">left</item>
     </style>
 
-    <style name="Instructions" parent="@style/Blurb">
-        <item name="android:layout_marginBottom">20dp</item>
-    </style>
 
     <style name="ScoreLabel">
         <item name="android:layout_width">wrap_content</item>
@@ -200,6 +183,8 @@
         <item name="android:layout_marginBottom">20dp</item>
     </style>
 
-    <string name="game_blurb">game blurb</string>
-    <string name="inv_popup_text">has invited you to join a game</string>
+    <style name="ButtonIcon">
+        <item name="android:background">@color/background_color</item>
+        <item name="android:paddingTop">10dp</item>
+    </style>
 </resources>

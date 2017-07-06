@@ -19,7 +19,9 @@
             android:gravity="center"
             android:textSize="20sp"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:drawableLeft="@drawable/ic_timer"
+            android:drawableStart="@drawable/ic_timer"/>
 
         <Button
             android:id="@+id/option_onGame_btn"
@@ -27,9 +29,11 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/settings"
+            android:drawableTop="@drawable/ic_settings"
+            style="@style/ButtonIcon"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:onClick="goToOptions"/>
 
     </RelativeLayout>
 
@@ -94,6 +98,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp"
-        android:id="@+id/game_board" />
+        android:id="@+id/fragment_container" />
 
 </LinearLayout>

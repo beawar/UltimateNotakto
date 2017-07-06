@@ -3,7 +3,6 @@ package com.example.misterweeman.ultimatenotakto;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -11,20 +10,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.misterweeman.ultimatenotakto.view.GameFragment;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
 
+import static com.example.misterweeman.ultimatenotakto.view.GameFragment.DEFAULT_GRID_SIZE;
+import static com.example.misterweeman.ultimatenotakto.view.GameFragment.DEFAULT_PLAYERS_NUM;
+
 public class GameActivity extends AppCompatActivity implements
         GameFragment.GameListener {
     private static final String TAG = "GameActivity";
-    private CountDownTimer timer;
-    private AlertDialog alertDialog;
     private static final String ARG_GAMELOST = "gameLost";
+
+    private AlertDialog alertDialog;
     private boolean gameLost = false;
     private ConnectionHandler mConnectionHandler;
     private GameOptionFragment mGameOptionFragment;
@@ -39,18 +39,20 @@ public class GameActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_layout);
         mConnectionHandler = new ConnectionHandler(this, R.layout.activity_game);
-        App.setLayout(this, R.layout.activity_game);
+        App.setLayout(this, R.layout.game_activity);
 
         //Create the fragments
         mGameOptionFragment = GameOptionFragment.newInstance();
         mGameOptionFragment.setArguments(getIntent().getExtras());
-        mGameFragment = GameFragment.newInstance(getIntent().getIntExtra(getString(R.string.ARG_GRID_SIZE), 3));
+        mGameFragment = GameFragment.newInstance(getIntent().getIntExtra(getString(R.string.ARG_GRID_SIZE), DEFAULT_GRID_SIZE),
+                getIntent().getIntExtra(getString(R.string.ARG_PLAYERS_NUM), DEFAULT_PLAYERS_NUM));
 
         if (findViewById(R.id.fragment_container) != null) {
             if (!mConnectionHandler.isConnectedToRoom() && savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, mGameOptionFragment).commit();
                 mCurrentFragment = mGameOptionFragment;
+
             } else if (savedInstanceState == null) {
                 mGameFragment.setArguments(getIntent().getExtras());
                 getSupportFragmentManager().beginTransaction()
@@ -60,31 +62,7 @@ public class GameActivity extends AppCompatActivity implements
                 onGameLost();
             }
         }
-
-
-        //TODO: collegare questo codice
-         /*Intent intent = getIntent();
-
-         int boardSize = intent.getIntExtra("BoardSizeChecked", R.id.button_3x3);
-         int playerSize = intent.getIntExtra("PlayerNumberChecked", R.id.button_2players);
-
-         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-         GameFragment gameFragment = GameFragment.newInstance(getBoardSize(boardSize));
-
-         fragmentTransaction.add(R.id.game_board, gameFragment);
-         fragmentTransaction.commit();
-
-         setContentView(R.layout.base_activity);
-
-         LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
-         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-         layout.addView(layoutInflater.inflate(R.layout.game_activity, layout, false));
-
-          addPlayers(playerSize);
-
-         createTimer();*/
+        updateLayout();
     }
 
     @Override
@@ -144,7 +122,6 @@ public class GameActivity extends AppCompatActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: do something else
-
                     }
                 })
                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
@@ -227,6 +204,7 @@ public class GameActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(contentFrameId, replacingFragment).commit();
         mCurrentFragment = replacingFragment;
+        updateLayout();
         recreate();
     }
 
@@ -255,76 +233,25 @@ public class GameActivity extends AppCompatActivity implements
         mGameFragment.updateBoard(x, y, sender, turn);
     }
 
-    private int getBoardSize(int id){
-
-        int bSize = 3;
-
-        if(id == R.id.button_3x3){
-            bSize = 3;
-        }
-        else if(id == R.id.button_4x4){
-            bSize = 4;
-        }
-        else if(id == R.id.button_5x5){
-            bSize = 5;
-        }
-        else if(id == R.id.button_6x6) {
-            bSize = 6;
-        }
-
-        return bSize;
-
-    }
-
-    private void createTimer(){
-
-        final TextView textTimer = (TextView) findViewById(R.id.game_timer);
-        final Toast toast = Toast.makeText(this, "Turno finito", Toast.LENGTH_LONG);
-
-        timer = new CountDownTimer(40000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                textTimer.setText(String.valueOf(millisUntilFinished / 1000));
-            }
-
-            public void onFinish(){
-                toast.show();
-                this.start();
-            }
-
-        }.start();
-
-    }
-
-    private void addPlayers(int playerSize){
-
-        TextView player1 = (TextView) findViewById(R.id.player_1);
-        player1.setBackgroundResource(R.color.green);
-
-        TextView player2 = (TextView) findViewById(R.id.player_2);
-        player2.setBackgroundResource(R.color.green);
-
-        if(playerSize == R.id.button_3players){
-
-            TextView player3 = (TextView) findViewById(R.id.player_3);
-            player3.setBackgroundResource(R.color.green);
-
-        }
-        else if(playerSize == R.id.button_4players){
-
-            TextView player3 = (TextView) findViewById(R.id.player_3);
-            player3.setBackgroundResource(R.color.green);
-
-            TextView player4 = (TextView) findViewById(R.id.player_4);
-            player4.setBackgroundResource(R.color.green);
+    protected void updateLayout() {
+        if (mCurrentFragment == mGameFragment) {
+            findViewById(R.id.game_timer).setVisibility(View.VISIBLE);
+            findViewById(R.id.players_layout).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.game_timer).setVisibility(View.GONE);
+            findViewById(R.id.players_layout).setVisibility(View.GONE);
         }
     }
-
 
     public void onBackPressed(){
-        //timer.cancel();
+//        mTimer.cancel();
         mConnectionHandler.leaveRoom();
         super.onBackPressed();
     }
 
+    public void goToOptions(View view) {
+        Log.d(TAG, "goToOptions: ");
+        Intent intent = new Intent(this, Options.class);
+        startActivity(intent);
+    }
 }
