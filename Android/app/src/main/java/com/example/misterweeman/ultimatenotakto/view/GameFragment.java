@@ -98,6 +98,7 @@ public class GameFragment extends Fragment implements
                             // if the touch is valid, check for lost and broadcast the move
                             if (Notakto.checkBoardForLost(board, x, y)) {
                                 if (gameListener != null) {
+                                    mConnectionHandler.ILost();
                                     gameListener.onGameLost();
                                 }
                                 // if it's my turn and i just lost
@@ -112,6 +113,8 @@ public class GameFragment extends Fragment implements
                         mConnectionHandler.broadcastTurn(true, -1, -1);
                     }
                 }
+                mConnectionHandler.checkforWin();
+
             }
         }
         return true;

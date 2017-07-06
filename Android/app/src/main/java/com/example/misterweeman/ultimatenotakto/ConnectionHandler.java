@@ -56,6 +56,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     private int mCurScreen;
     private int mFromScreen;
     private boolean mResolvingConnectionFailure = false;
+    private boolean hasWon = false;
 
     private Set<String> mFinishedPartecipants = new HashSet<>();
     private int mCurrentTurn = 0;
@@ -132,7 +133,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         startGame();
     }
 
-    protected boolean shouldCancelGame(Room room) {
+    protected boolean shouldCancelGame() {
         if (mPartecipants != null) {
             int connectedPlayers = 0;
             for (Participant p : mPartecipants) {
@@ -141,7 +142,7 @@ public class ConnectionHandler implements RoomUpdateListener,
                 }
             }
             return connectedPlayers <= 1
-                    || mFinishedPartecipants.size() == mPartecipants.size() - 1;
+                    || hasWon;
         }
         return true;
     }
@@ -234,12 +235,15 @@ public class ConnectionHandler implements RoomUpdateListener,
 //        mSecondsLeft = 0;
         stopKeepingScreenOn();
         if (mRoomId != null) {
+            Log.d(TAG, "this");
             Games.RealTimeMultiplayer.leave(mGoogleApiHelper.getGoogleApiClient(), this, mRoomId);
             mPartecipants.remove(mMyTurn);
             mRoomId = null;
             switchToScreen(R.layout.screen_wait);
         } else {
+            Log.d(TAG, "that");
             switchToMainScreen();
+            mParentActivity.finish();
         }
     }
 
@@ -320,30 +324,34 @@ public class ConnectionHandler implements RoomUpdateListener,
         mCurrentTurn = (mCurrentTurn + 1) % mPartecipants.size();
     }
 
+
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
         Log.d(TAG, "onRealTimeMessageReceived: ");
         byte[] buf = realTimeMessage.getMessageData();
         String sender = realTimeMessage.getSenderParticipantId();
-        boolean hasLost = (char) buf[0] == 'Y';
-        int x = (int) buf[1];
-        int y = (int) buf[2];
-        int turn = (int) buf[3];
 
-        Log.d(TAG, "onRealTimeMessageReceived: hasLost=" + hasLost + "/("
-                + x + ", " + y +") - Turn: " + turn);
-        // if it's a final score, mark this participant as having finished
-        // the game
-        if (!mFinishedPartecipants.contains(sender)) {
-            if (hasLost) {
-                mFinishedPartecipants.add(sender);
+
+            boolean hasLost = (char) buf[0] == 'Y';
+            int x = (int) buf[1];
+            int y = (int) buf[2];
+            int turn = (int) buf[3];
+
+            Log.d(TAG, "onRealTimeMessageReceived: hasLost=" + hasLost + "/("
+                    + x + ", " + y + ") - Turn: " + turn);
+            // if it's a final score, mark this participant as having finished
+            // the game
+            if (!mFinishedPartecipants.contains(sender)) {
+                if (hasLost) {
+                    mFinishedPartecipants.add(sender);
+                }
             }
-        }
-        // update the current turn
-        mCurrentTurn = (turn + 1) % mPartecipants.size();
+            // update the current turn
+            mCurrentTurn = (turn + 1) % mPartecipants.size();
 
 
-        mParentActivity.updateBoard(x, y, sender, turn);
+            mParentActivity.updateBoard(x, y, sender, turn);
+            checkforWin();
 
     }
 
@@ -371,7 +379,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onPeerDeclined(Room room, List<String> list) {
         Log.d(TAG, "onPeerDeclined: ");
-        if (shouldCancelGame(room)) {
+        if (shouldCancelGame()) {
             leaveRoom();
         } else {
             updateRoom(room);
@@ -389,7 +397,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onPeerLeft(Room room, List<String> list) {
         Log.d(TAG, "onPeerLeft: ");
-        if (shouldCancelGame(room)) {
+        if (shouldCancelGame()) {
             leaveRoom();
         } else {
             updateRoom(room);
@@ -433,7 +441,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onPeersDisconnected(Room room, List<String> list) {
         Log.d(TAG, "onPeersDisconnected: ");
-        if (shouldCancelGame(room)) {
+        if (shouldCancelGame()) {
             leaveRoom();
         } else {
             updateRoom(room);
@@ -480,7 +488,8 @@ public class ConnectionHandler implements RoomUpdateListener,
     public void onLeftRoom(int statusCode, String roomId) {
         // we have left the room, return to main screen
         Log.d(TAG, "onLeftRoom, code: " + statusCode);
-        switchToMainScreen();
+        //switchToMainScreen();
+        mParentActivity.finish();
     }
 
     @Override
@@ -613,6 +622,22 @@ public class ConnectionHandler implements RoomUpdateListener,
         return mRoomId != null;
     }
 
+
+    //TODO testare con più players
+    public void checkforWin(){
+        Log.d(TAG, "checkforWin()");
+        if(mFinishedPartecipants.size()==(mPartecipants.size()-1)){
+             if((!mFinishedPartecipants.contains(mMyId))){
+                 Log.d(TAG, "I won:");
+                 hasWon = true;
+                 mParentActivity.onWinning();
+             }
+        }
+    }
+    public void ILost(){
+        Log.d(TAG, "ILost");
+        mFinishedPartecipants.add(mMyId);
+    }
     public int getCurrTurn(){
         Log.d(TAG, "getCurrTurn()");
         return mCurrentTurn;

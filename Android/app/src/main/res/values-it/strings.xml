@@ -28,6 +28,10 @@
     <string name="lang_en">English</string>
     <string name="how_to_play_title">Come giocare</string>
     <string name="how_to_play">How to play italiano</string>
+    <string name="player1">Player1</string>
+    <string name="player2">Player2</string>
+    <string name="player3">Player3</string>
+    <string name="player4">Player4</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">
@@ -35,9 +39,16 @@
         1) Torni indietro e l\'app si chiude, quindi se la riapri puoi iniziare una nuova partita;\n
         2) Premi il tasto home, riapri l\'app e tornerai in questa schermata.
     </string>
-    <string name="lost_dialog_message">Peccato, hai perso!</string>
+    <string name="lost_dialog_message">Hai perso. Puoi rimanere come spettatore o abbandonare la partita.</string>
     <string name="list_dialog_title">Hai perso</string>
     <string name="oh_no">Oh no!</string>
     <string name="signin_failure">Unable to sign in.</string>
     <string name="sign_out">Sign Out</string>
+    <string name="title_activity_howtoplay">HowtoplayActivity</string>
+    <string name="create_quick_game">Crea partita veloce</string>
+    <string name="accept_popup_invite">Accetta</string>
+    <string name="game_problem">Something went wrong. Try again later.</string>
+    <string name="is_inviting_you">is inviting you to join a game</string>
+    <string name="please_wait">Attendi</string>
+    <string name="automatching">Sto cercando una partita...</string>
 </resources>

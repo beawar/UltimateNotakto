@@ -39,17 +39,20 @@
         1) Torni indietro e l\'app si chiude, quindi se la riapri puoi iniziare una nuova partita;\n
         2) Premi il tasto home, riapri l\'app e tornerai in questa schermata.
     </string>
-    <string name="lost_dialog_message">Peccato, hai perso!</string>
-    <string name="list_dialog_title">Hai perso</string>
+    <string name="lost_dialog_message">You lost. You can stay as a spectator or leave the match.</string>
+    <string name="list_dialog_title">You lost</string>
+    <string name="won_dialog_message">You won. You can leave the match.</string>
+    <string name="win_dialog_title">You won</string>
     <string name="oh_no">Oh no!</string>
     <string name="signin_failure">Unable to sign in.</string>
     <string name="sign_out">Sign Out</string>
     <string name="title_activity_howtoplay">HowtoplayActivity</string>
-    <string name="create_quick_game">Crea partita veloce</string>
+    <string name="create_quick_game">Create quick game</string>
     <string name="accept_popup_invite">Accept</string>
     <string name="game_problem">Something went wrong. Try again later.</string>
     <string name="is_inviting_you">is inviting you to join a game</string>
     <string name="please_wait">Please wait</string>
+    <string name="automatching">Looking for match...</string>
 </resources>
 
 

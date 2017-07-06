@@ -1,31 +1,21 @@
 package com.example.misterweeman.ultimatenotakto;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.CountDownTimer;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.misterweeman.ultimatenotakto.view.GameFragment;
 
-import static android.R.attr.fragment;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -71,28 +61,30 @@ public class GameActivity extends AppCompatActivity implements
             }
         }
 
-        // Intent intent = getIntent();
 
-        // int boardSize = intent.getIntExtra("BoardSizeChecked", R.id.button_3x3);
-        // int playerSize = intent.getIntExtra("PlayerNumberChecked", R.id.button_2players);
+        //TODO: collegare questo codice
+         /*Intent intent = getIntent();
 
-        // android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        // FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+         int boardSize = intent.getIntExtra("BoardSizeChecked", R.id.button_3x3);
+         int playerSize = intent.getIntExtra("PlayerNumberChecked", R.id.button_2players);
 
-        // GameFragment gameFragment = GameFragment.newInstance(getBoardSize(boardSize));
+         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        // fragmentTransaction.add(R.id.game_board, gameFragment);
-        // fragmentTransaction.commit();
+         GameFragment gameFragment = GameFragment.newInstance(getBoardSize(boardSize));
 
-        // setContentView(R.layout.base_activity);
+         fragmentTransaction.add(R.id.game_board, gameFragment);
+         fragmentTransaction.commit();
 
-        // LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
-        // LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        // layout.addView(layoutInflater.inflate(R.layout.game_activity, layout, false));
+         setContentView(R.layout.base_activity);
 
-        addPlayers(playerSize);
+         LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
+         LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+         layout.addView(layoutInflater.inflate(R.layout.game_activity, layout, false));
 
-        createTimer();
+          addPlayers(playerSize);
+
+         createTimer();*/
     }
 
     @Override
@@ -139,7 +131,7 @@ public class GameActivity extends AppCompatActivity implements
             gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
         }
     }
-*/
+
 
     @Override
     public void onGameLost() {
@@ -152,6 +144,32 @@ public class GameActivity extends AppCompatActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: do something else
+
+                    }
+                })
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                            finish();
+                        }
+                        return false;
+                    }
+                });
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+
+    public void onWinning() {
+        Log.d(TAG, "onGameWon: ");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.won_dialog_message)
+                .setTitle(R.string.win_dialog_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mConnectionHandler.leaveRoom();
                         finish();
                     }
                 })
@@ -159,6 +177,7 @@ public class GameActivity extends AppCompatActivity implements
                     @Override
                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                            mConnectionHandler.leaveRoom();
                             finish();
                         }
                         return false;
@@ -301,9 +320,11 @@ public class GameActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
+
     public void onBackPressed(){
-        timer.cancel();
+        //timer.cancel();
+        mConnectionHandler.leaveRoom();
+        super.onBackPressed();
     }
 
 }

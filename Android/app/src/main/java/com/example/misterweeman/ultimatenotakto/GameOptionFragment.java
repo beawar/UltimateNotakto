@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 
 public class GameOptionFragment extends Fragment{
@@ -69,6 +70,7 @@ public class GameOptionFragment extends Fragment{
     public void startQuickGame(View view) {
         if (mConnectionHandler != null) {
             mConnectionHandler.startQuickGame(getNumberOfPlayers()-1);
+            Toast.makeText(getActivity(), R.string.automatching , Toast.LENGTH_SHORT).show();
         }
     }
 
