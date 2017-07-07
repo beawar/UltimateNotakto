@@ -77,6 +77,7 @@ public class GameActivity extends AppCompatActivity implements
         Log.d(TAG, "onResume: "+mConnectionHandler.getmRoomId());
         super.onResume();
         isRunning = true;
+
     }
 
     @Override
@@ -88,6 +89,7 @@ public class GameActivity extends AppCompatActivity implements
             fragmentTransactionHelper.commit();
             mCurrentFragment = fragmentTransactionHelper.getReplacingFragment();
         }
+        updateLayout();
     }
 
     @Override
@@ -113,7 +115,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     public void onGameLost() {
-        Log.d(TAG, "onGameLost: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "onGameLost: "+ mConnectionHandler.getmRoomId());
         gameLost = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lost_dialog_message)
@@ -204,7 +206,6 @@ public class GameActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(contentFrameId, replacingFragment).commit();
         mCurrentFragment = replacingFragment;
-        updateLayout();
         recreate();
     }
 
@@ -254,5 +255,14 @@ public class GameActivity extends AppCompatActivity implements
         Log.d(TAG, "goToOptions: ");
         Intent intent = new Intent(this, Options.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy: ");
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
+        super.onDestroy();
     }
 }

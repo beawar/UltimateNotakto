@@ -137,12 +137,11 @@ public class ConnectionHandler implements RoomUpdateListener,
         if (mPartecipants != null) {
             int connectedPlayers = 0;
             for (Participant p : mPartecipants) {
-                if (p.isConnectedToRoom()&&p.getStatus()==Participant.STATUS_JOINED) {
+                if (p.isConnectedToRoom() && p.getStatus() == Participant.STATUS_JOINED) {
                     connectedPlayers += 1;
                 }
             }
-            return connectedPlayers <= 1
-                    || hasWon;
+            return connectedPlayers <= 1 || hasWon;
         }
         return true;
     }
@@ -194,7 +193,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.d(TAG, "onConnected() called" +mRoomId);
+        Log.d(TAG, "onConnected() called" + mRoomId);
 
         // register the listener so we are notified if we receive an invitation to play
         Games.Invitations.registerInvitationListener(App.getGoogleApiHelper().getGoogleApiClient(), this);
@@ -227,7 +226,6 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onClick(View v) {
         Log.d(TAG, "onClick: called");
-
     }
 
     protected void leaveRoom() {
@@ -257,7 +255,6 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     protected void showGameError(){
         Log.d(TAG, "showGameError: " +mRoomId);
-        switchToMainScreen();
         BaseGameUtils.makeSimpleDialog(mParentActivity, mParentActivity.getString(R.string.game_problem));
     }
 
@@ -315,6 +312,10 @@ public class ConnectionHandler implements RoomUpdateListener,
         // turnId indicates whos turn has take place
         mMsgBuffer[3] = (byte) mCurrentTurn;
 
+        if (hasLost && !mFinishedPartecipants.contains(mMyId)) {
+            mFinishedPartecipants.add(mMyId);
+        }
+
         // send to every other partecipant
         // Reliable messages are used because receiving this information is essential for the game
         for (Participant p : mPartecipants) {
@@ -344,17 +345,15 @@ public class ConnectionHandler implements RoomUpdateListener,
                 + x + ", " + y + ") - Turn: " + turn);
         // if it's a final score, mark this participant as having finished
         // the game
-        if (!mFinishedPartecipants.contains(sender)) {
-            if (hasLost) {
-                mFinishedPartecipants.add(sender);
-            }
+        if (hasLost && !mFinishedPartecipants.contains(sender)) {
+            mFinishedPartecipants.add(sender);
         }
         // update the current turn
         mCurrentTurn = (turn + 1) % mPartecipants.size();
 
 
         mParentActivity.updateBoard(x, y, sender, turn);
-        checkforWin();
+        checkForWin();
 
     }
 
@@ -434,9 +433,8 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onDisconnectedFromRoom(Room room) {
-        Log.d(TAG, "onDisconnectedFromRoom: "+mRoomId);
-        mRoomId = null;
-        showGameError();
+        Log.d(TAG, "onDisconnectedFromRoom: "+ mRoomId);
+        leaveRoom();
     }
 
     @Override
@@ -627,6 +625,11 @@ public class ConnectionHandler implements RoomUpdateListener,
         return mFinishedPartecipants.contains(mMyId);
     }
 
+    public boolean hasPlayerLost(String playerId) {
+        return mFinishedPartecipants.contains(playerId);
+    }
+
+
     public boolean isConnectedToRoom() {
         Log.d(TAG, "isConnectedToRoom: " + (mRoomId != null));
         return mRoomId != null;
@@ -634,8 +637,8 @@ public class ConnectionHandler implements RoomUpdateListener,
 
 
     //TODO testare con più players
-    public void checkforWin(){
-        Log.d(TAG, "checkforWin() "+mRoomId);
+    public void checkForWin(){
+        Log.d(TAG, "checkForWin() "+mRoomId);
         if(mFinishedPartecipants.size()>=(mPartecipants.size()-1)
                 && !mFinishedPartecipants.contains(mMyId)){
             Log.d(TAG, "I won:");
@@ -643,10 +646,7 @@ public class ConnectionHandler implements RoomUpdateListener,
             mParentActivity.onWinning();
         }
     }
-    public void ILost(){
-        Log.d(TAG, "ILost");
-        mFinishedPartecipants.add(mMyId);
-    }
+
     public int getCurrTurn(){
         Log.d(TAG, "getCurrTurn()");
         return mCurrentTurn;
@@ -655,5 +655,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     public String getMyId() {
         return mMyId;
     }
+
     public String getmRoomId() {return mRoomId;}
+
 }

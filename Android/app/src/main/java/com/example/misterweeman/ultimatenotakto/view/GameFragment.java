@@ -158,14 +158,15 @@ public class GameFragment extends Fragment implements
         if (mBoardView != null) {
             int color = BoardView.getColors()[turn];
             boolean set = mBoardView.updateBoard(x, y, color);
-            if (set) {
-                mConnectionHandler.checkforWin();
+            if (set && mConnectionHandler.hasPlayerLost(sender)) {
+                mConnectionHandler.checkForWin();
             }
             return set;
         }
         return false;
     }
 
+    // This method is called when a player doesn't make his move before the timer ends.
     public void onTurnFinished() {
         Log.d(TAG, "onTurnFinished: ");
         boolean done = false;
@@ -178,10 +179,11 @@ public class GameFragment extends Fragment implements
                     }
                     mConnectionHandler.broadcastTurn(isLost, x, y);
                     done = true;
-                    mConnectionHandler.checkforWin();
+
                 }
             }
         }
+        mConnectionHandler.checkForWin();
     }
 
     private void addPlayersLabels(int playerSize){
