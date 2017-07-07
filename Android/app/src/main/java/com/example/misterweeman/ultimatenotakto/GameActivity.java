@@ -245,7 +245,8 @@ public class GameActivity extends AppCompatActivity implements
 
     public void onBackPressed(){
 //        mTimer.cancel();
-        mConnectionHandler.leaveRoom();
+        Log.d(TAG, "onBackPressed: "+mConnectionHandler.getmRoomId());
+        mConnectionHandler.onBackPressed();
         super.onBackPressed();
     }
 

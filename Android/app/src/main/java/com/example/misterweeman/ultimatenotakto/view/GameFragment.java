@@ -151,7 +151,7 @@ public class GameFragment extends Fragment implements
     }
 
     public boolean updateBoard(int x, int y, String sender, int turn) {
-        Log.d(TAG, "updateBoard()");
+        Log.d(TAG, "updateBoard()" );
         if (sender != null && !sender.isEmpty() && !mPlayersList.contains(sender)) {
             mPlayersList.add(sender);
         }
@@ -167,6 +167,7 @@ public class GameFragment extends Fragment implements
     }
 
     public void onTurnFinished() {
+        Log.d(TAG, "onTurnFinished: ");
         boolean done = false;
         for (int y=0; y<mGridSize && !done; ++y) {
             for (int x=0; x<mGridSize && !done; ++x) {
@@ -227,4 +228,6 @@ public class GameFragment extends Fragment implements
     public interface GameListener{
         void onGameLost();
     }
+
+
 }

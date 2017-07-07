@@ -84,7 +84,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     private void handleSelectPlayersResult(int resultCode, Intent data) {
-        Log.d(TAG, "handleSelectPlayersResult: ");
+        Log.d(TAG, "handleSelectPlayersResult: " +mRoomId);
         if (resultCode != Activity.RESULT_OK) {
             Log.w(TAG, "*** select players UI cancelled, resultCode: " + resultCode);
             switchToMainScreen();
@@ -137,7 +137,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         if (mPartecipants != null) {
             int connectedPlayers = 0;
             for (Participant p : mPartecipants) {
-                if (p.isConnectedToRoom()) {
+                if (p.isConnectedToRoom()&&p.getStatus()==Participant.STATUS_JOINED) {
                     connectedPlayers += 1;
                 }
             }
@@ -162,7 +162,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 //    }
 
     void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult: ");
+        Log.d(TAG, "onActivityResult: " +mRoomId);
         switch (requestCode){
             case RC_SELECT_PLAYERS:
                 // we got the result from the "select players" UI -> ready to create the room
@@ -187,14 +187,14 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     protected void startGame() {
-        Log.d(TAG, "startGame: ");
+        Log.d(TAG, "startGame: " +mRoomId);
 //        mParentActivity.startActivity(new Intent(mParentActivity, GameActivity.class));
         switchToScreen(R.layout.fragment_game);
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.d(TAG, "onConnected() called");
+        Log.d(TAG, "onConnected() called" +mRoomId);
 
         // register the listener so we are notified if we receive an invitation to play
         Games.Invitations.registerInvitationListener(App.getGoogleApiHelper().getGoogleApiClient(), this);
@@ -231,7 +231,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     protected void leaveRoom() {
-        Log.d(TAG, "Leaving room");
+        Log.d(TAG, "Leaving room "+mRoomId);
         stopKeepingScreenOn();
         if (mRoomId != null) {
             Log.d(TAG, "this");
@@ -247,7 +247,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     protected void showWaitingRoom(Room room) {
-        Log.d(TAG, "showWaitingRoom: ");
+        Log.d(TAG, "showWaitingRoom: " +mRoomId);
         final int MIN_PLAYERS = Integer.MAX_VALUE;
         Intent intent = Games.RealTimeMultiplayer.getWaitingRoomIntent(mGoogleApiHelper.getGoogleApiClient(), room, MIN_PLAYERS);
 
@@ -256,7 +256,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     protected void showGameError(){
-        Log.d(TAG, "showGameError: ");
+        Log.d(TAG, "showGameError: " +mRoomId);
         switchToMainScreen();
         BaseGameUtils.makeSimpleDialog(mParentActivity, mParentActivity.getString(R.string.game_problem));
     }
@@ -265,6 +265,11 @@ public class ConnectionHandler implements RoomUpdateListener,
         Log.d(TAG, "updateRoom: ");
         if (room != null) {
             mPartecipants = room.getParticipants();
+            for(Participant p : mPartecipants){
+                if(p.getStatus()!=Participant.STATUS_JOINED){
+                    mPartecipants.remove(p);
+                }
+            }
             for (int i=0; i<mPartecipants.size(); ++i){
                 if (mPartecipants.get(i).getParticipantId().equals(mMyId)) {
                     mMyTurn = i;
@@ -276,7 +281,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onInvitationReceived(Invitation invitation) {
-        Log.d(TAG, "onInvitationReceived: ");
+        Log.d(TAG, "onInvitationReceived: " +mRoomId);
         // store invitation for use when player accepts this invitation
         mIncomingInvitationId = invitation.getInvitationId();
 
@@ -292,7 +297,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onInvitationRemoved(String s) {
-        Log.d(TAG, "onInvitationRemoved: ");
+        Log.d(TAG, "onInvitationRemoved: " +mRoomId);
         if (mIncomingInvitationId != null && mIncomingInvitationId.equals(s)) {
             mIncomingInvitationId = null;
             // hide the invitation popup
@@ -301,7 +306,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     public void broadcastTurn(boolean hasLost, int x, int y) {
-        Log.d(TAG, "broadcastTurn: ");
+        Log.d(TAG, "broadcastTurn: " +mRoomId);
         // has the player lost with his move?
         mMsgBuffer[0] = (byte) (hasLost ? 'Y' : 'N');
         // coordinates of the cell clicked
@@ -326,7 +331,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
-        Log.d(TAG, "onRealTimeMessageReceived: ");
+        Log.d(TAG, "onRealTimeMessageReceived: " +mRoomId);
         byte[] buf = realTimeMessage.getMessageData();
         String sender = realTimeMessage.getSenderParticipantId();
 
@@ -355,14 +360,14 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onRoomConnecting(Room room) {
-        Log.d(TAG, "onRoomConnecting: ");
+        Log.d(TAG, "onRoomConnecting: " +mRoomId);
         updateRoom(room);
     }
 
 
     @Override
     public void onRoomAutoMatching(Room room) {
-        Log.d(TAG, "onRoomAutoMatching: ");
+        Log.d(TAG, "onRoomAutoMatching: " +mRoomId);
         updateRoom(room);
     }
 
@@ -376,7 +381,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onPeerDeclined(Room room, List<String> list) {
-        Log.d(TAG, "onPeerDeclined: ");
+        Log.d(TAG, "onPeerDeclined: " +mRoomId);
         if (shouldCancelGame()) {
             leaveRoom();
         } else {
@@ -387,14 +392,14 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onPeerJoined(Room room, List<String> list) {
-        Log.d(TAG, "onPeerJoined: ");
+        Log.d(TAG, "onPeerJoined: "+mRoomId);
         updateRoom(room);
     }
 
 
     @Override
     public void onPeerLeft(Room room, List<String> list) {
-        Log.d(TAG, "onPeerLeft: ");
+        Log.d(TAG, "onPeerLeft: "+mRoomId);
         if (shouldCancelGame()) {
             leaveRoom();
         } else {
@@ -405,10 +410,15 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onConnectedToRoom(Room room) {
-        Log.d(TAG, "onConnectedToRoom() called");
+        Log.d(TAG, "onConnectedToRoom() called" +mRoomId);
 
         // get partecipants and my id
         mPartecipants = room.getParticipants();
+        for(Participant p : mPartecipants){
+            if(p.getStatus()!=Participant.STATUS_JOINED){
+                mPartecipants.remove(p);
+            }
+        }
         mMyId = room.getParticipantId(Games.Players.getCurrentPlayerId(mGoogleApiHelper.getGoogleApiClient()));
 
         // save room id if its not initialized in onRoomCreated()
@@ -424,21 +434,21 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     @Override
     public void onDisconnectedFromRoom(Room room) {
-        Log.d(TAG, "onDisconnectedFromRoom: ");
+        Log.d(TAG, "onDisconnectedFromRoom: "+mRoomId);
         mRoomId = null;
         showGameError();
     }
 
     @Override
     public void onPeersConnected(Room room, List<String> list) {
-        Log.d(TAG, "onPeersConnected: ");
+        Log.d(TAG, "onPeersConnected: "+mRoomId);
         updateRoom(room);
     }
 
 
     @Override
     public void onPeersDisconnected(Room room, List<String> list) {
-        Log.d(TAG, "onPeersDisconnected: ");
+        Log.d(TAG, "onPeersDisconnected: " +mRoomId);
         if (shouldCancelGame()) {
             leaveRoom();
         } else {
@@ -501,7 +511,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     void startQuickGame(int opponents) {
-        Log.d(TAG, "startQuickGame()");
+        Log.d(TAG, "startQuickGame() " +mRoomId);
 
         // auto-match criteria to invite the number of opponents.
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(opponents, opponents, 0);
@@ -523,7 +533,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     void createGame(int opponents){
-        Log.d(TAG, "createGame()");
+        Log.d(TAG, "createGame() " +mRoomId );
         Intent intent = Games.RealTimeMultiplayer.
                 getSelectOpponentsIntent(App.getGoogleApiHelper().getGoogleApiClient(), opponents, opponents);
         mParentActivity.startActivityForResult(intent, RC_SELECT_PLAYERS);
@@ -531,16 +541,21 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     void onStop() {
-        Log.d(TAG, "*** got onStop");
+        Log.d(TAG, "*** got onStop "+mRoomId);
         // if we are in a room, leave it
         leaveRoom();
 
         // stop trying to keep screen on
         stopKeepingScreenOn();
     }
+    void onBackPressed(){
+        Log.d(TAG, "onBackPressed: " +mRoomId);
+        leaveRoom();
+        stopKeepingScreenOn();
+    }
 
     protected void switchToScreen(int layout) {
-        Log.d(TAG, "switchToScreen: ");
+        Log.d(TAG, "switchToScreen: " +mRoomId);
         if (mCurScreen != layout) {
             if (layout == R.layout.fragment_game || layout == R.layout.fragment_game_option) {
                 mCurScreen = R.layout.activity_game;
@@ -559,7 +574,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     protected void switchToMainScreen() {
-        Log.d(TAG, "switchToMainScreen: ");
+        Log.d(TAG, "switchToMainScreen: " +mRoomId);
         if (mParentActivity != null) {
             mParentActivity.finish();
 
@@ -567,7 +582,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     protected void switchToGameScreen(int layout) {
-        Log.d(TAG, "switchToGameScreen: ");
+        Log.d(TAG, "switchToGameScreen: " +mRoomId);
 
         GameActivity gameActivity = (GameActivity) mParentActivity;
         if (layout == R.layout.fragment_game) {
@@ -620,8 +635,8 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     //TODO testare con più players
     public void checkforWin(){
-        Log.d(TAG, "checkforWin()");
-        if(mFinishedPartecipants.size()==(mPartecipants.size()-1)
+        Log.d(TAG, "checkforWin() "+mRoomId);
+        if(mFinishedPartecipants.size()>=(mPartecipants.size()-1)
                 && !mFinishedPartecipants.contains(mMyId)){
             Log.d(TAG, "I won:");
             hasWon = true;
@@ -640,4 +655,5 @@ public class ConnectionHandler implements RoomUpdateListener,
     public String getMyId() {
         return mMyId;
     }
+    public String getmRoomId() {return mRoomId;}
 }
