@@ -67,21 +67,21 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause: ");
+        Log.d(TAG, "onPause: "+mConnectionHandler.getmRoomId());
         super.onPause();
         isRunning = false;
     }
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume: ");
+        Log.d(TAG, "onResume: "+mConnectionHandler.getmRoomId());
         super.onResume();
         isRunning = true;
     }
 
     @Override
     protected void onPostResume() {
-        Log.d(TAG, "onPostResume: ");
+        Log.d(TAG, "onPostResume: "+mConnectionHandler.getmRoomId());
         super.onPostResume();
         while (!fragmentTransactionHelpers.isEmpty()) {
             FragmentTransactionHelper fragmentTransactionHelper = fragmentTransactionHelpers.remove();
@@ -92,7 +92,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstanceState: ");
+        Log.d(TAG, "onSaveInstanceState: "+mConnectionHandler.getmRoomId());
         super.onSaveInstanceState(outState);
         if (alertDialog != null && alertDialog.isShowing()) {
             // close dialog to prevent leaked window
@@ -103,7 +103,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.d(TAG, "onRestoreInstanceState: ");
+        Log.d(TAG, "onRestoreInstanceState: "+mConnectionHandler.getmRoomId());
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
@@ -113,7 +113,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     public void onGameLost() {
-        Log.d(TAG, "onGameLost: ");
+        Log.d(TAG, "onGameLost: "+mConnectionHandler.getmRoomId());
         gameLost = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lost_dialog_message)
@@ -139,7 +139,7 @@ public class GameActivity extends AppCompatActivity implements
 
 
     public void onWinning() {
-        Log.d(TAG, "onGameWon: ");
+        Log.d(TAG, "onGameWon: "+mConnectionHandler.getmRoomId());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.won_dialog_message)
                 .setTitle(R.string.win_dialog_title)
@@ -182,7 +182,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     public void replaceFragment(Fragment fragment) {
-        Log.d(TAG, "replaceFragment: ");
+        Log.d(TAG, "replaceFragment: "+mConnectionHandler.getmRoomId());
         if (!isRunning) {
             FragmentTransactionHelper fragmentTransactionHelper = new FragmentTransactionHelper() {
                 @Override
@@ -200,7 +200,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     private void replaceFragmentInternal(int contentFrameId, Fragment replacingFragment) {
-        Log.d(TAG, "replaceFragmentInternal: ");
+        Log.d(TAG, "replaceFragmentInternal: "+mConnectionHandler.getmRoomId());
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(contentFrameId, replacingFragment).commit();
         mCurrentFragment = replacingFragment;
@@ -229,7 +229,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     public void updateBoard(int x, int y, String sender, int turn) {
-        Log.d(TAG, "updateBoard()");
+        Log.d(TAG, "updateBoard() "+mConnectionHandler.getmRoomId());
         mGameFragment.updateBoard(x, y, sender, turn);
     }
 
