@@ -152,7 +152,6 @@ public class GameActivity extends AppCompatActivity implements
         updateLayout();
     }
 
-
     @Override
     public void onGameLost() {
         Log.d(TAG, "onGameLost: "+ mConnectionHandler.getRoomId());
@@ -163,7 +162,13 @@ public class GameActivity extends AppCompatActivity implements
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // TODO: do something else
+                        // do nothing: become a watcher
+                    }
+                })
+                .setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
                     }
                 })
                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
@@ -178,7 +183,6 @@ public class GameActivity extends AppCompatActivity implements
         alertDialog = builder.create();
         alertDialog.show();
     }
-
 
     @Override
     public void onGameWon() {
@@ -219,7 +223,6 @@ public class GameActivity extends AppCompatActivity implements
     public ConnectionHandler getConnectionHandler() {
         return mConnectionHandler;
     }
-
 
     public void startQuickGame(View view) {
         if (mGameOptionFragment != null) {
@@ -298,7 +301,6 @@ public class GameActivity extends AppCompatActivity implements
 //        mTimer.cancel();
         Log.d(TAG, "onBackPressed: "+mConnectionHandler.getRoomId());
         mConnectionHandler.onBackPressed();
-        super.onBackPressed();
     }
 
     public void goToOptions(View view) {

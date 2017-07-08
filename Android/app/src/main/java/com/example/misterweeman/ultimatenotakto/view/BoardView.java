@@ -109,8 +109,8 @@ public class BoardView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(Color.WHITE);
-        drawCells(canvas);
         drawGrid(canvas);
+        drawCells(canvas);
     }
 
     private void drawGrid(Canvas canvas) {

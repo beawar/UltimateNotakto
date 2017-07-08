@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ARG_PLAYERS_NUM">playersNumber</string>
-    <string name="ARG_GRID_SIZE">gridSize</string>
+    <string name="ARG_PLAYERS_NUM" translatable="false">playersNumber</string>
+    <string name="ARG_GRID_SIZE" translatable="false">gridSize</string>
 </resources>

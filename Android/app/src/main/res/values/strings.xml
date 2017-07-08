@@ -28,10 +28,10 @@
     <string name="lang_en">English</string>
     <string name="how_to_play_title">How to play</string>
     <string name="how_to_play">How to play default</string>
-    <string name="player1">Player1</string>
-    <string name="player2">Player2</string>
-    <string name="player3">Player3</string>
-    <string name="player4">Player4</string>
+    <string name="player1">Player 1</string>
+    <string name="player2">Player 2</string>
+    <string name="player3">Player 3</string>
+    <string name="player4">Player 4</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">
@@ -54,6 +54,9 @@
     <string name="please_wait">Please wait</string>
     <string name="automatching">Looking for match…</string>
     <string name="winner_is">%1$s wins!</string>
+    <string name="notTurn">This is not your turn</string>
+    <string name="finished_turn">Your turn is finished</string>
+    <string name="exit">Exit</string>
 </resources>
 
 
