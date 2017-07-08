@@ -23,6 +23,9 @@ public class GameActivity extends AppCompatActivity implements
         GameFragment.GameListener {
     private static final String TAG = "GameActivity";
     private static final String ARG_GAMELOST = "gameLost";
+    private static final String ARG_CURRFRAGMENT = "currentFragment";
+    private static final String ARG_GAMEFRAGMENT = "gameFragment";
+    private static final String ARG_GAMEOPTFRAGMENT = "gameOptionFragment";
 
     private AlertDialog alertDialog;
     private boolean gameLost = false;
@@ -58,8 +61,20 @@ public class GameActivity extends AppCompatActivity implements
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.fragment_container, mGameFragment).commit();
                 mCurrentFragment = mGameFragment;
-            } else if (savedInstanceState.getBoolean(ARG_GAMELOST, true)) {
-                onGameLost();
+            } else {
+                gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, true);
+                if (gameLost) {
+                    onGameLost();
+                }
+                String strFragment = savedInstanceState.getString(ARG_CURRFRAGMENT,
+                        ARG_GAMEOPTFRAGMENT);
+                if (strFragment != null) {
+                    if (strFragment.equals(ARG_GAMEFRAGMENT)){
+                        mCurrentFragment = mGameFragment;
+                    } else if (strFragment.equals(ARG_GAMEOPTFRAGMENT)) {
+                        mCurrentFragment = mGameOptionFragment;
+                    }
+                }
             }
         }
         updateLayout();
@@ -84,12 +99,14 @@ public class GameActivity extends AppCompatActivity implements
     protected void onPostResume() {
         Log.d(TAG, "onPostResume: "+mConnectionHandler.getmRoomId());
         super.onPostResume();
-        while (!fragmentTransactionHelpers.isEmpty()) {
-            FragmentTransactionHelper fragmentTransactionHelper = fragmentTransactionHelpers.remove();
-            fragmentTransactionHelper.commit();
-            mCurrentFragment = fragmentTransactionHelper.getReplacingFragment();
+        if (fragmentTransactionHelpers != null && !fragmentTransactionHelpers.isEmpty()) {
+            while (!fragmentTransactionHelpers.isEmpty()) {
+                FragmentTransactionHelper fragmentTransactionHelper = fragmentTransactionHelpers.remove();
+                fragmentTransactionHelper.commit();
+                mCurrentFragment = fragmentTransactionHelper.getReplacingFragment();
+            }
+            updateLayout();
         }
-        updateLayout();
     }
 
     @Override
@@ -101,6 +118,13 @@ public class GameActivity extends AppCompatActivity implements
             alertDialog.dismiss();
         }
         outState.putBoolean(ARG_GAMELOST, gameLost);
+        String strFragment = null;
+        if (mCurrentFragment == mGameFragment) {
+            strFragment = ARG_GAMEFRAGMENT;
+        } else if (mCurrentFragment == mGameOptionFragment) {
+            strFragment = ARG_GAMEOPTFRAGMENT;
+        }
+        outState.putString(ARG_CURRFRAGMENT, strFragment);
     }
 
     @Override
@@ -109,7 +133,17 @@ public class GameActivity extends AppCompatActivity implements
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
+            String strCurrentFragment = savedInstanceState.getString(ARG_CURRFRAGMENT,
+                    ARG_GAMEOPTFRAGMENT);
+            if (strCurrentFragment != null) {
+                if (strCurrentFragment.equals(ARG_GAMEFRAGMENT)) {
+                    mCurrentFragment = mGameFragment;
+                } else if (strCurrentFragment.equals(ARG_GAMEOPTFRAGMENT)) {
+                    mCurrentFragment = mGameOptionFragment;
+                }
+            }
         }
+        updateLayout();
     }
 
 
@@ -238,7 +272,7 @@ public class GameActivity extends AppCompatActivity implements
         if (mCurrentFragment == mGameFragment) {
             findViewById(R.id.game_timer).setVisibility(View.VISIBLE);
             findViewById(R.id.players_layout).setVisibility(View.VISIBLE);
-        } else {
+        } else if (mCurrentFragment == mGameOptionFragment){
             findViewById(R.id.game_timer).setVisibility(View.GONE);
             findViewById(R.id.players_layout).setVisibility(View.GONE);
         }

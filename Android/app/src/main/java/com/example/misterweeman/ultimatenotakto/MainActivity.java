@@ -8,9 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import static com.example.misterweeman.ultimatenotakto.Utility.loadLocale;
 
@@ -80,7 +78,9 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onPause() {
         super.onPause();
-        mServ.pauseMusic();
+        if (mServ != null) {
+            mServ.pauseMusic();
+        }
     }
 
 
