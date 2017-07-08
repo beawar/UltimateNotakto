@@ -10,14 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-
-import com.example.misterweeman.ultimatenotakto.view.GameFragment;
+import android.widget.TextView;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import static com.example.misterweeman.ultimatenotakto.view.GameFragment.DEFAULT_GRID_SIZE;
-import static com.example.misterweeman.ultimatenotakto.view.GameFragment.DEFAULT_PLAYERS_NUM;
+import static com.example.misterweeman.ultimatenotakto.GameFragment.DEFAULT_GRID_SIZE;
+import static com.example.misterweeman.ultimatenotakto.GameFragment.DEFAULT_PLAYERS_NUM;
 
 public class GameActivity extends AppCompatActivity implements
         GameFragment.GameListener {
@@ -82,14 +81,14 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "onPause: "+mConnectionHandler.getRoomId());
         super.onPause();
         isRunning = false;
     }
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "onResume: "+mConnectionHandler.getRoomId());
         super.onResume();
         isRunning = true;
 
@@ -97,7 +96,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onPostResume() {
-        Log.d(TAG, "onPostResume: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "onPostResume: "+mConnectionHandler.getRoomId());
         super.onPostResume();
         if (fragmentTransactionHelpers != null && !fragmentTransactionHelpers.isEmpty()) {
             while (!fragmentTransactionHelpers.isEmpty()) {
@@ -111,7 +110,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstanceState: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "onSaveInstanceState: "+mConnectionHandler.getRoomId());
         super.onSaveInstanceState(outState);
         if (alertDialog != null && alertDialog.isShowing()) {
             // close dialog to prevent leaked window
@@ -129,7 +128,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.d(TAG, "onRestoreInstanceState: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "onRestoreInstanceState: "+mConnectionHandler.getRoomId());
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
@@ -149,7 +148,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     public void onGameLost() {
-        Log.d(TAG, "onGameLost: "+ mConnectionHandler.getmRoomId());
+        Log.d(TAG, "onGameLost: "+ mConnectionHandler.getRoomId());
         gameLost = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lost_dialog_message)
@@ -174,8 +173,10 @@ public class GameActivity extends AppCompatActivity implements
     }
 
 
-    public void onWinning() {
-        Log.d(TAG, "onGameWon: "+mConnectionHandler.getmRoomId());
+    @Override
+    public void onGameWon() {
+        Log.d(TAG, "onGameWon: "+ mConnectionHandler.getRoomId());
+        mConnectionHandler.broadcastWin();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.won_dialog_message)
                 .setTitle(R.string.win_dialog_title)
@@ -200,6 +201,14 @@ public class GameActivity extends AppCompatActivity implements
         alertDialog.show();
     }
 
+    @Override
+    public void onGameEnd(String winner) {
+        Log.d(TAG, "onGameEnd: ");
+        TextView message = (TextView) findViewById(R.id.text_message);
+        message.setText(getResources().getString(R.string.winner_is, winner));
+        message.setVisibility(View.VISIBLE);
+    }
+
     public ConnectionHandler getConnectionHandler() {
         return mConnectionHandler;
     }
@@ -218,7 +227,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     public void replaceFragment(Fragment fragment) {
-        Log.d(TAG, "replaceFragment: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "replaceFragment: "+mConnectionHandler.getRoomId());
         if (!isRunning) {
             FragmentTransactionHelper fragmentTransactionHelper = new FragmentTransactionHelper() {
                 @Override
@@ -236,7 +245,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     private void replaceFragmentInternal(int contentFrameId, Fragment replacingFragment) {
-        Log.d(TAG, "replaceFragmentInternal: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "replaceFragmentInternal: "+mConnectionHandler.getRoomId());
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(contentFrameId, replacingFragment).commit();
         mCurrentFragment = replacingFragment;
@@ -264,7 +273,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     public void updateBoard(int x, int y, String sender, int turn) {
-        Log.d(TAG, "updateBoard() "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "updateBoard() "+mConnectionHandler.getRoomId());
         mGameFragment.updateBoard(x, y, sender, turn);
     }
 
@@ -280,7 +289,7 @@ public class GameActivity extends AppCompatActivity implements
 
     public void onBackPressed(){
 //        mTimer.cancel();
-        Log.d(TAG, "onBackPressed: "+mConnectionHandler.getmRoomId());
+        Log.d(TAG, "onBackPressed: "+mConnectionHandler.getRoomId());
         mConnectionHandler.onBackPressed();
         super.onBackPressed();
     }
@@ -298,5 +307,13 @@ public class GameActivity extends AppCompatActivity implements
             alertDialog.dismiss();
         }
         super.onDestroy();
+    }
+
+    public void setPlayersNum(int number) {
+        mGameFragment.setPlayersNum(number);
+    }
+
+    public void setGridSize(int gridSize) {
+        mGameFragment.setGridSize(gridSize);
     }
 }

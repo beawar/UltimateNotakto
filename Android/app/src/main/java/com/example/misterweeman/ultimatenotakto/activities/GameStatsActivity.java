@@ -12,8 +12,6 @@ public class GameStats extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_layout);
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
-        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layout.addView(layoutInflater.inflate(R.layout.activity_game_stats, layout, false));
+        App.setLayout(this, R.layout.activity_game_stats);
     }
 }

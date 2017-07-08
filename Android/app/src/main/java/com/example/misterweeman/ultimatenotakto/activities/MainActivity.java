@@ -83,12 +83,8 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
-
-
     @Override
     public void onDestroy(){
-
         Log.d(TAG, "destroy");
         doUnbindService();
         if(!isChangingConfigurations()) {

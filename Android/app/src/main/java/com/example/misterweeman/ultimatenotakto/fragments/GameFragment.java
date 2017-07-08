@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto.view;
+package com.example.misterweeman.ultimatenotakto;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,12 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.misterweeman.ultimatenotakto.ConnectionHandler;
-import com.example.misterweeman.ultimatenotakto.GameActivity;
-import com.example.misterweeman.ultimatenotakto.R;
-import com.example.misterweeman.ultimatenotakto.model.Board;
-import com.example.misterweeman.ultimatenotakto.model.Notakto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,7 +107,6 @@ public class GameFragment extends Fragment implements
                             // if the touch is valid, check for lost and broadcast the move
                             if (Notakto.checkBoardForLost(mBoard, x, y)) {
                                 if (mGameListener != null) {
-//                                    mConnectionHandler.ILost();
                                     mGameListener.onGameLost();
                                 }
                                 // if it's my turn and i just lost
@@ -136,6 +129,7 @@ public class GameFragment extends Fragment implements
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        setPlayersNum(mPlayersNum);
         if (context instanceof GameListener) {
             mGameListener = (GameListener) context;
         } else {
@@ -158,8 +152,8 @@ public class GameFragment extends Fragment implements
         if (mBoardView != null) {
             int color = BoardView.getColors()[turn];
             boolean set = mBoardView.updateBoard(x, y, color);
-            if (set && mConnectionHandler.hasPlayerLost(sender)) {
-                mConnectionHandler.checkForWin();
+            if (set && mConnectionHandler.hasPlayerLost(sender) && mConnectionHandler.checkForWin()) {
+                mGameListener.onGameWon();
             }
             return set;
         }
@@ -179,25 +173,23 @@ public class GameFragment extends Fragment implements
                     }
                     mConnectionHandler.broadcastTurn(isLost, x, y);
                     done = true;
-
                 }
             }
         }
-        mConnectionHandler.checkForWin();
     }
 
-    private void addPlayersLabels(int playerSize){
+    private void addPlayersLabels(int playersNum){
 //        TextView player1 = (TextView) getActivity().findViewById(R.id.player_1);
 //        TextView player2 = (TextView) getActivity().findViewById(R.id.player_2);
 
 //        player1.setBackgroundResource(R.color.green);
 //        player2.setBackgroundResource(R.color.green);
 
-        if (playerSize < 3) {
+        if (playersNum < 3) {
             TextView player3 = (TextView) getActivity().findViewById(R.id.player_3);
             player3.setVisibility(View.GONE);
         }
-        if (playerSize < 4) {
+        if (playersNum < 4) {
             TextView player4 = (TextView) getActivity().findViewById(R.id.player_4);
             player4.setVisibility(View.GONE);
         }
@@ -221,6 +213,18 @@ public class GameFragment extends Fragment implements
         }.start();
     }
 
+    public int getPlayersNum() {
+        return mPlayersNum;
+    }
+
+    public void setPlayersNum(int mPlayersNum) {
+        this.mPlayersNum = mPlayersNum;
+    }
+
+    public void setGridSize(int gridSize) {
+        this.mGridSize = gridSize;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -229,7 +233,7 @@ public class GameFragment extends Fragment implements
      */
     public interface GameListener{
         void onGameLost();
+        void onGameWon();
+        void onGameEnd(String winner);
     }
-
-
 }

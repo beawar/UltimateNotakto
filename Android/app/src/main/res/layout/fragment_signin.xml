@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_centerInParent="true"
-    tools:context="com.example.misterweeman.ultimatenotakto.SignInFragment"
+    tools:context="com.example.misterweeman.ultimatenotakto.fragments.SignInFragment"
     android:id="@+id/fragment_signin">
 
     <com.google.android.gms.common.SignInButton

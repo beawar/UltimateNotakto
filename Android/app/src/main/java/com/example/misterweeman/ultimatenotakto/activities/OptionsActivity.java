@@ -127,7 +127,11 @@ public class Options extends AppCompatActivity {
         mServ.resumeMusic();
     }
 
-
+    @Override
+    protected void onDestroy() {
+//        doUnbindService();
+        super.onDestroy();
+    }
 
     // inizializza elementi del layout
     private void initializeVariables() {

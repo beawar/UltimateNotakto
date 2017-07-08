@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto.model;
+package com.example.misterweeman.ultimatenotakto;
 
 /**
  * Created by Bea on 18/05/2017.

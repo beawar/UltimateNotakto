@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto.model;
+package com.example.misterweeman.ultimatenotakto;
 
 public class Notakto {
 

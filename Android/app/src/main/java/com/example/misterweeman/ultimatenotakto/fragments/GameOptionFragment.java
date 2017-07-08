@@ -69,6 +69,11 @@ public class GameOptionFragment extends Fragment{
 
     public void startQuickGame(View view) {
         if (mConnectionHandler != null) {
+            if (getActivity() instanceof GameActivity) {
+                GameActivity gameActivity = ((GameActivity) getActivity());
+                gameActivity.setPlayersNum(getNumberOfPlayers());
+                gameActivity.setGridSize(getBoardSize());
+            }
             mConnectionHandler.startQuickGame(getNumberOfPlayers()-1);
             Toast.makeText(getActivity(), R.string.automatching , Toast.LENGTH_SHORT).show();
         }

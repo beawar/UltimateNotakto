@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,17 +8,11 @@ import android.util.DisplayMetrics;
 
 import java.util.Locale;
 
-/**
- * Created by Andrea on 02/06/2017.
- */
-
-
-class Utility {
+public class Utility {
 
     private static Locale myLocale;
     private static final String PREFS_NAME = "MySettingsFile";
-    static void loadLocale(Context context) {
-
+    public static void loadLocale(Context context) {
 
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         String lang = settings.getString("lang", "en");

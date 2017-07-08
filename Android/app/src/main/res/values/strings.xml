@@ -53,6 +53,7 @@
     <string name="is_inviting_you">is inviting you to join a game</string>
     <string name="please_wait">Please wait</string>
     <string name="automatching">Looking for match…</string>
+    <string name="winner_is">%1$s wins!</string>
 </resources>
 
 
