@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.example.misterweeman.ultimatenotakto.App;
+import com.example.misterweeman.ultimatenotakto.R;
+import com.example.misterweeman.ultimatenotakto.activities.GameActivity;
+import com.example.misterweeman.ultimatenotakto.helpers.ConnectionHandler;
 
 
 public class GameOptionFragment extends Fragment{

@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.misterweeman.ultimatenotakto.R;
+import com.example.misterweeman.ultimatenotakto.activities.GameActivity;
+import com.example.misterweeman.ultimatenotakto.helpers.ConnectionHandler;
+import com.example.misterweeman.ultimatenotakto.model.Board;
+import com.example.misterweeman.ultimatenotakto.model.Notakto;
+import com.example.misterweeman.ultimatenotakto.view.BoardView;
 
 import java.util.ArrayList;
 import java.util.List;

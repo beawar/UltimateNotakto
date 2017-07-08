@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.activities;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,11 +22,14 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.example.misterweeman.ultimatenotakto.services.MusicService;
+import com.example.misterweeman.ultimatenotakto.R;
+
 import java.util.Locale;
 
-import static com.example.misterweeman.ultimatenotakto.Utility.loadLocale;
+import static com.example.misterweeman.ultimatenotakto.preferences.Utility.loadLocale;
 
-public class Options extends AppCompatActivity {
+public class OptionsActivity extends AppCompatActivity {
     private static final String TAG = "UltimateNotakto";
     private SeekBar SoundSeekbar;
     private SeekBar EffectsSeekbar;
@@ -168,7 +171,7 @@ public class Options extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, Options.class);
+        Intent refresh = new Intent(this, OptionsActivity.class);
         refresh.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(refresh);
         finish();
@@ -216,13 +219,13 @@ public class Options extends AppCompatActivity {
         }
     };
 
-    void doBindService(){
+    public void doBindService(){
         bindService(new Intent(this,MusicService.class),
                 Scon, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 
-    void doUnbindService()
+    public void doUnbindService()
     {
         if(mIsBound)
         {

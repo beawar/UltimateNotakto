@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.helpers;
 
 
 import android.app.Activity;
@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.example.misterweeman.ultimatenotakto.App;
+import com.example.misterweeman.ultimatenotakto.activities.GameActivity;
+import com.example.misterweeman.ultimatenotakto.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
@@ -162,7 +165,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 //        mParentActivity.startActivityForResult(intent, RC_SELECT_PLAYERS);
 //    }
 
-    void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult: " +mRoomId);
         switch (requestCode){
             case RC_SELECT_PLAYERS:
@@ -229,7 +232,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         Log.d(TAG, "onClick: ");
     }
 
-    protected void leaveRoom() {
+    public void leaveRoom() {
         Log.d(TAG, "Leaving room "+mRoomId);
         stopKeepingScreenOn();
         if (mRoomId != null) {
@@ -530,7 +533,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
     }
 
-    void startQuickGame(int opponents) {
+    public void startQuickGame(int opponents) {
         Log.d(TAG, "startQuickGame() " +mRoomId);
 
         // auto-match criteria to invite the number of opponents.
@@ -552,7 +555,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
     }
 
-    void createGame(int opponents){
+    public void createGame(int opponents){
         Log.d(TAG, "createGame() " +mRoomId );
         Intent intent = Games.RealTimeMultiplayer.
                 getSelectOpponentsIntent(App.getGoogleApiHelper().getGoogleApiClient(), opponents, opponents);
@@ -560,7 +563,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     }
 
-    void onBackPressed(){
+    public void onBackPressed(){
         Log.d(TAG, "onBackPressed: " +mRoomId);
         leaveRoom();
         stopKeepingScreenOn();

@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto.model;
+package com.example.misterweeman.ultimatenotakto.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;

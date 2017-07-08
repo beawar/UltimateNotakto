@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,11 +12,18 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.misterweeman.ultimatenotakto.App;
+import com.example.misterweeman.ultimatenotakto.fragments.GameFragment;
+import com.example.misterweeman.ultimatenotakto.fragments.GameOptionFragment;
+import com.example.misterweeman.ultimatenotakto.R;
+import com.example.misterweeman.ultimatenotakto.helpers.ConnectionHandler;
+import com.example.misterweeman.ultimatenotakto.helpers.FragmentTransactionHelper;
+
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import static com.example.misterweeman.ultimatenotakto.GameFragment.DEFAULT_GRID_SIZE;
-import static com.example.misterweeman.ultimatenotakto.GameFragment.DEFAULT_PLAYERS_NUM;
+import static com.example.misterweeman.ultimatenotakto.fragments.GameFragment.DEFAULT_GRID_SIZE;
+import static com.example.misterweeman.ultimatenotakto.fragments.GameFragment.DEFAULT_PLAYERS_NUM;
 
 public class GameActivity extends AppCompatActivity implements
         GameFragment.GameListener {
@@ -41,7 +48,7 @@ public class GameActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_layout);
         mConnectionHandler = new ConnectionHandler(this, R.layout.activity_game);
-        App.setLayout(this, R.layout.game_activity);
+        App.setLayout(this, R.layout.activity_game);
 
         //Create the fragments
         mGameOptionFragment = GameOptionFragment.newInstance();
@@ -296,7 +303,7 @@ public class GameActivity extends AppCompatActivity implements
 
     public void goToOptions(View view) {
         Log.d(TAG, "goToOptions: ");
-        Intent intent = new Intent(this, Options.class);
+        Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
     }
 
