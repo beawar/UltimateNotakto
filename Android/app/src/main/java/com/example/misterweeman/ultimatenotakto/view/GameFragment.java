@@ -127,6 +127,8 @@ public class GameFragment extends Fragment implements
                         // if it's my turn but I lost already, I just skip it
                         mConnectionHandler.broadcastTurn(true, -1, -1);
                     }
+                }else{
+                    Toast.makeText(getActivity(),R.string.notTurn,Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -193,13 +195,24 @@ public class GameFragment extends Fragment implements
 //        player1.setBackgroundResource(R.color.green);
 //        player2.setBackgroundResource(R.color.green);
 
+        String[] playerNames = mConnectionHandler.getNames();
+        TextView player1 = (TextView) getActivity().findViewById(R.id.player_1);
+        TextView player2 = (TextView) getActivity().findViewById(R.id.player_2);
+        TextView player3 = (TextView) getActivity().findViewById(R.id.player_3);
+        TextView player4 = (TextView) getActivity().findViewById(R.id.player_4);
+
+        player1.setText(playerNames[0]);
+        player2.setText(playerNames[1]);
+
         if (playerSize < 3) {
-            TextView player3 = (TextView) getActivity().findViewById(R.id.player_3);
             player3.setVisibility(View.GONE);
+        }else{
+            player3.setText(playerNames[2]);
         }
         if (playerSize < 4) {
-            TextView player4 = (TextView) getActivity().findViewById(R.id.player_4);
             player4.setVisibility(View.GONE);
+        }else{
+            player4.setText(playerNames[3]);
         }
     }
 

@@ -658,4 +658,14 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     public String getmRoomId() {return mRoomId;}
 
+
+    public String[] getNames(){
+        String[] names = new String[mPartecipants.size()];
+        int i = 0;
+        for(Participant p: mPartecipants){
+            names[i] = p.getDisplayName();
+            i++;
+        }
+        return names;
+    }
 }

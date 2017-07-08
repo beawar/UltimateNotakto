@@ -109,6 +109,7 @@ public class GameActivity extends AppCompatActivity implements
         }
     }
 
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         Log.d(TAG, "onSaveInstanceState: "+mConnectionHandler.getmRoomId());
@@ -282,7 +283,6 @@ public class GameActivity extends AppCompatActivity implements
 //        mTimer.cancel();
         Log.d(TAG, "onBackPressed: "+mConnectionHandler.getmRoomId());
         mConnectionHandler.onBackPressed();
-        super.onBackPressed();
     }
 
     public void goToOptions(View view) {

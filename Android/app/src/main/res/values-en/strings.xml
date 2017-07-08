@@ -48,5 +48,6 @@
     <string name="inv_popup_text">has invted you to join a game</string>
     <string name="win_dialog_title">You won</string>
     <string name="won_dialog_message">You won! Leave the match.</string>
+    <string name="notTurn">This is not your turn</string>
 
 </resources>

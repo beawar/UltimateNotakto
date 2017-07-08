@@ -55,4 +55,5 @@
     <string name="inv_popup_text">ti ha invitato a giocare una partita</string>
     <string name="win_dialog_title">Hai vinto</string>
     <string name="won_dialog_message">Hai vinto! Lascia la partita.</string>
+    <string name="notTurn">Non è il tuo turno</string>
 </resources>
