@@ -556,7 +556,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     public void onBackPressed(){
-        Log.d(TAG, "onBackPressed: " +mRoomId);
+        Log.d(TAG, "onBackPressed: " + mRoomId);
         leaveRoom();
     }
 

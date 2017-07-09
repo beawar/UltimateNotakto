@@ -113,8 +113,11 @@ public class GameFragment extends Fragment implements
             if (x < mGridSize && y < mGridSize) {
                 if (mConnectionHandler.isMyTurn()) {
                     if (!mConnectionHandler.hasLost()) {
-                        // stop the timer
-                        mTimer.cancel();
+                        if (mTimerIsRunning && mTimer != null) {
+                            // stop the timer
+                            mTimer.cancel();
+                            mTimerIsRunning = false;
+                        }
 
                         // if it's my turn and I have not lost yet, I play
                         // if I click on an already cheched cell, do nothing and wait for a valid touch
@@ -192,6 +195,7 @@ public class GameFragment extends Fragment implements
 //                        done = true;
 //                    }
                     if (!mBoard.isChecked(x, y)) {
+                        done = true;
                         long downTime = SystemClock.uptimeMillis();
                         long eventTime = SystemClock.uptimeMillis() + 100;
                         // List of meta states found here: developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
@@ -200,7 +204,6 @@ public class GameFragment extends Fragment implements
                                 MotionEvent.ACTION_UP, x, y, metaState);
                         // Dispatch touch event to view
                         mBoardView.dispatchTouchEvent(motionEvent);
-                        done = true;
                     }
                 }
             }
@@ -231,28 +234,28 @@ public class GameFragment extends Fragment implements
 
     private void startTimer(){
         final TextView textTimer = (TextView) getActivity().findViewById(R.id.game_timer);
+        final Toast toast = Toast.makeText(getActivity(), R.string.finished_turn, Toast.LENGTH_LONG);
+        if (mTimer == null) {
+            mTimer = new CountDownTimer(TURN_TIME * 1000, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    textTimer.setText(String.valueOf(millisUntilFinished / 1000));
+                }
+
+                public void onFinish() {
+                    toast.show();
+                    onTurnFinished();
+                    mTimerIsRunning = false;
+                }
+            };
+        }
 
         if (mConnectionHandler.isMyTurn()) {
             textTimer.setVisibility(View.VISIBLE);
-            final Toast toast = Toast.makeText(getActivity(), R.string.finished_turn, Toast.LENGTH_LONG);
-
-            if (mTimer == null) {
-                mTimer = new CountDownTimer(TURN_TIME * 1000, 1000) {
-
-                    public void onTick(long millisUntilFinished) {
-                        textTimer.setText(String.valueOf(millisUntilFinished / 1000));
-                    }
-
-                    public void onFinish() {
-                        toast.show();
-                        onTurnFinished();
-//                    this.start();
-                    }
-                };
-            }
             mTimer.start();
+            mTimerIsRunning = true;
         } else {
-            textTimer.setText(String.valueOf(TURN_TIME));
+//            textTimer.setText(String.valueOf(TURN_TIME));
             textTimer.setVisibility(View.GONE);
         }
     }

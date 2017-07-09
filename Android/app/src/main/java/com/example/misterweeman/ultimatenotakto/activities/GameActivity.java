@@ -297,9 +297,9 @@ public class GameActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
     public void onBackPressed(){
-//        mTimer.cancel();
-        Log.d(TAG, "onBackPressed: "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "onBackPressed: "+ mConnectionHandler.getRoomId());
         mConnectionHandler.onBackPressed();
     }
 
