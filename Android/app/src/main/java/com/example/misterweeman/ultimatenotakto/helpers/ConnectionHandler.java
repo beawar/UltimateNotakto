@@ -68,7 +68,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     private int mConnectedPlayers;
 
 
-    public ConnectionHandler(GameActivity activity, int layoutId) {
+    public ConnectionHandler(GameActivity activity) {
         mParentActivity = activity;
         mGoogleApiHelper = App.getGoogleApiHelper();
         mParticipants = null;
@@ -239,10 +239,10 @@ public class ConnectionHandler implements RoomUpdateListener,
             Games.RealTimeMultiplayer.leave(mGoogleApiHelper.getGoogleApiClient(), this, mRoomId);
             mRoomId = null;
         }
-        if (mParticipants != null) {
+        if (mParticipants != null && !mParticipants.isEmpty()) {
             mParticipants.clear();
         }
-        if (mFinishedParticipants != null) {
+        if (mFinishedParticipants != null && !mFinishedParticipants.isEmpty()) {
             mFinishedParticipants.clear();
         }
         mConnectedPlayers = 0;
@@ -661,6 +661,10 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     public String getRoomId() {
         return mRoomId;
+    }
+
+    public void setRoomId(String mRoomId) {
+        this.mRoomId = mRoomId;
     }
 
     public String[] getNames(){

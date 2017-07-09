@@ -39,6 +39,7 @@ public class GameActivity extends AppCompatActivity implements
     private static final String ARG_CURRFRAGMENT = "currentFragment";
     private static final String ARG_GAMEFRAGMENT = "gameFragment";
     private static final String ARG_GAMEOPTFRAGMENT = "gameOptionFragment";
+    private static final String ARG_ROOMID = "roomId";
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -58,7 +59,7 @@ public class GameActivity extends AppCompatActivity implements
         mGoogleApiClient=App.getGoogleApiHelper().getGoogleApiClient();
 
         setContentView(R.layout.base_layout);
-        mConnectionHandler = new ConnectionHandler(this, R.layout.activity_game);
+        mConnectionHandler = new ConnectionHandler(this);
         Log.d(TAG, "onCreate: "+ mConnectionHandler.getRoomId());
         App.setLayout(this, R.layout.activity_game);
 
@@ -80,6 +81,7 @@ public class GameActivity extends AppCompatActivity implements
                         .add(R.id.fragment_container, mGameFragment).commit();
                 mCurrentFragment = mGameFragment;
             } else {
+                mConnectionHandler.setRoomId(ARG_ROOMID);
                 gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
                 if (gameLost) {
                     onGameLost();
@@ -135,6 +137,7 @@ public class GameActivity extends AppCompatActivity implements
             alertDialog.dismiss();
         }
         outState.putBoolean(ARG_GAMELOST, gameLost);
+        outState.putString(ARG_ROOMID, mConnectionHandler.getRoomId());
         String strFragment = null;
         if (mCurrentFragment == mGameFragment) {
             strFragment = ARG_GAMEFRAGMENT;
@@ -150,6 +153,7 @@ public class GameActivity extends AppCompatActivity implements
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
+            mConnectionHandler.setRoomId(savedInstanceState.getString(ARG_ROOMID));
             String strCurrentFragment = savedInstanceState.getString(ARG_CURRFRAGMENT,
                     ARG_GAMEOPTFRAGMENT);
             if (strCurrentFragment != null) {
