@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.helpers;
 
 import android.support.v4.app.Fragment;
 

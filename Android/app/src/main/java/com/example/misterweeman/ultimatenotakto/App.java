@@ -6,6 +6,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
+import com.example.misterweeman.ultimatenotakto.helpers.GoogleApiHelper;
+
 public class App extends Application {
     private GoogleApiHelper mGoogleApiHelper;
     private static App mInstance;

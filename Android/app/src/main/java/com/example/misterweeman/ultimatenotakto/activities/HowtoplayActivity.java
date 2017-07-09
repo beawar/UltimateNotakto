@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.activities;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -8,6 +8,9 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.TextView;
+
+import com.example.misterweeman.ultimatenotakto.services.MusicService;
+import com.example.misterweeman.ultimatenotakto.R;
 
 public class HowtoplayActivity extends Activity {
 

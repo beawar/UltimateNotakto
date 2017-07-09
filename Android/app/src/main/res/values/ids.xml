@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_id">507273564298</string>
+    <string name="app_id" translatable="false">507273564298</string>
 
-    <string name="achievement_winner">CgkIiqHx3uEOEAIQCA</string>
-    <string name="achievement_loser">CgkIiqHx3uEOEAIQCQ</string>
+    <string name="achievement_winner" translatable="false">CgkIiqHx3uEOEAIQCA</string>
+    <string name="achievement_loser" translatable="false">CgkIiqHx3uEOEAIQCQ</string>
 
-
-    <string name="leaderboard_victories">CgkIiqHx3uEOEAIQBw</string>
+    <string name="leaderboard_victories" translatable="false">CgkIiqHx3uEOEAIQBw</string>
 </resources>

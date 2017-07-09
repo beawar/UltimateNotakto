@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.activities;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,7 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import static com.example.misterweeman.ultimatenotakto.Utility.loadLocale;
+import com.example.misterweeman.ultimatenotakto.App;
+import com.example.misterweeman.ultimatenotakto.services.MusicService;
+import com.example.misterweeman.ultimatenotakto.R;
+import com.example.misterweeman.ultimatenotakto.fragments.SignInFragment;
+
+import static com.example.misterweeman.ultimatenotakto.preferences.Utility.loadLocale;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity{
 
         Log.d(TAG, "goToStats()");
 
-        Intent intent = new Intent(this, GameStats.class);
+        Intent intent = new Intent(this, GameStatsActivity.class);
         startActivity(intent);
     }
 
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity{
 
         Log.d(TAG, "goToOptions()");
 
-        Intent intent = new Intent(this, Options.class);
+        Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
     }
 
@@ -83,12 +88,8 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
-
-
     @Override
     public void onDestroy(){
-
         Log.d(TAG, "destroy");
         doUnbindService();
         if(!isChangingConfigurations()) {

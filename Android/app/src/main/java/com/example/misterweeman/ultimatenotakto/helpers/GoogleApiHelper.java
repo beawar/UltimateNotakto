@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.helpers;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
 
-class GoogleApiHelper implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public class GoogleApiHelper implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
     private static final String TAG = "GoogleApiHelper";
     private Context context;
     private GoogleApiClient mGoogleApiClient;

@@ -1,32 +1,28 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.misterweeman.ultimatenotakto.App;
+import com.example.misterweeman.ultimatenotakto.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
-public class GameStats extends AppCompatActivity {
-
-
-    private GoogleApiClient mGoogleApiClient;
+public class GameStatsActivity extends AppCompatActivity {
+    GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mGoogleApiClient = App.getGoogleApiHelper().getGoogleApiClient();
         setContentView(R.layout.base_layout);
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout_container);
-        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        layout.addView(layoutInflater.inflate(R.layout.activity_game_stats, layout, false));
+        App.setLayout(this, R.layout.activity_game_stats);
     }
 
     public void showAchievements(View v){
-        mGoogleApiClient = App.getGoogleApiHelper().getGoogleApiClient();
+//        mGoogleApiClient = App.getGoogleApiHelper().getGoogleApiClient();
         if(mGoogleApiClient.isConnected()) {
             startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient),
                     1);
@@ -37,7 +33,7 @@ public class GameStats extends AppCompatActivity {
     }
 
     public void showLeaderBoard(View v){
-        mGoogleApiClient = App.getGoogleApiHelper().getGoogleApiClient();
+//        mGoogleApiClient = App.getGoogleApiHelper().getGoogleApiClient();
         if(mGoogleApiClient.isConnected()) {
             startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient,
                     String.valueOf(R.string.leaderboard_victories)), 2);

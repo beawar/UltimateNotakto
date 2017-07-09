@@ -2,8 +2,6 @@ package com.example.misterweeman.ultimatenotakto.model;
 
 public class Notakto {
 
-    //funzioni per controllare la presenza di x nelle varie direzioni
-
     private static boolean chkUpLeftUpLeft(Board brd, int x, int y) {
         boolean lost = false;
         int x1 = x - 1;

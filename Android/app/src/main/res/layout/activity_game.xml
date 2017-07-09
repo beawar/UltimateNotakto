@@ -1,19 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_vertical"
-    tools:context="com.example.misterweeman.ultimatenotakto.GameActivity"
-    android:id="@+id/activity_game">
+    android:id="@+id/game_activity"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/game_layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/game_timer"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:drawableLeft="@drawable/ic_timer"
+            android:drawableStart="@drawable/ic_timer"/>
+
+        <Button
+            android:id="@+id/option_onGame_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawableTop="@drawable/ic_settings"
+            style="@style/ButtonIcon"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="goToOptions"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/players_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/player_1"
+            style="@style/PlayerLabel"
+            android:background= "@drawable/back"
+            android:text="@string/player1" />
+
+        <TextView
+            android:id="@+id/player_2"
+            style="@style/PlayerLabel"
+            android:layout_toEndOf="@id/player_1"
+            android:layout_toRightOf="@id/player_1"
+            android:background= "@drawable/back2"
+            android:text="@string/player2" />
+
+        <TextView
+            android:id="@+id/player_3"
+            style="@style/PlayerLabel"
+            android:layout_toEndOf="@id/player_2"
+            android:layout_toRightOf="@id/player_2"
+            android:background= "@drawable/back3"
+            android:text="@string/player3" />
+
+        <TextView
+            android:id="@+id/player_4"
+            style="@style/PlayerLabel"
+            android:layout_toEndOf="@id/player_3"
+            android:layout_toRightOf="@id/player_3"
+            android:background= "@drawable/back4"
+            android:text="@string/player4" />
+
+    </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="395dp"
-        android:layout_height="643dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:id="@+id/fragment_container" />
+    <TextView
+        android:id="@+id/text_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/background_color"
+        android:visibility="gone"/>
 
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

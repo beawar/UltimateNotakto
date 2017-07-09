@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.fragments;
 
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.misterweeman.ultimatenotakto.App;
+import com.example.misterweeman.ultimatenotakto.R;
+import com.example.misterweeman.ultimatenotakto.helpers.GoogleApiHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.games.Games;

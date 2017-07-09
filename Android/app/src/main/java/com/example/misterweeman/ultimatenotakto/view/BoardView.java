@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.MotionEvent;
@@ -88,7 +87,6 @@ public class BoardView extends View {
 
     // Set the styles for the x (1 for every possible player)
     protected void drawXStyles(){
-        Log.d(TAG, "drawXStyles: ");
         colorBoardHelper = new SparseIntArray();
         xOnBoardMap = new SparseArray<>(4);
         xOnBoardMap.append(Color.RED, new Paint());
@@ -109,8 +107,8 @@ public class BoardView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(Color.WHITE);
-        drawCells(canvas);
         drawGrid(canvas);
+        drawCells(canvas);
     }
 
     private void drawGrid(Canvas canvas) {
@@ -121,8 +119,7 @@ public class BoardView extends View {
     }
 
     private void drawCells(Canvas canvas) {
-        Log.d(TAG, "drawCells: ");
-        // Disegna la X
+        // Draws every X
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 if (grid.at(i, j)) {
@@ -146,7 +143,6 @@ public class BoardView extends View {
     // Setta la cella toccata con l'opposto del suo valore
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d(TAG, "onTouchEvent: ");
         xTouch = (int) (event.getX() / cellSize);
         yTouch = (int) (event.getY() / cellSize);
         return super.onTouchEvent(event);
@@ -179,7 +175,6 @@ public class BoardView extends View {
     }
 
     public boolean updateBoard(int x, int y, int color) {
-        Log.d(TAG, "updateBoard: ");
         if (x < gridSize && y < gridSize && grid.setChecked(x, y)) {
             colorBoardHelper.put(3 * y + x, color);
             invalidate();

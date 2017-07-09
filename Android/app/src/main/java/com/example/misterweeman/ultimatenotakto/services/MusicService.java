@@ -1,4 +1,4 @@
-package com.example.misterweeman.ultimatenotakto;
+package com.example.misterweeman.ultimatenotakto.services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,10 +8,8 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.example.misterweeman.ultimatenotakto.R;
 
-/**
- * Created by Andrea on 03/06/2017.
- */
 
 public class MusicService extends Service  implements MediaPlayer.OnErrorListener {
 
@@ -25,7 +23,7 @@ public class MusicService extends Service  implements MediaPlayer.OnErrorListene
     public MusicService() { }
 
     public class ServiceBinder extends Binder {
-        MusicService getService()
+        public MusicService getService()
         {
             return MusicService.this;
         }

@@ -31,6 +31,10 @@ public class Board {
         return false;
     }
 
+    public boolean isChecked(int col, int row) {
+        return grid[col][row];
+    }
+
     public boolean at(int col, int row) {
         return grid[col][row];
     }
