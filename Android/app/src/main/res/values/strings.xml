@@ -52,8 +52,9 @@
     <string name="game_problem">Something went wrong. Try again later.</string>
     <string name="is_inviting_you">is inviting you to join a game</string>
     <string name="please_wait">Please wait</string>
-    <string name="automatching">Looking for match…</string>
+    <string name="automatching">Looking for match&#8230;</string>
     <string name="notTurn">This is not your turn</string>
+    <string name="notConnected">You are not connected to Google Play Games</string>
 </resources>
 
 
