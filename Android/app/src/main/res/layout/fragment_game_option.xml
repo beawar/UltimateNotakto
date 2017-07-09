@@ -120,14 +120,14 @@
             android:id="@+id/create_quick_game_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/create_quick_game"
-            android:onClick="startQuickGame"/>
+            android:text="@string/create_game"
+            android:onClick="createGame"/>
         <Button
             android:id="@+id/create_game_btn2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/create_game"
-            android:onClick="createGame"/>
+            android:text="@string/create_quick_game"
+            android:onClick="startQuickGame"/>
 
     </LinearLayout>
 

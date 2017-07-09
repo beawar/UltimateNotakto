@@ -72,21 +72,22 @@ public class GameOptionFragment extends Fragment{
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    public void startQuickGame(View view) {
+    public void createGame(View view) {
         if (mConnectionHandler != null) {
             if (getActivity() instanceof GameActivity) {
                 GameActivity gameActivity = ((GameActivity) getActivity());
                 gameActivity.setPlayersNum(getNumberOfPlayers());
                 gameActivity.setGridSize(getBoardSize());
             }
-            mConnectionHandler.startQuickGame(getNumberOfPlayers()-1);
+            mConnectionHandler.createGame(getNumberOfPlayers()-1,getBoardSize());
             Toast.makeText(getActivity(), R.string.automatching , Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void createGame(View view) {
+    public void startQuickGame(View view) {
         if (mConnectionHandler != null) {
-            mConnectionHandler.createGame(getNumberOfPlayers()-1);
+            mConnectionHandler.startQuickGame();
+            Toast.makeText(getActivity(), R.string.automatching , Toast.LENGTH_SHORT).show();
         }
     }
 

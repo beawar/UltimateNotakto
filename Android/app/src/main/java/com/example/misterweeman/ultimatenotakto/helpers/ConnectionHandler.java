@@ -55,7 +55,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     // message buffer for the sending message
     // format of a message: [Y = lost, N = not lost][X coordinate][Y coordinate][turn id]
     private byte[] mMsgBuffer = new byte[4];
-
+    private int grid_size = -1;
     private int mCurScreen;
     private boolean mResolvingConnectionFailure = false;
     private boolean hasWon = false;
@@ -277,6 +277,7 @@ public class ConnectionHandler implements RoomUpdateListener,
                 if (p.isConnectedToRoom() && p.getStatus() == Participant.STATUS_JOINED) {
                     mConnectedPlayers += 1;
                 }
+                Log.d(TAG, "updateRoom: "+mConnectedPlayers);
             }
         }
     }
@@ -363,7 +364,10 @@ public class ConnectionHandler implements RoomUpdateListener,
                 }
             }
             mParentActivity.onGameEnd(winner);
-        } else {
+        } else if((char) buf[0] == 'R'){
+            int grid_size = buf[1];
+            mParentActivity.setGridSize(grid_size);
+        } else{
             boolean hasLost = (char) buf[0] == 'Y';
             int x = (int) buf[1];
             int y = (int) buf[2];
@@ -439,8 +443,25 @@ public class ConnectionHandler implements RoomUpdateListener,
         if (mRoomId == null) {
             mRoomId = room.getRoomId();
         }
-
         updateRoom(room);
+        if(grid_size != -1) {
+            mParentActivity.setPlayersNum(mConnectedPlayers);
+            mMsgBuffer[0] = (byte) 'R';
+            // coordinates of the cell clicked
+            mMsgBuffer[1] = (byte) grid_size;
+
+            if (mParticipants.get(0).getParticipantId() == mMyId) {
+                mParentActivity.setGridSize(grid_size);
+                // send to every other partecipant
+                // Reliable messages are used because receiving this information is essential for the game
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId) && p.getStatus() == Participant.STATUS_JOINED) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(
+                                mGoogleApiHelper.getGoogleApiClient(), null, mMsgBuffer, mRoomId, p.getParticipantId());
+                    }
+                }
+            }
+        }
         // print the list of partecipants
         Log.d(TAG, "Room ID: " +  mRoomId);
         Log.d(TAG, "My ID: " + mMyId);
@@ -522,8 +543,8 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
     }
 
-    public void startQuickGame(int opponents) {
-        Log.d(TAG, "startQuickGame() " +mRoomId);
+    public void createGame(int opponents, int gridSize) {
+        Log.d(TAG, "createGame() " +mRoomId);
 
         // auto-match criteria to invite the number of opponents.
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(opponents, opponents, 0);
@@ -537,18 +558,32 @@ public class ConnectionHandler implements RoomUpdateListener,
 
         if (mGoogleApiHelper.getGoogleApiClient() != null && mGoogleApiHelper.getGoogleApiClient().isConnected()) {
             // create room
-            Games.RealTimeMultiplayer.create(mGoogleApiHelper.getGoogleApiClient(), roomConfigBuilder.build());
+            Games.RealTimeMultiplayer.create(mGoogleApiHelper.getGoogleApiClient(), roomConfigBuilder.setVariant(gridSize).build());
         } else {
             BaseGameUtils.makeSimpleDialog(mParentActivity, mParentActivity.getString(R.string.game_problem)).show();
             switchToMainScreen();
         }
     }
 
-    public void createGame(int opponents){
-        Log.d(TAG, "createGame() " + mRoomId);
-        Intent intent = Games.RealTimeMultiplayer.
-                getSelectOpponentsIntent(App.getGoogleApiHelper().getGoogleApiClient(), opponents, opponents);
-        mParentActivity.startActivityForResult(intent, RC_SELECT_PLAYERS);
+    public void startQuickGame(){
+        Log.d(TAG, "startQuickGame() " + mRoomId);
+
+        // auto-match criteria to invite the number of opponents.
+        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(2, 4, 0);
+        // build the room config
+        RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();
+        roomConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
+        grid_size = (int)((Math.random()*4)+3);
+        switchToScreen(R.layout.screen_wait);
+        keepScreenOn();
+
+        if (mGoogleApiHelper.getGoogleApiClient() != null && mGoogleApiHelper.getGoogleApiClient().isConnected()) {
+            // create room
+            Games.RealTimeMultiplayer.create(mGoogleApiHelper.getGoogleApiClient(), roomConfigBuilder.build());
+        } else {
+            BaseGameUtils.makeSimpleDialog(mParentActivity, mParentActivity.getString(R.string.game_problem)).show();
+            switchToMainScreen();
+        }
 
     }
 

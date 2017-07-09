@@ -243,15 +243,15 @@ public class GameActivity extends AppCompatActivity implements
         return mConnectionHandler;
     }
 
-    public void startQuickGame(View view) {
-        if (mGameOptionFragment != null) {
-            mGameOptionFragment.startQuickGame(view);
-        }
-    }
-
     public void createGame(View view) {
         if (mGameOptionFragment != null) {
             mGameOptionFragment.createGame(view);
+        }
+    }
+
+    public void startQuickGame(View view) {
+        if (mGameOptionFragment != null) {
+            mGameOptionFragment.startQuickGame(view);
         }
     }
 
