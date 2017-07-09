@@ -198,10 +198,11 @@ public class GameFragment extends Fragment implements
         if (mBoardView != null) {
             int color = BoardView.getColors()[turn];
             boolean set = mBoardView.updateBoard(x, y, color);
-            turnGraphics(mConnectionHandler.getCurrTurn());
+
             if (set && mConnectionHandler.hasPlayerLost(sender) && mConnectionHandler.checkForWin()) {
                 mGameListener.onGameWon();
             }
+            turnGraphics(turn+1);
             startTimer();
         }
     }
@@ -296,6 +297,7 @@ public class GameFragment extends Fragment implements
     }
 
     public void turnGraphics(int i){
+        Log.d(TAG, "turnGraphics: " +i);
         if(i>=mPlayersNum){
             i = 0;
         }
