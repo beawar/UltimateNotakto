@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.TextView;
 
-import com.example.misterweeman.ultimatenotakto.services.MusicService;
 import com.example.misterweeman.ultimatenotakto.R;
+import com.example.misterweeman.ultimatenotakto.services.MusicService;
 
 public class HowtoplayActivity extends Activity {
 

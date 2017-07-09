@@ -13,10 +13,10 @@ import android.view.ViewGroup;
 
 import com.example.misterweeman.ultimatenotakto.App;
 import com.example.misterweeman.ultimatenotakto.R;
+import com.example.misterweeman.ultimatenotakto.helpers.BaseGameUtils;
 import com.example.misterweeman.ultimatenotakto.helpers.GoogleApiHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
-import com.google.example.games.basegameutils.BaseGameUtils;
 
 import static android.app.Activity.RESULT_OK;
 

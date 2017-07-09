@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.misterweeman.ultimatenotakto">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:name=".App"
         android:allowBackup="false"
@@ -77,5 +78,4 @@
             android:screenOrientation = "portrait"
             android:label="@string/title_activity_howtoplay"/>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

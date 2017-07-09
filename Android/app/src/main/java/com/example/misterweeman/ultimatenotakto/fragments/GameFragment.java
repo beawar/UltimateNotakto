@@ -254,7 +254,6 @@ public class GameFragment extends Fragment implements
 
     private void onTick(long millisUntilFinished) {
         mTextTimer.setText(String.valueOf(millisUntilFinished / 1000));
-        mTextTimer.invalidate();
     }
 
     protected void startTimer(){
@@ -329,6 +328,6 @@ public class GameFragment extends Fragment implements
     public interface GameListener{
         void onGameLost();
         void onGameWon();
-        void onGameEnd(String winner);
+//        void onGameEnd(String winner);
     }
 }

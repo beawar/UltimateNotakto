@@ -27,7 +27,6 @@ import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
 import com.google.android.gms.games.multiplayer.realtime.RoomUpdateListener;
-import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -344,7 +343,7 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     public void broadcastWin() {
         Log.d(TAG, "broadcastWin: ");
-        mMsgBuffer[0] = mMsgBuffer[1] = mMsgBuffer[2] = mMsgBuffer[3] = 'W';
+        mMsgBuffer[0] = mMsgBuffer[1] = mMsgBuffer[2] = mMsgBuffer[3] = (byte) 'W';
 
         if (mParticipants != null) {
             for (Participant p : mParticipants) {
