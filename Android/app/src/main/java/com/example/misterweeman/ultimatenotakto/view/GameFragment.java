@@ -1,6 +1,7 @@
 package com.example.misterweeman.ultimatenotakto.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,11 @@ public class GameFragment extends Fragment implements
     private int mPlayersNum;
     private CountDownTimer mTimer;
 
+    private TextView player1;
+    private TextView player2;
+    private TextView player3;
+    private TextView player4;
+
 
     private List<String> mPlayersList;
 
@@ -69,7 +75,6 @@ public class GameFragment extends Fragment implements
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +98,9 @@ public class GameFragment extends Fragment implements
         mBoardView.setGrid(this.mBoard);
         mBoardView.setOnTouchListener(this);
         addPlayersLabels(mPlayersNum);
+        turnGraphics(mConnectionHandler.getCurrTurn());
         return mBoardView;
+
     }
 
     @Override
@@ -123,12 +130,15 @@ public class GameFragment extends Fragment implements
                                 mConnectionHandler.broadcastTurn(false, x, y);
                             }
                         }
+                        turnGraphics(mConnectionHandler.getCurrTurn());
                     } else {
                         // if it's my turn but I lost already, I just skip it
                         mConnectionHandler.broadcastTurn(true, -1, -1);
                     }
                 }else{
-                    Toast.makeText(getActivity(),R.string.notTurn,Toast.LENGTH_SHORT).show();
+                    if (!mConnectionHandler.hasLost()) {
+                        Toast.makeText(getActivity(), R.string.notTurn, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }
@@ -160,6 +170,7 @@ public class GameFragment extends Fragment implements
         if (mBoardView != null) {
             int color = BoardView.getColors()[turn];
             boolean set = mBoardView.updateBoard(x, y, color);
+            turnGraphics(mConnectionHandler.getCurrTurn());
             if (set && mConnectionHandler.hasPlayerLost(sender)) {
                 mConnectionHandler.checkForWin();
             }
@@ -196,10 +207,11 @@ public class GameFragment extends Fragment implements
 //        player2.setBackgroundResource(R.color.green);
 
         String[] playerNames = mConnectionHandler.getNames();
-        TextView player1 = (TextView) getActivity().findViewById(R.id.player_1);
-        TextView player2 = (TextView) getActivity().findViewById(R.id.player_2);
-        TextView player3 = (TextView) getActivity().findViewById(R.id.player_3);
-        TextView player4 = (TextView) getActivity().findViewById(R.id.player_4);
+
+        player1 = (TextView) getActivity().findViewById(R.id.player_1);
+        player2 = (TextView) getActivity().findViewById(R.id.player_2);
+        player3 = (TextView) getActivity().findViewById(R.id.player_3);
+        player4 = (TextView) getActivity().findViewById(R.id.player_4);
 
         player1.setText(playerNames[0]);
         player2.setText(playerNames[1]);
@@ -234,6 +246,39 @@ public class GameFragment extends Fragment implements
         }.start();
     }
 
+    public void turnGraphics(int i){
+        if(i>=mPlayersNum){
+            i = 0;
+        }
+        Log.d(TAG, "turnGraphics: " +i);
+        switch(i){
+            case 0:
+                player1.setTextColor(Color.WHITE);
+                player2.setTextColor(Color.BLACK);
+                player3.setTextColor(Color.BLACK);
+                player4.setTextColor(Color.BLACK);
+                break;
+            case 1:
+                player1.setTextColor(Color.BLACK);
+                player2.setTextColor(Color.WHITE);
+                player3.setTextColor(Color.BLACK);
+                player4.setTextColor(Color.BLACK);
+                break;
+            case 2:
+                player1.setTextColor(Color.BLACK);
+                player2.setTextColor(Color.BLACK);
+                player3.setTextColor(Color.WHITE);
+                player4.setTextColor(Color.BLACK);
+                break;
+            case 3:
+                player1.setTextColor(Color.BLACK);
+                player2.setTextColor(Color.BLACK);
+                player3.setTextColor(Color.BLACK);
+                player4.setTextColor(Color.WHITE);
+                break;
+        }
+
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
