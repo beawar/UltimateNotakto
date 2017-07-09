@@ -54,4 +54,6 @@
     <string name="notTurn">Non è il tuo turno</string>
     <string name="exit">Esci</string>
     <string name="notConnected">Non sei connesso a Google Play Games</string>
+    <string name="connection_title">Connessione mancante</string>
+    <string name="connection">Non puoi procedere senza una connessione ad internet. Riconnettiti e riprova.</string>
 </resources>

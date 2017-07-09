@@ -54,6 +54,8 @@
     <string name="notTurn">This is not your turn</string>
     <string name="exit">Exit</string>
     <string name="notConnected">You are not connected to Google Play Games</string>
+    <string name="connection_title">Missing connection</string>
+    <string name="connection">You cannot proceed without an internet connection. Please reconnnect and try again.</string>
 
 
 </resources>

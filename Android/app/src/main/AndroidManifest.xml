@@ -12,6 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.games.APP_ID"
@@ -76,5 +77,5 @@
             android:screenOrientation = "portrait"
             android:label="@string/title_activity_howtoplay"/>
     </application>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>
