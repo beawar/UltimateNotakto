@@ -27,7 +27,9 @@
     <string name="lang_it">Italiano</string>
     <string name="lang_en">English</string>
     <string name="how_to_play_title">How to play</string>
-    <string name="how_to_play">How to play default</string>
+    <string name="how_to_play">How to play: \n This game is a variant of Tic Tac Toe, where  every player is playing the same piece. \n
+        Every time  a player makes a three-in-a-row, he loses. \n
+        The last player remaining is the winner.</string>
     <string name="player1">Player 1</string>
     <string name="player2">Player 2</string>
     <string name="player3">Player 3</string>

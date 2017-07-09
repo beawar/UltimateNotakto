@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity{
         super.onPause();
         if (mServ != null) {
             mServ.pauseMusic();
+            firstTime = false;
         }
     }
 

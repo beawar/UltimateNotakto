@@ -33,12 +33,6 @@
             android:onClick="goToNewGame"/>
 
         <Button
-            android:id="@+id/join_game_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/join_game"/>
-
-        <Button
             android:id="@+id/stats_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

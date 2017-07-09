@@ -132,7 +132,7 @@ public class OptionsActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-//        doUnbindService();
+         doUnbindService();
         super.onDestroy();
     }
 

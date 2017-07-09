@@ -49,7 +49,10 @@ public class HowtoplayActivity extends Activity {
         mServ.resumeMusic();
     }
 
-
+    protected void onDestroy() {
+        doUnbindService();
+        super.onDestroy();
+    }
     private void initializeVariables(){
         howto = (TextView) findViewById(R.id.how_to_play_content);
     }

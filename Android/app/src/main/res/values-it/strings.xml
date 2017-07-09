@@ -27,7 +27,9 @@
     <string name="lang_it">Italiano</string>
     <string name="lang_en">English</string>
     <string name="how_to_play_title">Come giocare</string>
-    <string name="how_to_play">How to play italiano</string>
+    <string name="how_to_play">Come giocare: \n Questo gioco è una variante del Tris in cui ogni giocatore utilizza gli stessi simboli. \n
+        Se un giocatore mette tre simboli in fila, perde. \n
+        Vince l\'ultimo giocatore rimasto.</string>
     <string name="player1">Giocatore 1</string>
     <string name="player2">Giocatore 2</string>
     <string name="player3">Giocatore 3</string>
