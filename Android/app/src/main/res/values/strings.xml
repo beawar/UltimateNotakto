@@ -50,7 +50,7 @@
     <string name="is_inviting_you">is inviting you to join a game</string>
     <string name="please_wait">Please wait</string>
     <string name="automatching">Looking for match&#8230;</string>
-    <string name="winner_is">%1$s wins!</string>
+    <string name="winner_is">%1$s has won!</string>
     <string name="notTurn">This is not your turn</string>
     <string name="finished_turn">Your turn is finished</string>
     <string name="exit">Exit</string>

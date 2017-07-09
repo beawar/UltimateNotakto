@@ -255,32 +255,33 @@ public class GameActivity extends AppCompatActivity implements
         alertDialog.show();
     }
 
-    @Override
-    public void onGameEnd(String winner) {
-        Log.d(TAG, "onGameEnd: "+ mConnectionHandler.getRoomId());
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getResources().getString(R.string.winner_is, winner))
-                .setTitle(R.string.winner_is_title)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mConnectionHandler.leaveRoom();
-                        finish();
-                    }
-                })
-                .setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                            mConnectionHandler.leaveRoom();
-                            finish();
-                        }
-                        return false;
-                    }
-                });
-        alertDialog = builder.create();
-        alertDialog.show();
-    }
+//    @Override
+//    public void onGameEnd(String winner) {
+//        Log.d(TAG, "onGameEnd: "+ mConnectionHandler.getRoomId());
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setMessage(getResources().getString(R.string.winner_is, winner))
+//                .setTitle(R.string.winner_is_title)
+//                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        mConnectionHandler.leaveRoom();
+//                        finish();
+//                    }
+//                })
+//                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+//                    @Override
+//                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+//                        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+//                            mConnectionHandler.leaveRoom();
+//                            finish();
+//                        }
+//                        return false;
+//                    }
+//                });
+//        alertDialog = builder.create();
+//        alertDialog.show();
+//    }
 
     public ConnectionHandler getConnectionHandler() {
         return mConnectionHandler;

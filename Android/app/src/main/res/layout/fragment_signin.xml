@@ -12,12 +12,4 @@
         style="@style/SignInButton"
         android:layout_centerInParent="true"/>
 
-    <Button
-        android:id="@+id/sign_out_button"
-        style="@style/SignOutButton"
-        android:text="@string/sign_out"
-        android:visibility="gone"
-        android:layout_centerInParent="true"
-        android:background="@color/common_google_signin_btn_text_dark_default"/>
-
 </RelativeLayout>

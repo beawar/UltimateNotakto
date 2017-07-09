@@ -363,13 +363,14 @@ public class ConnectionHandler implements RoomUpdateListener,
         String sender = realTimeMessage.getSenderParticipantId();
 
         if ((char) buf[0] == 'W') {
-            String winner = "";
-            for (Participant participant : mParticipants) {
-                if (participant.getParticipantId().equals(sender)) {
-                    winner = participant.getDisplayName();
-                }
-            }
-            mParentActivity.onGameEnd(winner);
+//            String winner = "";
+//            for (Participant participant : mParticipants) {
+//                if (participant.getParticipantId().equals(sender)) {
+//                    winner = participant.getDisplayName();
+//                }
+//            }
+//            mParentActivity.onGameEnd(winner);
+            switchToMainScreen();
         } else if((char) buf[0] == 'R'){
             int grid_size = buf[1];
             mParentActivity.setGridSize(grid_size);

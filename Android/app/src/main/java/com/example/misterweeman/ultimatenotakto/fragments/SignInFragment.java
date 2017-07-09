@@ -1,23 +1,21 @@
 package com.example.misterweeman.ultimatenotakto.fragments;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.misterweeman.ultimatenotakto.App;
 import com.example.misterweeman.ultimatenotakto.R;
 import com.example.misterweeman.ultimatenotakto.helpers.GoogleApiHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 import static android.app.Activity.RESULT_OK;
@@ -34,8 +32,6 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
     private boolean mExplicitSignOut = false;
 
     private SignInButton mSignInButton;
-    private Button mSignOutButton;
-//    private View.OnClickListener mClickListener;
 
 
     @Override
@@ -50,10 +46,8 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
     private void setButtonVisibility() {
         if (mGoogleApiHelper.isConnected()){
             mSignInButton.setVisibility(View.GONE);
-            mSignOutButton.setVisibility(View.VISIBLE);
         } else {
             mSignInButton.setVisibility(View.VISIBLE);
-            mSignOutButton.setVisibility(View.GONE);
         }
     }
 
@@ -64,11 +58,9 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
         final View view = inflater.inflate(R.layout.fragment_signin, container, false);
         if (view != null){
             mSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
-            mSignOutButton = (Button) view.findViewById(R.id.sign_out_button);
         }
-        if (mSignInButton != null && mSignOutButton != null){
+        if (mSignInButton != null){
             mSignInButton.setOnClickListener(this);
-            mSignOutButton.setOnClickListener(this);
             setButtonVisibility();
         }
         return view;
@@ -110,7 +102,6 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         setButtonVisibility();
-        // Your code here: update UI, enable functionality that depends on sign in, etc
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -124,21 +115,13 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
                 BaseGameUtils.showActivityResultError(getActivity(), requestCode, resultCode, R.string.signin_failure);
             }
         }
+        setButtonVisibility();
     }
 
     public void signIn() {
         mInSignInFlow = true;
         mSignInClicked = true;
         mGoogleApiHelper.connect();
-    }
-
-    public void signOut() {
-        mExplicitSignOut = true;
-        mSignInClicked = false;
-        if (mGoogleApiHelper.isConnected()){
-            Games.signOut(mGoogleApiHelper.getGoogleApiClient());
-            mGoogleApiHelper.disconnect();
-        }
     }
 
     @Override
@@ -155,10 +138,6 @@ public class SignInFragment extends Fragment implements GoogleApiHelper.Connecti
     public void onClick(View v) {
         if (v.getId() == R.id.sign_in_button) {
             signIn();
-
-        } else if (v.getId() == R.id.sign_out_button) {
-            signOut();
-            setButtonVisibility();
         }
     }
 

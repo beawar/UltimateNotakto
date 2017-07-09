@@ -55,6 +55,8 @@ public class GameFragment extends Fragment implements
     private TextView player3;
     private TextView player4;
 
+    private TextView mTextTimer;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -150,6 +152,7 @@ public class GameFragment extends Fragment implements
                                 // if it's my turn and I haven't lost yet
                                 mConnectionHandler.broadcastTurn(false, x, y);
                             }
+                            mTextTimer.setVisibility(View.GONE);
                         }
                         turnGraphics(mConnectionHandler.getCurrTurn());
                     } else {
@@ -230,22 +233,28 @@ public class GameFragment extends Fragment implements
 
     protected void createTimer() {
         Log.d(TAG, "createTimer: " + mConnectionHandler.getRoomId());
-        final TextView textTimer = (TextView) getActivity().findViewById(R.id.game_timer);
-//        textTimer.setText(String.valueOf(TURN_TIME));
-        textTimer.setVisibility(View.VISIBLE);
+        mTextTimer = (TextView) getActivity().findViewById(R.id.game_timer);
+        mTextTimer.setText(String.valueOf(TURN_TIME));
         mTimer = new CountDownTimer(TURN_TIME * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                textTimer.setText(String.valueOf(millisUntilFinished / 1000));
+                GameFragment.this.onTick(millisUntilFinished);
             }
 
             public void onFinish() {
                 Toast.makeText(getActivity(), R.string.finished_turn, Toast.LENGTH_LONG).show();
                 mTimerIsRunning = false;
+                mTextTimer.setVisibility(View.GONE);
+                mConnectionHandler.broadcastTurn(true, -1, -1);
                 mGameListener.onGameLost();
             }
         };
         mTimerIsRunning = false;
+    }
+
+    private void onTick(long millisUntilFinished) {
+        mTextTimer.setText(String.valueOf(millisUntilFinished / 1000));
+        mTextTimer.invalidate();
     }
 
     protected void startTimer(){
@@ -260,7 +269,6 @@ public class GameFragment extends Fragment implements
                 mTimerIsRunning = true;
             }
         } else {
-            ((TextView) getActivity().findViewById(R.id.game_timer)).setText(String.valueOf(TURN_TIME));
             getActivity().findViewById(R.id.game_timer).setVisibility(View.GONE);
         }
     }
