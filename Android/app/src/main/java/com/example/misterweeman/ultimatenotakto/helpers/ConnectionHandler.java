@@ -272,9 +272,9 @@ public class ConnectionHandler implements RoomUpdateListener,
                 Participant p = mParticipants.get(i);
                 if (p.isConnectedToRoom() && p.getStatus() == Participant.STATUS_JOINED) {
                     mConnectedPlayers += 1;
-                    if (p.getParticipantId().equals(mMyId)) {
-                        mMyTurn = mConnectedPlayers-1;
-                    }
+                }
+                if (p.getParticipantId().equals(mMyId)) {
+                    mMyTurn = i;
                 }
                 Log.d(TAG, "updateRoom: "+mConnectedPlayers);
             }
@@ -331,7 +331,15 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
 
         // update the current turn (if I sent this message, I have already played my turn)
-        mCurrentTurn = (mCurrentTurn + 1) % mConnectedPlayers;
+        boolean updated = false;
+        while (!updated) {
+            mCurrentTurn = (mCurrentTurn + 1) % mParticipants.size();
+            Participant p = mParticipants.get(mCurrentTurn);
+            if (p.isConnectedToRoom() && p.getStatus() == Participant.STATUS_JOINED
+                    && !mFinishedParticipants.contains(p.getParticipantId())) {
+                updated = true;
+            }
+        }
     }
 
     public void broadcastWin() {
@@ -380,7 +388,16 @@ public class ConnectionHandler implements RoomUpdateListener,
 
             mParentActivity.updateBoard(x, y, sender, turn);
             // update the current turn
-            mCurrentTurn = (turn + 1) % mConnectedPlayers;
+            boolean updated = false;
+            mCurrentTurn = turn;
+            while (!updated) {
+                mCurrentTurn = (mCurrentTurn + 1) % mParticipants.size();
+                Participant p = mParticipants.get(mCurrentTurn);
+                if (p.isConnectedToRoom() && p.getStatus() == Participant.STATUS_JOINED
+                        && !mFinishedParticipants.contains(p.getParticipantId())) {
+                    updated = true;
+                }
+            }
         }
     }
 
@@ -569,7 +586,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         Log.d(TAG, "startQuickGame() " + mRoomId);
 
         // auto-match criteria to invite the number of opponents.
-        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(2, 4, 0);
+        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(1, 3, 0);
         // build the room config
         RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();
         roomConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
