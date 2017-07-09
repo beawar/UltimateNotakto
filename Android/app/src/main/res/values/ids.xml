@@ -2,9 +2,9 @@
 <resources>
     <string name="app_id">507273564298</string>
 
-    <string name="achievement_prime">CgkIiqHx3uEOEAIQAQ</string>
-    <string name="achievement_bored">CgkIiqHx3uEOEAIQAg</string>
-    <string name="achievement_really_bored">CgkIiqHx3uEOEAIQAw</string>
+    <string name="achievement_winner">CgkIiqHx3uEOEAIQCA</string>
+    <string name="achievement_loser">CgkIiqHx3uEOEAIQCQ</string>
 
-    <string name="leaderboard_high_scores">CgkIiqHx3uEOEAIQBA</string>
+
+    <string name="leaderboard_victories">CgkIiqHx3uEOEAIQBw</string>
 </resources>

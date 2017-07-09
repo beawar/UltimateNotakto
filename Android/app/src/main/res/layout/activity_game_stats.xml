@@ -20,13 +20,15 @@
             android:id="@+id/achievements_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/achievements" />
+            android:text="@string/achievements"
+            android:onClick="showAchievements"/>
 
         <Button
             android:id="@+id/leaderboard_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/leaderboard"/>
+            android:text="@string/leaderboard"
+            android:onClick="showLeaderBoard"/>
 
     </LinearLayout>
 

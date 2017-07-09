@@ -10,8 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import com.google.android.gms.common.api.ResultCallback;
 
 import com.example.misterweeman.ultimatenotakto.view.GameFragment;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.leaderboard.LeaderboardVariant;
+import com.google.android.gms.games.leaderboard.Leaderboards;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -27,6 +33,7 @@ public class GameActivity extends AppCompatActivity implements
     private static final String ARG_GAMEFRAGMENT = "gameFragment";
     private static final String ARG_GAMEOPTFRAGMENT = "gameOptionFragment";
 
+    private GoogleApiClient mGoogleApiClient=App.getGoogleApiHelper().getGoogleApiClient();
     private AlertDialog alertDialog;
     private boolean gameLost = false;
     private ConnectionHandler mConnectionHandler;
@@ -152,6 +159,8 @@ public class GameActivity extends AppCompatActivity implements
     public void onGameLost() {
         Log.d(TAG, "onGameLost: "+ mConnectionHandler.getmRoomId());
         gameLost = true;
+        Games.Achievements.increment(mGoogleApiClient, String.valueOf(R.string.achievement_loser), 1);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lost_dialog_message)
                 .setTitle(R.string.list_dialog_title)
@@ -177,6 +186,8 @@ public class GameActivity extends AppCompatActivity implements
 
     public void onWinning() {
         Log.d(TAG, "onGameWon: "+mConnectionHandler.getmRoomId());
+        Games.Achievements.increment(mGoogleApiClient, String.valueOf(R.string.achievement_winner), 1);
+        addScore();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.won_dialog_message)
                 .setTitle(R.string.win_dialog_title)
@@ -298,5 +309,28 @@ public class GameActivity extends AppCompatActivity implements
             alertDialog.dismiss();
         }
         super.onDestroy();
+    }
+
+    private void addScore() {
+        Games.Leaderboards.loadCurrentPlayerLeaderboardScore(mGoogleApiClient,String.valueOf(R.string.leaderboard_victories), LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC).setResultCallback(new ResultCallback<Leaderboards.LoadPlayerScoreResult>() {
+            @Override
+            public void onResult(final Leaderboards.LoadPlayerScoreResult scoreResult) {
+                if(scoreResult != null )
+
+                if (isScoreResultValid(scoreResult)) {
+                    if(scoreResult != null ) {
+                        long mPoints = scoreResult.getScore().getRawScore();
+                        Games.Leaderboards.submitScore(mGoogleApiClient, String.valueOf(R.string.leaderboard_victories), mPoints+1);
+                    }else{
+                        Games.Leaderboards.submitScore(mGoogleApiClient, String.valueOf(R.string.leaderboard_victories), 1);
+                    }
+
+                }
+            }
+        });
+    }
+
+    private boolean isScoreResultValid(final Leaderboards.LoadPlayerScoreResult scoreResult) {
+        return  GamesStatusCodes.STATUS_OK == scoreResult.getStatus().getStatusCode() && scoreResult.getScore() != null;
     }
 }
