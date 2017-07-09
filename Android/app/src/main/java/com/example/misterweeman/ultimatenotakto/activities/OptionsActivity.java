@@ -32,9 +32,7 @@ import static com.example.misterweeman.ultimatenotakto.preferences.Utility.loadL
 public class OptionsActivity extends AppCompatActivity {
     private static final String TAG = "UltimateNotakto";
     private SeekBar SoundSeekbar;
-    private SeekBar EffectsSeekbar;
     private TextView SoundVolume;
-    private TextView EffectsVolume;
     private RadioGroup Languages;
     Locale myLocale;
     public static final String PREFS_NAME = "MySettingsFile";
@@ -74,19 +72,6 @@ public class OptionsActivity extends AppCompatActivity {
 
         });
 
-        EffectsSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-            int effects_progress = 0;
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-
-                effects_progress=progresValue;
-                EffectsVolume.setText(""+effects_progress);
-            }
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                saveSoundSetting(effects_progress);
-            }
-
-        });
 
         Languages.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
@@ -140,8 +125,6 @@ public class OptionsActivity extends AppCompatActivity {
     private void initializeVariables() {
         SoundSeekbar = (SeekBar) findViewById(R.id.Sound_seekbar);
         SoundVolume = (TextView) findViewById(R.id.Sound_volume);
-        EffectsSeekbar = (SeekBar) findViewById(R.id.Effects_seekbar);
-        EffectsVolume = (TextView) findViewById(R.id.Effects_volume);
         Languages = (RadioGroup) findViewById(R.id.languages);
         //per settare il radiobutton di default
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -155,11 +138,9 @@ public class OptionsActivity extends AppCompatActivity {
                 break;
         }
         int music_volume= settings.getInt("music", 100);
-        int effects_volume= settings.getInt("effects", 100);
         SoundSeekbar.setProgress(music_volume);
         SoundVolume.setText(""+music_volume);
-        EffectsSeekbar.setProgress(effects_volume);
-        EffectsVolume.setText(""+effects_volume);
+
     }
 
     //cambia lingua

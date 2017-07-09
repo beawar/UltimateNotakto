@@ -9,7 +9,6 @@
         android:id="@+id/game_layout_top"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:padding="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -81,7 +80,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
         android:id="@+id/fragment_container" />
     <TextView
         android:id="@+id/text_message"
