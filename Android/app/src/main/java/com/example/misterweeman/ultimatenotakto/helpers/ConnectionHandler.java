@@ -270,12 +270,11 @@ public class ConnectionHandler implements RoomUpdateListener,
             mConnectedPlayers = 0;
             for (int i = 0; i< mParticipants.size(); ++i){
                 Participant p = mParticipants.get(i);
-                String pId = p.getParticipantId();
-                if (pId.equals(mMyId)) {
-                    mMyTurn = i;
-                }
                 if (p.isConnectedToRoom() && p.getStatus() == Participant.STATUS_JOINED) {
                     mConnectedPlayers += 1;
+                    if (p.getParticipantId().equals(mMyId)) {
+                        mMyTurn = mConnectedPlayers-1;
+                    }
                 }
                 Log.d(TAG, "updateRoom: "+mConnectedPlayers);
             }
@@ -347,7 +346,6 @@ public class ConnectionHandler implements RoomUpdateListener,
                 }
             }
         }
-
     }
 
     @Override
@@ -443,14 +441,16 @@ public class ConnectionHandler implements RoomUpdateListener,
         if (mRoomId == null) {
             mRoomId = room.getRoomId();
         }
+
         updateRoom(room);
+
         if(grid_size != -1) {
             mParentActivity.setPlayersNum(mConnectedPlayers);
             mMsgBuffer[0] = (byte) 'R';
             // coordinates of the cell clicked
             mMsgBuffer[1] = (byte) grid_size;
 
-            if (mParticipants.get(0).getParticipantId() == mMyId) {
+            if (!mParticipants.isEmpty() && mParticipants.get(0).getParticipantId().equals(mMyId)) {
                 mParentActivity.setGridSize(grid_size);
                 // send to every other partecipant
                 // Reliable messages are used because receiving this information is essential for the game
