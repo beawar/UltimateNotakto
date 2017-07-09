@@ -11,8 +11,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.misterweeman.ultimatenotakto.App;
-import com.example.misterweeman.ultimatenotakto.activities.GameActivity;
 import com.example.misterweeman.ultimatenotakto.R;
+import com.example.misterweeman.ultimatenotakto.activities.GameActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
@@ -386,7 +386,6 @@ public class ConnectionHandler implements RoomUpdateListener,
                 mFinishedParticipants.add(sender);
             }
 
-            mParentActivity.updateBoard(x, y, sender, turn);
             // update the current turn
             boolean updated = false;
             mCurrentTurn = turn;
@@ -398,6 +397,7 @@ public class ConnectionHandler implements RoomUpdateListener,
                     updated = true;
                 }
             }
+            mParentActivity.updateBoard(x, y, sender, turn);
         }
     }
 
@@ -438,12 +438,21 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onPeerLeft(Room room, List<String> list) {
         Log.d(TAG, "onPeerLeft: "+ mRoomId + " list: " + list);
-        mConnectedPlayers -= 1;
+        mConnectedPlayers -= list.size();
+        mFinishedParticipants.addAll(list);
         mParticipants = room.getParticipants();
         if (shouldCancelGame()) {
             leaveRoom();
         } else {
+            for (int i=0; i<list.size(); i++) {
+                if (mParticipants.get(mCurrentTurn).getParticipantId().equals(list.get(i))) {
+                    mCurrentTurn = (mCurrentTurn + 1) % mParticipants.size();
+                    // Repeat the cycle until currentTurn is different every left peer's turn
+                    i = 0;
+                }
+            }
             updateRoom(room);
+            mParentActivity.updateGraphics();
         }
     }
 
@@ -568,14 +577,15 @@ public class ConnectionHandler implements RoomUpdateListener,
 
         // build the room config
         RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();
-        roomConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
+        roomConfigBuilder.setAutoMatchCriteria(autoMatchCriteria)
+                .setVariant(gridSize);
 
         switchToScreen(R.layout.screen_wait);
         keepScreenOn();
 
         if (mGoogleApiHelper.getGoogleApiClient() != null && mGoogleApiHelper.getGoogleApiClient().isConnected()) {
             // create room
-            Games.RealTimeMultiplayer.create(mGoogleApiHelper.getGoogleApiClient(), roomConfigBuilder.setVariant(gridSize).build());
+            Games.RealTimeMultiplayer.create(mGoogleApiHelper.getGoogleApiClient(), roomConfigBuilder.build());
         } else {
             BaseGameUtils.makeSimpleDialog(mParentActivity, mParentActivity.getString(R.string.game_problem)).show();
             switchToMainScreen();
@@ -586,11 +596,14 @@ public class ConnectionHandler implements RoomUpdateListener,
         Log.d(TAG, "startQuickGame() " + mRoomId);
 
         // auto-match criteria to invite the number of opponents.
-        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(1, 3, 0);
+        // to get a random value in [min, max]: Math.random() * (max - min) + min
+        int opponents = (int) (Math.random() * 2 + 1);
+        Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(opponents, opponents, 0);
         // build the room config
         RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();
         roomConfigBuilder.setAutoMatchCriteria(autoMatchCriteria);
-        grid_size = (int)((Math.random()*4)+3);
+
+        grid_size = (int) (Math.random() * 4 + 3);
         switchToScreen(R.layout.screen_wait);
         keepScreenOn();
 

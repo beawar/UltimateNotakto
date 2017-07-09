@@ -58,6 +58,7 @@
     <string name="inv_popup_text">has invted you to join a game</string>
     <string name="connection_title">Missing connection</string>
     <string name="connection">You cannot proceed without an internet connection. Please reconnnect and try again.</string>
+    <string name="winner_is_title">We got a winner!</string>
 </resources>
 
 

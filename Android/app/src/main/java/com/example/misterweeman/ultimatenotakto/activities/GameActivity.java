@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import com.example.misterweeman.ultimatenotakto.App;
 import com.example.misterweeman.ultimatenotakto.R;
@@ -259,9 +258,28 @@ public class GameActivity extends AppCompatActivity implements
     @Override
     public void onGameEnd(String winner) {
         Log.d(TAG, "onGameEnd: "+ mConnectionHandler.getRoomId());
-        TextView message = (TextView) findViewById(R.id.text_message);
-        message.setText(getResources().getString(R.string.winner_is, winner));
-        message.setVisibility(View.VISIBLE);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getResources().getString(R.string.winner_is, winner))
+                .setTitle(R.string.winner_is_title)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mConnectionHandler.leaveRoom();
+                        finish();
+                    }
+                })
+                .setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                            mConnectionHandler.leaveRoom();
+                            finish();
+                        }
+                        return false;
+                    }
+                });
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public ConnectionHandler getConnectionHandler() {
@@ -330,6 +348,10 @@ public class GameActivity extends AppCompatActivity implements
     public void updateBoard(int x, int y, String sender, int turn) {
         Log.d(TAG, "updateBoard() "+ mConnectionHandler.getRoomId());
         mGameFragment.updateBoard(x, y, sender, turn);
+    }
+
+    public void updateGraphics() {
+        mGameFragment.turnGraphics(mConnectionHandler.getCurrTurn());
     }
 
     protected void updateLayout() {

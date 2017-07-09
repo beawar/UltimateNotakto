@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,7 +88,6 @@ public class GameFragment extends Fragment implements
             mConnectionHandler =((GameActivity) getActivity()).getConnectionHandler();
             Log.d(TAG, "onCreate: " + mConnectionHandler.getRoomId());
         }
-        final TextView textTimer = (TextView) getActivity().findViewById(R.id.game_timer);
         createTimer();
     }
 
@@ -109,18 +107,16 @@ public class GameFragment extends Fragment implements
     public void onResume() {
         Log.d(TAG, "onResume: " + mConnectionHandler.getRoomId());
         super.onResume();
-//        if (!mTimerIsRunning && mConnectionHandler.isMyTurn()) {
-//            startTimer();
-//        }
+        startTimer();
     }
 
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy: " + mConnectionHandler.getRoomId());
         super.onDestroy();
-//        if (mTimer != null) {
-//            mTimer.cancel();
-//        }
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
     }
 
     @Override
@@ -196,44 +192,15 @@ public class GameFragment extends Fragment implements
             mPlayersList.add(sender);
         }
         if (mBoardView != null) {
-            int color = BoardView.getColors()[turn];
-            boolean set = mBoardView.updateBoard(x, y, color);
+            if (x >= 0 && y >= 0 && x < mGridSize && y < mGridSize) {
+                int color = BoardView.getColors()[turn];
+                boolean set = mBoardView.updateBoard(x, y, color);
 
-            if (set && mConnectionHandler.hasPlayerLost(sender) && mConnectionHandler.checkForWin()) {
-                mGameListener.onGameWon();
-            }
-            turnGraphics(turn+1);
-            startTimer();
-        }
-    }
-
-    // This method is called when a player doesn't make his move before the timer ends.
-    public void onTurnFinished() {
-        Log.d(TAG, "onTurnFinished: ");
-        // Obtain MotionEvent object
-        if (mConnectionHandler.isMyTurn()) {
-            boolean done = false;
-            for (int y = 0; y < mGridSize && !done; ++y) {
-                for (int x = 0; x < mGridSize && !done; ++x) {
-//                    if (mBoardView.updateBoard(x, y, mConnectionHandler.getCurrTurn())) {
-//                        boolean isLost = Notakto.checkBoardForLost(mBoard, x, y);
-//                        if (isLost && mGameListener != null) {
-//                            mGameListener.onGameLost();
-//                        }
-//                        mConnectionHandler.broadcastTurn(isLost, x, y);
-//                        done = true;
-//                    }
-                    if (!mBoard.isChecked(x, y)) {
-                        done = true;
-                        long downTime = SystemClock.uptimeMillis();
-                        long eventTime = SystemClock.uptimeMillis() + 100;
-                        // List of meta states found here: developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
-                        int metaState = 0;
-                        MotionEvent motionEvent = MotionEvent.obtain(downTime, eventTime,
-                                MotionEvent.ACTION_UP, x, y, metaState);
-                        // Dispatch touch event to view
-                        mBoardView.dispatchTouchEvent(motionEvent);
-                    }
+                if (set && mConnectionHandler.hasPlayerLost(sender) && mConnectionHandler.checkForWin()) {
+                    mGameListener.onGameWon();
+                } else {
+                    turnGraphics(mConnectionHandler.getCurrTurn());
+                    startTimer();
                 }
             }
         }
@@ -264,7 +231,8 @@ public class GameFragment extends Fragment implements
     protected void createTimer() {
         Log.d(TAG, "createTimer: " + mConnectionHandler.getRoomId());
         final TextView textTimer = (TextView) getActivity().findViewById(R.id.game_timer);
-        textTimer.setText(String.valueOf(TURN_TIME));
+//        textTimer.setText(String.valueOf(TURN_TIME));
+        textTimer.setVisibility(View.VISIBLE);
         mTimer = new CountDownTimer(TURN_TIME * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -273,9 +241,8 @@ public class GameFragment extends Fragment implements
 
             public void onFinish() {
                 Toast.makeText(getActivity(), R.string.finished_turn, Toast.LENGTH_LONG).show();
-//                onTurnFinished();
-                mGameListener.onGameLost();
                 mTimerIsRunning = false;
+                mGameListener.onGameLost();
             }
         };
         mTimerIsRunning = false;
@@ -288,17 +255,19 @@ public class GameFragment extends Fragment implements
         }
         if (mConnectionHandler.isMyTurn()) {
             getActivity().findViewById(R.id.game_timer).setVisibility(View.VISIBLE);
-            mTimer.start();
-            mTimerIsRunning = true;
+            if (!mTimerIsRunning) {
+                mTimer.start();
+                mTimerIsRunning = true;
+            }
         } else {
-            getActivity().findViewById(R.id.game_timer).setVisibility(View.GONE);
             ((TextView) getActivity().findViewById(R.id.game_timer)).setText(String.valueOf(TURN_TIME));
+            getActivity().findViewById(R.id.game_timer).setVisibility(View.GONE);
         }
     }
 
     public void turnGraphics(int i){
         Log.d(TAG, "turnGraphics: " +i);
-        if(i>=mPlayersNum){
+        if(i >= mPlayersNum){
             i = 0;
         }
         Log.d(TAG, "turnGraphics: " +i);

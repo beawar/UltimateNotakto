@@ -56,4 +56,5 @@
     <string name="notConnected">Non sei connesso a Google Play Games</string>
     <string name="connection_title">Connessione mancante</string>
     <string name="connection">Non puoi procedere senza una connessione ad internet. Riconnettiti e riprova.</string>
+    <string name="winner_is_title">Abbiamo un vincitore!</string>
 </resources>
