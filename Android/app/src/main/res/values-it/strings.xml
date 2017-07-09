@@ -32,13 +32,6 @@
     <string name="player2">Giocatore 2</string>
     <string name="player3">Giocatore 3</string>
     <string name="player4">Giocatore 4</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">
-        Ora hai due opzioni:\n
-        1) Torni indietro e l\'app si chiude, quindi se la riapri puoi iniziare una nuova partita;\n
-        2) Premi il tasto home, riapri l\'app e tornerai in questa schermata.
-    </string>
     <string name="lost_dialog_message">Hai perso. Puoi rimanere come spettatore o abbandonare la partita.</string>
     <string name="list_dialog_title">Hai perso</string>
     <string name="oh_no">Oh no!</string>
@@ -50,7 +43,7 @@
     <string name="game_problem">Qualcosa è andato storto. Riprova più tardi.</string>
     <string name="is_inviting_you">is inviting you to join a game</string>
     <string name="please_wait">Attendi</string>
-    <string name="automatching">Sto cercando una partita...</string>
+    <string name="automatching">Sto cercando una partita&#8230;</string>
     <string name="finished_turn">Il tuo turno è finito</string>
     <string name="inv_popup_text">ti ha invitato a giocare una partita</string>
     <string name="win_dialog_title">Hai vinto</string>
@@ -58,4 +51,5 @@
     <string name="winner_is">%1$s ha vinto!</string>
     <string name="notTurn">Non è il tuo turno</string>
     <string name="exit">Esci</string>
+    <string name="notConnected">Non sei connesso a Google Play Games</string>
 </resources>

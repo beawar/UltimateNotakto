@@ -48,6 +48,7 @@
         <TextView
             android:id="@+id/player_1"
             style="@style/PlayerLabel"
+            android:background= "@drawable/back"
             android:text="@string/player1" />
 
         <TextView
@@ -55,6 +56,7 @@
             style="@style/PlayerLabel"
             android:layout_toEndOf="@id/player_1"
             android:layout_toRightOf="@id/player_1"
+            android:background= "@drawable/back2"
             android:text="@string/player2" />
 
         <TextView
@@ -62,6 +64,7 @@
             style="@style/PlayerLabel"
             android:layout_toEndOf="@id/player_2"
             android:layout_toRightOf="@id/player_2"
+            android:background= "@drawable/back3"
             android:text="@string/player3" />
 
         <TextView
@@ -69,6 +72,7 @@
             style="@style/PlayerLabel"
             android:layout_toEndOf="@id/player_3"
             android:layout_toRightOf="@id/player_3"
+            android:background= "@drawable/back4"
             android:text="@string/player4" />
 
     </RelativeLayout>

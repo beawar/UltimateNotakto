@@ -138,6 +138,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     protected boolean shouldCancelGame() {
+        Log.d(TAG, "shouldCancelGame: ");
         if (mParticipants != null) {
             int connectedPlayers = 0;
             for (Participant p : mParticipants) {
@@ -235,20 +236,17 @@ public class ConnectionHandler implements RoomUpdateListener,
         Log.d(TAG, "Leaving room "+mRoomId);
         stopKeepingScreenOn();
         if (mRoomId != null) {
-            Log.d(TAG, "this");
             Games.RealTimeMultiplayer.leave(mGoogleApiHelper.getGoogleApiClient(), this, mRoomId);
-            if (mParticipants != null) {
-                mParticipants.clear();
-            }
-            if (mFinishedParticipants != null) {
-                mFinishedParticipants.clear();
-            }
-            mConnectedPlayers = 0;
             mRoomId = null;
-            switchToMainScreen();
-        } else {
-            switchToMainScreen();
         }
+        if (mParticipants != null) {
+            mParticipants.clear();
+        }
+        if (mFinishedParticipants != null) {
+            mFinishedParticipants.clear();
+        }
+        mConnectedPlayers = 0;
+        switchToMainScreen();
     }
 
     protected void showWaitingRoom(Room room) {
@@ -399,7 +397,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onPeerInvitedToRoom(Room room, List<String> list) {
         Log.d(TAG, "onPeerInvitedToRoom: ");
-        updateRoom(room);
+//        updateRoom(room);
     }
 
     @Override
@@ -460,7 +458,6 @@ public class ConnectionHandler implements RoomUpdateListener,
         Log.d(TAG, "onPeersConnected: "+mRoomId);
         updateRoom(room);
     }
-
 
     @Override
     public void onPeersDisconnected(Room room, List<String> list) {
@@ -548,7 +545,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     }
 
     public void createGame(int opponents){
-        Log.d(TAG, "createGame() " +mRoomId );
+        Log.d(TAG, "createGame() " + mRoomId);
         Intent intent = Games.RealTimeMultiplayer.
                 getSelectOpponentsIntent(App.getGoogleApiHelper().getGoogleApiClient(), opponents, opponents);
         mParentActivity.startActivityForResult(intent, RC_SELECT_PLAYERS);

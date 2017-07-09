@@ -51,5 +51,6 @@
     <string name="winner_is">%1$s wins!</string>
     <string name="notTurn">This is not your turn</string>
     <string name="exit">Exit</string>
+    <string name="notConnected">You are not connected to Google Play Games</string>
 
 </resources>

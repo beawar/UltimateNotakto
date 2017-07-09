@@ -1,6 +1,7 @@
 package com.example.misterweeman.ultimatenotakto.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
@@ -50,6 +51,11 @@ public class GameFragment extends Fragment implements
     private GameListener mGameListener;
     private ConnectionHandler mConnectionHandler;
 
+    private TextView player1;
+    private TextView player2;
+    private TextView player3;
+    private TextView player4;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -81,30 +87,45 @@ public class GameFragment extends Fragment implements
         setRetainInstance(true);
         if (getActivity() instanceof GameActivity) {
             mConnectionHandler =((GameActivity) getActivity()).getConnectionHandler();
+            Log.d(TAG, "onCreate: " + mConnectionHandler.getRoomId());
         }
+        final TextView textTimer = (TextView) getActivity().findViewById(R.id.game_timer);
+        createTimer();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: " + mConnectionHandler.getRoomId());
         mBoardView = new BoardView(getActivity());
         mBoardView.setGrid(this.mBoard);
         mBoardView.setOnTouchListener(this);
         addPlayersLabels(mPlayersNum);
+        turnGraphics(mConnectionHandler.getCurrTurn());
         return mBoardView;
     }
 
     @Override
     public void onResume() {
+        Log.d(TAG, "onResume: " + mConnectionHandler.getRoomId());
         super.onResume();
-        if ((mTimer == null || !mTimerIsRunning) && mConnectionHandler.isMyTurn()) {
-            startTimer();
-        }
+//        if (!mTimerIsRunning && mConnectionHandler.isMyTurn()) {
+//            startTimer();
+//        }
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "onDestroy: " + mConnectionHandler.getRoomId());
+        super.onDestroy();
+//        if (mTimer != null) {
+//            mTimer.cancel();
+//        }
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d("GameFragment", "onTouch: " + event.getAction());
+        Log.d(TAG, "onTouch: " + event.getAction());
         boolean onTouchEvent = v.onTouchEvent(event);
         if (v instanceof BoardView && event.getAction() == MotionEvent.ACTION_UP) {
             BoardView bv = (BoardView) v;
@@ -134,12 +155,16 @@ public class GameFragment extends Fragment implements
                                 mConnectionHandler.broadcastTurn(false, x, y);
                             }
                         }
+                        turnGraphics(mConnectionHandler.getCurrTurn());
                     } else {
                         // if it's my turn but I lost already, I just skip it
                         mConnectionHandler.broadcastTurn(true, -1, -1);
                     }
                 } else {
                     Toast.makeText(getActivity(), R.string.notTurn, Toast.LENGTH_SHORT).show();
+                    if (!mConnectionHandler.hasLost()) {
+                        Toast.makeText(getActivity(), R.string.notTurn, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }
@@ -148,6 +173,7 @@ public class GameFragment extends Fragment implements
 
     @Override
     public void onAttach(Context context) {
+        Log.d(TAG, "onAttach: ");
         super.onAttach(context);
         if (context instanceof GameListener) {
             mGameListener = (GameListener) context;
@@ -159,18 +185,20 @@ public class GameFragment extends Fragment implements
 
     @Override
     public void onDetach() {
+        Log.d(TAG, "onDetach: " + mConnectionHandler.getRoomId());
         super.onDetach();
         mGameListener = null;
     }
 
     public void updateBoard(int x, int y, String sender, int turn) {
-        Log.d(TAG, "updateBoard()" );
+        Log.d(TAG, "updateBoard: " + mConnectionHandler.getRoomId());
         if (sender != null && !sender.isEmpty() && !mPlayersList.contains(sender)) {
             mPlayersList.add(sender);
         }
         if (mBoardView != null) {
             int color = BoardView.getColors()[turn];
             boolean set = mBoardView.updateBoard(x, y, color);
+            turnGraphics(mConnectionHandler.getCurrTurn());
             if (set && mConnectionHandler.hasPlayerLost(sender) && mConnectionHandler.checkForWin()) {
                 mGameListener.onGameWon();
             }
@@ -212,10 +240,10 @@ public class GameFragment extends Fragment implements
 
     private void addPlayersLabels(int playersNum){
         String[] playerNames = mConnectionHandler.getNames();
-        TextView player1 = (TextView) getActivity().findViewById(R.id.player_1);
-        TextView player2 = (TextView) getActivity().findViewById(R.id.player_2);
-        TextView player3 = (TextView) getActivity().findViewById(R.id.player_3);
-        TextView player4 = (TextView) getActivity().findViewById(R.id.player_4);
+        player1 = (TextView) getActivity().findViewById(R.id.player_1);
+        player2 = (TextView) getActivity().findViewById(R.id.player_2);
+        player3 = (TextView) getActivity().findViewById(R.id.player_3);
+        player4 = (TextView) getActivity().findViewById(R.id.player_4);
 
         player1.setText(playerNames[0]);
         player2.setText(playerNames[1]);
@@ -232,31 +260,71 @@ public class GameFragment extends Fragment implements
         }
     }
 
-    private void startTimer(){
+    protected void createTimer() {
+        Log.d(TAG, "createTimer: " + mConnectionHandler.getRoomId());
         final TextView textTimer = (TextView) getActivity().findViewById(R.id.game_timer);
-        final Toast toast = Toast.makeText(getActivity(), R.string.finished_turn, Toast.LENGTH_LONG);
+        textTimer.setText(String.valueOf(TURN_TIME));
+        mTimer = new CountDownTimer(TURN_TIME * 1000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                textTimer.setText(String.valueOf(millisUntilFinished / 1000));
+            }
+
+            public void onFinish() {
+                Toast.makeText(getActivity(), R.string.finished_turn, Toast.LENGTH_LONG).show();
+//                onTurnFinished();
+                mGameListener.onGameLost();
+                mTimerIsRunning = false;
+            }
+        };
+        mTimerIsRunning = false;
+    }
+
+    protected void startTimer(){
+        Log.d(TAG, "startTimer: " + mConnectionHandler.getRoomId());
         if (mTimer == null) {
-            mTimer = new CountDownTimer(TURN_TIME * 1000, 1000) {
-
-                public void onTick(long millisUntilFinished) {
-                    textTimer.setText(String.valueOf(millisUntilFinished / 1000));
-                }
-
-                public void onFinish() {
-                    toast.show();
-                    onTurnFinished();
-                    mTimerIsRunning = false;
-                }
-            };
+            createTimer();
         }
-
         if (mConnectionHandler.isMyTurn()) {
-            textTimer.setVisibility(View.VISIBLE);
+            getActivity().findViewById(R.id.game_timer).setVisibility(View.VISIBLE);
             mTimer.start();
             mTimerIsRunning = true;
         } else {
-//            textTimer.setText(String.valueOf(TURN_TIME));
-            textTimer.setVisibility(View.GONE);
+            getActivity().findViewById(R.id.game_timer).setVisibility(View.GONE);
+            ((TextView) getActivity().findViewById(R.id.game_timer)).setText(String.valueOf(TURN_TIME));
+        }
+    }
+
+    public void turnGraphics(int i){
+        if(i>=mPlayersNum){
+            i = 0;
+        }
+        Log.d(TAG, "turnGraphics: " +i);
+        switch(i){
+            case 0:
+                player1.setTextColor(Color.WHITE);
+                player2.setTextColor(Color.BLACK);
+                player3.setTextColor(Color.BLACK);
+                player4.setTextColor(Color.BLACK);
+                break;
+            case 1:
+                player1.setTextColor(Color.BLACK);
+                player2.setTextColor(Color.WHITE);
+                player3.setTextColor(Color.BLACK);
+                player4.setTextColor(Color.BLACK);
+                break;
+            case 2:
+                player1.setTextColor(Color.BLACK);
+                player2.setTextColor(Color.BLACK);
+                player3.setTextColor(Color.WHITE);
+                player4.setTextColor(Color.BLACK);
+                break;
+            case 3:
+                player1.setTextColor(Color.BLACK);
+                player2.setTextColor(Color.BLACK);
+                player3.setTextColor(Color.BLACK);
+                player4.setTextColor(Color.WHITE);
+                break;
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.misterweeman.ultimatenotakto.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -13,11 +14,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.misterweeman.ultimatenotakto.App;
+import com.example.misterweeman.ultimatenotakto.R;
 import com.example.misterweeman.ultimatenotakto.fragments.GameFragment;
 import com.example.misterweeman.ultimatenotakto.fragments.GameOptionFragment;
-import com.example.misterweeman.ultimatenotakto.R;
 import com.example.misterweeman.ultimatenotakto.helpers.ConnectionHandler;
 import com.example.misterweeman.ultimatenotakto.helpers.FragmentTransactionHelper;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.leaderboard.LeaderboardVariant;
+import com.google.android.gms.games.leaderboard.Leaderboards;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -33,6 +40,8 @@ public class GameActivity extends AppCompatActivity implements
     private static final String ARG_GAMEFRAGMENT = "gameFragment";
     private static final String ARG_GAMEOPTFRAGMENT = "gameOptionFragment";
 
+    private GoogleApiClient mGoogleApiClient;
+
     private AlertDialog alertDialog;
     private boolean gameLost = false;
     private ConnectionHandler mConnectionHandler;
@@ -44,10 +53,13 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
+
+        mGoogleApiClient=App.getGoogleApiHelper().getGoogleApiClient();
+
         setContentView(R.layout.base_layout);
         mConnectionHandler = new ConnectionHandler(this, R.layout.activity_game);
+        Log.d(TAG, "onCreate: "+ mConnectionHandler.getRoomId());
         App.setLayout(this, R.layout.activity_game);
 
         //Create the fragments
@@ -68,7 +80,7 @@ public class GameActivity extends AppCompatActivity implements
                         .add(R.id.fragment_container, mGameFragment).commit();
                 mCurrentFragment = mGameFragment;
             } else {
-                gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, true);
+                gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
                 if (gameLost) {
                     onGameLost();
                 }
@@ -88,22 +100,21 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause: "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "onPause: "+ mConnectionHandler.getRoomId());
         super.onPause();
         isRunning = false;
     }
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume: "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "onResume: "+ mConnectionHandler.getRoomId());
         super.onResume();
         isRunning = true;
-
     }
 
     @Override
     protected void onPostResume() {
-        Log.d(TAG, "onPostResume: "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "onPostResume: "+ mConnectionHandler.getRoomId());
         super.onPostResume();
         if (fragmentTransactionHelpers != null && !fragmentTransactionHelpers.isEmpty()) {
             while (!fragmentTransactionHelpers.isEmpty()) {
@@ -117,7 +128,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Log.d(TAG, "onSaveInstanceState: "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "onSaveInstanceState: "+ mConnectionHandler.getRoomId());
         super.onSaveInstanceState(outState);
         if (alertDialog != null && alertDialog.isShowing()) {
             // close dialog to prevent leaked window
@@ -135,7 +146,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.d(TAG, "onRestoreInstanceState: "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "onRestoreInstanceState: "+ mConnectionHandler.getRoomId());
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             gameLost = savedInstanceState.getBoolean(ARG_GAMELOST, false);
@@ -156,6 +167,8 @@ public class GameActivity extends AppCompatActivity implements
     public void onGameLost() {
         Log.d(TAG, "onGameLost: "+ mConnectionHandler.getRoomId());
         gameLost = true;
+        Games.Achievements.increment(mGoogleApiClient, String.valueOf(R.string.achievement_loser), 1);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lost_dialog_message)
                 .setTitle(R.string.list_dialog_title)
@@ -168,14 +181,14 @@ public class GameActivity extends AppCompatActivity implements
                 .setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        mConnectionHandler.leaveRoom();
                     }
                 })
                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
                     @Override
                     public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
                         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                            finish();
+                            mConnectionHandler.leaveRoom();
                         }
                         return false;
                     }
@@ -187,6 +200,8 @@ public class GameActivity extends AppCompatActivity implements
     @Override
     public void onGameWon() {
         Log.d(TAG, "onGameWon: "+ mConnectionHandler.getRoomId());
+        Games.Achievements.increment(mGoogleApiClient, String.valueOf(R.string.achievement_winner), 1);
+        addScore();
         mConnectionHandler.broadcastWin();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.won_dialog_message)
@@ -214,7 +229,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     public void onGameEnd(String winner) {
-        Log.d(TAG, "onGameEnd: ");
+        Log.d(TAG, "onGameEnd: "+ mConnectionHandler.getRoomId());
         TextView message = (TextView) findViewById(R.id.text_message);
         message.setText(getResources().getString(R.string.winner_is, winner));
         message.setVisibility(View.VISIBLE);
@@ -237,7 +252,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     public void replaceFragment(Fragment fragment) {
-        Log.d(TAG, "replaceFragment: "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "replaceFragment: "+ mConnectionHandler.getRoomId());
         if (!isRunning) {
             FragmentTransactionHelper fragmentTransactionHelper = new FragmentTransactionHelper() {
                 @Override
@@ -255,7 +270,7 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     private void replaceFragmentInternal(int contentFrameId, Fragment replacingFragment) {
-        Log.d(TAG, "replaceFragmentInternal: "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "replaceFragmentInternal: "+ mConnectionHandler.getRoomId());
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(contentFrameId, replacingFragment).commit();
         mCurrentFragment = replacingFragment;
@@ -264,6 +279,7 @@ public class GameActivity extends AppCompatActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult: " + mConnectionHandler.getRoomId());
         if (mCurrentFragment != null) {
             mCurrentFragment.onActivityResult(requestCode, resultCode, data);
         }
@@ -283,11 +299,12 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     public void updateBoard(int x, int y, String sender, int turn) {
-        Log.d(TAG, "updateBoard() "+mConnectionHandler.getRoomId());
+        Log.d(TAG, "updateBoard() "+ mConnectionHandler.getRoomId());
         mGameFragment.updateBoard(x, y, sender, turn);
     }
 
     protected void updateLayout() {
+        Log.d(TAG, "updateLayout: " + mConnectionHandler.getRoomId());
         if (mCurrentFragment == mGameFragment) {
             findViewById(R.id.game_timer).setVisibility(View.VISIBLE);
             findViewById(R.id.players_layout).setVisibility(View.VISIBLE);
@@ -304,14 +321,14 @@ public class GameActivity extends AppCompatActivity implements
     }
 
     public void goToOptions(View view) {
-        Log.d(TAG, "goToOptions: ");
+        Log.d(TAG, "goToOptions: " + mConnectionHandler.getRoomId());
         Intent intent = new Intent(this, OptionsActivity.class);
         startActivity(intent);
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
+        Log.d(TAG, "onDestroy: " + mConnectionHandler.getRoomId());
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
@@ -324,5 +341,27 @@ public class GameActivity extends AppCompatActivity implements
 
     public void setGridSize(int gridSize) {
         mGameFragment.setGridSize(gridSize);
+    }
+
+    protected void addScore() {
+        Games.Leaderboards.loadCurrentPlayerLeaderboardScore(mGoogleApiClient,
+                String.valueOf(R.string.leaderboard_victories),
+                LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC)
+                .setResultCallback(
+                        new ResultCallback<Leaderboards.LoadPlayerScoreResult>() {
+                            @Override
+                            public void onResult(@NonNull final Leaderboards.LoadPlayerScoreResult scoreResult) {
+                                if (isScoreResultValid(scoreResult)) {
+                                    long mPoints = scoreResult.getScore().getRawScore();
+                                    Games.Leaderboards.submitScore(mGoogleApiClient,
+                                            String.valueOf(R.string.leaderboard_victories), mPoints + 1);
+                                }
+                            }
+                        }
+                );
+    }
+
+    protected boolean isScoreResultValid(final Leaderboards.LoadPlayerScoreResult scoreResult) {
+        return  GamesStatusCodes.STATUS_OK == scoreResult.getStatus().getStatusCode() && scoreResult.getScore() != null;
     }
 }

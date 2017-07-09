@@ -2,9 +2,8 @@
 <resources>
     <string name="app_id" translatable="false">507273564298</string>
 
-    <string name="achievement_prime" translatable="false">CgkIiqHx3uEOEAIQAQ</string>
-    <string name="achievement_bored" translatable="false">CgkIiqHx3uEOEAIQAg</string>
-    <string name="achievement_really_bored" translatable="false">CgkIiqHx3uEOEAIQAw</string>
+    <string name="achievement_winner" translatable="false">CgkIiqHx3uEOEAIQCA</string>
+    <string name="achievement_loser" translatable="false">CgkIiqHx3uEOEAIQCQ</string>
 
-    <string name="leaderboard_high_scores">CgkIiqHx3uEOEAIQBA</string>
+    <string name="leaderboard_victories" translatable="false">CgkIiqHx3uEOEAIQBw</string>
 </resources>

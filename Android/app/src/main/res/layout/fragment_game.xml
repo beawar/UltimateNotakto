@@ -5,10 +5,4 @@
     tools:context="com.example.misterweeman.ultimatenotakto.fragments.GameFragment"
     android:id="@+id/fragment_game">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
 </FrameLayout>
