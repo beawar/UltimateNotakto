@@ -60,6 +60,7 @@
     <string name="connection">You cannot proceed without an internet connection. Please reconnnect and try again.</string>
     <string name="winner_is_title">We got a winner!</string>
     <string name="sign_in_other_error">Something went wrong while trying to connect. Try again later.</string>
+    <string name="sign_in_failed">Sign in failed.</string>
 </resources>
 
 

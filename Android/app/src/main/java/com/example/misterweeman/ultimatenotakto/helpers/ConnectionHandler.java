@@ -244,6 +244,7 @@ public class ConnectionHandler implements RoomUpdateListener,
         if (mFinishedParticipants != null && !mFinishedParticipants.isEmpty()) {
             mFinishedParticipants.clear();
         }
+        grid_size = -1;
         mConnectedPlayers = 0;
         switchToMainScreen();
     }
@@ -369,7 +370,8 @@ public class ConnectionHandler implements RoomUpdateListener,
 //                }
 //            }
 //            mParentActivity.onGameEnd(winner);
-            switchToMainScreen();
+            hasWon = true;
+            leaveRoom();
         } else if((char) buf[0] == 'R'){
             int grid_size = buf[1];
             mParentActivity.setGridSize(grid_size);
@@ -471,7 +473,6 @@ public class ConnectionHandler implements RoomUpdateListener,
         updateRoom(room);
 
         if(grid_size != -1) {
-            mParentActivity.setPlayersNum(mConnectedPlayers);
             mMsgBuffer[0] = (byte) 'R';
             // coordinates of the cell clicked
             mMsgBuffer[1] = (byte) grid_size;
@@ -651,12 +652,11 @@ public class ConnectionHandler implements RoomUpdateListener,
 
     protected void switchToGameScreen(int layout) {
         Log.d(TAG, "switchToGameScreen: " +mRoomId);
-
-        GameActivity gameActivity =  mParentActivity;
+        mParentActivity.setPlayersNum(mConnectedPlayers);
         if (layout == R.layout.fragment_game) {
-            gameActivity.replaceFragment(gameActivity.getGameFragment());
+            mParentActivity.replaceFragment(mParentActivity.getGameFragment());
         } else if (layout == R.layout.fragment_game_option) {
-            gameActivity.replaceFragment(gameActivity.getGameOptionFragment());
+            mParentActivity.replaceFragment(mParentActivity.getGameOptionFragment());
         }
 
     }

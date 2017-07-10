@@ -11,16 +11,14 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/game_timer"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/ic_timer"
-            android:drawableStart="@drawable/ic_timer"/>
+        <!--<TextView-->
+            <!--android:id="@+id/game_timer"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="20sp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_centerHorizontal="true"/>-->
 
         <Button
             android:id="@+id/option_onGame_btn"

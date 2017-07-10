@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.IntentSender;
 import android.util.Log;
 
+import com.example.misterweeman.ultimatenotakto.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,17 +32,9 @@ public class BaseGameUtils {
         Dialog errorDialog;
 
         switch (actResp) {
-            case GamesActivityResultCodes.RESULT_APP_MISCONFIGURED:
-                errorDialog = makeSimpleDialog(activity,
-                        activity.getString(com.google.example.games.basegameutils.R.string.app_misconfigured));
-                break;
             case GamesActivityResultCodes.RESULT_SIGN_IN_FAILED:
                 errorDialog = makeSimpleDialog(activity,
-                        activity.getString(com.google.example.games.basegameutils.R.string.sign_in_failed));
-                break;
-            case GamesActivityResultCodes.RESULT_LICENSE_FAILED:
-                errorDialog = makeSimpleDialog(activity,
-                        activity.getString(com.google.example.games.basegameutils.R.string.license_failed));
+                        activity.getString(R.string.sign_in_failed));
                 break;
             default:
                 // No meaningful Activity response code, so generate default Google

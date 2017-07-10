@@ -58,4 +58,5 @@
     <string name="connection">Non puoi procedere senza una connessione ad internet. Riconnettiti e riprova.</string>
     <string name="winner_is_title">Abbiamo un vincitore!</string>
     <string name="sign_in_other_error">Qualcosa è andato storto nel tentativo di connessione. Riprova più tardi.</string>
+    <string name="sign_in_failed">Signin fallito.</string>
 </resources>

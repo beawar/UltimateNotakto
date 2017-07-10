@@ -358,10 +358,8 @@ public class GameActivity extends AppCompatActivity implements
     protected void updateLayout() {
         Log.d(TAG, "updateLayout: " + mConnectionHandler.getRoomId());
         if (mCurrentFragment == mGameFragment) {
-            findViewById(R.id.game_timer).setVisibility(View.VISIBLE);
             findViewById(R.id.players_layout).setVisibility(View.VISIBLE);
         } else if (mCurrentFragment == mGameOptionFragment){
-            findViewById(R.id.game_timer).setVisibility(View.GONE);
             findViewById(R.id.players_layout).setVisibility(View.GONE);
         }
     }
