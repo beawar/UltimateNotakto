@@ -36,7 +36,7 @@ public class GameFragment extends Fragment implements
     private static final String ARG_PLAYERS = "PlayerNumberChecked";
     public static final int DEFAULT_GRID_SIZE = 3;
     public static final int DEFAULT_PLAYERS_NUM = 2;
-    public static final int TURN_TIME = 30;
+    public static final int TURN_TIME = 60;
 
     private Board mBoard;
     private BoardView mBoardView;
@@ -136,16 +136,15 @@ public class GameFragment extends Fragment implements
                             mTimer.cancel();
                             mTimerIsRunning = false;
                         }
-
                         // if it's my turn and I have not lost yet, I play
-                        // if I click on an already cheched cell, do nothing and wait for a valid touch
+                        // if I click on an already checked cell, do nothing and wait for a valid touch
                         if (bv.updateBoard(x, y, BoardView.getColors()[mConnectionHandler.getCurrTurn()])) {
                             // if the touch is valid, check for lost and broadcast the move
                             if (Notakto.checkBoardForLost(mBoard, x, y)) {
                                 if (mGameListener != null) {
                                     mGameListener.onGameLost();
                                 }
-                                // if it's my turn and i just lost
+                                // if it's my turn and I just lost
                                 mConnectionHandler.broadcastTurn(true, x, y);
                             } else {
                                 // if it's my turn and I haven't lost yet
@@ -196,15 +195,15 @@ public class GameFragment extends Fragment implements
             if (x >= 0 && y >= 0 && x < mGridSize && y < mGridSize) {
                 int color = BoardView.getColors()[turn];
                 boolean set = mBoardView.updateBoard(x, y, color);
-
-                if (set && mConnectionHandler.hasPlayerLost(sender) && mConnectionHandler.checkForWin()) {
-                    mGameListener.onGameWon();
-                } else {
-                    turnGraphics(mConnectionHandler.getCurrTurn());
-                    startTimer();
-                }
+            }
+            if (mConnectionHandler.hasPlayerLost(sender) && mConnectionHandler.checkForWin()) {
+                mGameListener.onGameWon();
+            } else {
+                turnGraphics(mConnectionHandler.getCurrTurn());
+                startTimer();
             }
         }
+
     }
 
     private void addPlayersLabels(int playersNum){
@@ -215,17 +214,21 @@ public class GameFragment extends Fragment implements
         player4 = (TextView) getActivity().findViewById(R.id.player_4);
 
         player1.setText(playerNames[0]);
+        player1.setVisibility(View.VISIBLE);
         player2.setText(playerNames[1]);
+        player2.setVisibility(View.VISIBLE);
 
         if (playersNum < 3) {
             player3.setVisibility(View.GONE);
         } else {
             player3.setText(playerNames[2]);
+            player3.setVisibility(View.VISIBLE);
         }
         if (playersNum < 4) {
             player4.setVisibility(View.GONE);
         } else {
             player4.setText(playerNames[3]);
+            player4.setVisibility(View.VISIBLE);
         }
     }
 
@@ -234,7 +237,7 @@ public class GameFragment extends Fragment implements
         mTimer = new CountDownTimer(TURN_TIME * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                // TODO: 10/07/2017 display the timer
+                // TODO: 10/07/2017 eventually display the timer
             }
 
             public void onFinish() {

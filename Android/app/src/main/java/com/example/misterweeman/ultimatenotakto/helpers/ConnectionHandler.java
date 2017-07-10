@@ -356,6 +356,26 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
     }
 
+    public void broadcastConfig() {
+        if(grid_size != -1) {
+            mMsgBuffer[0] = (byte) 'R';
+            // coordinates of the cell clicked
+            mMsgBuffer[1] = (byte) grid_size;
+
+            if (!mParticipants.isEmpty() && mParticipants.get(0).getParticipantId().equals(mMyId)) {
+                mParentActivity.setGridSize(grid_size);
+                // send to every other partecipant
+                // Reliable messages are used because receiving this information is essential for the game
+                for (Participant p : mParticipants) {
+                    if (!p.getParticipantId().equals(mMyId) && p.getStatus() == Participant.STATUS_JOINED) {
+                        Games.RealTimeMultiplayer.sendReliableMessage(
+                                mGoogleApiHelper.getGoogleApiClient(), null, mMsgBuffer, mRoomId, p.getParticipantId());
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
         Log.d(TAG, "onRealTimeMessageReceived: " +mRoomId);
@@ -471,24 +491,8 @@ public class ConnectionHandler implements RoomUpdateListener,
         }
 
         updateRoom(room);
+        broadcastConfig();
 
-        if(grid_size != -1) {
-            mMsgBuffer[0] = (byte) 'R';
-            // coordinates of the cell clicked
-            mMsgBuffer[1] = (byte) grid_size;
-
-            if (!mParticipants.isEmpty() && mParticipants.get(0).getParticipantId().equals(mMyId)) {
-                mParentActivity.setGridSize(grid_size);
-                // send to every other partecipant
-                // Reliable messages are used because receiving this information is essential for the game
-                for (Participant p : mParticipants) {
-                    if (!p.getParticipantId().equals(mMyId) && p.getStatus() == Participant.STATUS_JOINED) {
-                        Games.RealTimeMultiplayer.sendReliableMessage(
-                                mGoogleApiHelper.getGoogleApiClient(), null, mMsgBuffer, mRoomId, p.getParticipantId());
-                    }
-                }
-            }
-        }
         // print the list of partecipants
         Log.d(TAG, "Room ID: " +  mRoomId);
         Log.d(TAG, "My ID: " + mMyId);
@@ -505,6 +509,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     public void onPeersConnected(Room room, List<String> list) {
         Log.d(TAG, "onPeersConnected: "+mRoomId);
         updateRoom(room);
+        broadcastConfig();
     }
 
     @Override
@@ -520,6 +525,7 @@ public class ConnectionHandler implements RoomUpdateListener,
     @Override
     public void onP2PConnected(String partecipant) {
         Log.d(TAG, "onP2PConnected: partecipant " + partecipant);
+        broadcastConfig();
     }
 
     @Override
@@ -597,8 +603,8 @@ public class ConnectionHandler implements RoomUpdateListener,
         Log.d(TAG, "startQuickGame() " + mRoomId);
 
         // auto-match criteria to invite the number of opponents.
-        // to get a random value in [min, max]: Math.random() * (max - min) + min
-        int opponents = (int) (Math.random() * 2 + 1);
+        // to get a random value in [min, max]: Math.random() * (max - min + 1) + min
+        int opponents = (int) (Math.random() * 3 + 1);
         Bundle autoMatchCriteria = RoomConfig.createAutoMatchCriteria(opponents, opponents, 0);
         // build the room config
         RoomConfig.Builder roomConfigBuilder = makeBasicRoomConfigBuilder();
